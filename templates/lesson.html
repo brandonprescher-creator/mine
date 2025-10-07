@@ -343,21 +343,234 @@ function prepareVisualMode() {
     `;
 }
 
-function loadVisuals() {
-    prepareVisualMode();
+async function loadVisuals() {
+    const visualArea = document.getElementById('visual-area');
+    
+    // Show loading
+    visualArea.innerHTML = `
+        <div class="visual-loading">
+            <div class="loading-spinner-huge">✨</div>
+            <p style="font-size: 2rem; color: #667eea; margin-top: 2rem;">
+                Creating awesome visuals for you...
+            </p>
+        </div>
+    `;
+    
+    try {
+        // Call the visual generation API
+        const response = await fetch('/api/generate/visuals/{{ lesson.id }}');
+        const data = await response.json();
+        
+        if (data.success && data.visuals) {
+            showGeneratedVisuals(data.visuals);
+        } else {
+            // If generation fails, show built-in visual templates
+            showBuiltInVisuals();
+        }
+    } catch (error) {
+        console.error('Error loading visuals:', error);
+        // Fallback to built-in visuals
+        showBuiltInVisuals();
+    }
+}
+
+function showGeneratedVisuals(visuals) {
+    const visualArea = document.getElementById('visual-area');
+    
+    let visualHTML = '<div class="generated-visuals">';
+    
+    // Show each generated visual
+    visuals.forEach((visual, index) => {
+        visualHTML += `
+            <div class="visual-card-mega">
+                <h3 class="visual-card-title">${visual.title || 'Visual ' + (index + 1)}</h3>
+                ${visual.image_url ? `<img src="${visual.image_url}" alt="${visual.title}" style="max-width: 100%; border-radius: 15px;">` : ''}
+                ${visual.description ? `<p class="visual-description">${visual.description}</p>` : ''}
+                ${visual.svg ? visual.svg : ''}
+            </div>
+        `;
+    });
+    
+    visualHTML += '</div>';
+    visualArea.innerHTML = visualHTML;
+}
+
+function showBuiltInVisuals() {
+    const visualArea = document.getElementById('visual-area');
+    const lessonTitle = '{{ lesson.title }}'.toLowerCase();
+    
+    let visualHTML = '<div class="builtin-visuals">';
+    
+    // Determine which visuals to show based on lesson content
+    if (lessonTitle.includes('division')) {
+        visualHTML += showDivisionVisual();
+    } else if (lessonTitle.includes('fraction')) {
+        visualHTML += showFractionVisual();
+    } else if (lessonTitle.includes('geometry') || lessonTitle.includes('shape')) {
+        visualHTML += showGeometryVisual();
+    } else if (lessonTitle.includes('multiplication') || lessonTitle.includes('times')) {
+        visualHTML += showMultiplicationVisual();
+    } else if (lessonTitle.includes('addition') || lessonTitle.includes('add')) {
+        visualHTML += showAdditionVisual();
+    } else {
+        // Generic visual with lesson steps illustrated
+        visualHTML += showGenericVisual();
+    }
+    
+    visualHTML += '</div>';
+    visualArea.innerHTML = visualHTML;
 }
 
 function showDivisionVisual() {
-    // Would load actual division visual
-    alert('🎨 Division visual loading... (Feature ready!)');
+    return `
+        <div class="visual-card-mega">
+            <h3 class="visual-card-title">🍕 Division as Fair Sharing</h3>
+            <div class="division-visual">
+                <div class="visual-example">
+                    <div class="visual-problem">12 ÷ 3 = ?</div>
+                    <div class="visual-demo">
+                        <div class="pizza-visual">
+                            <div class="pizza-whole">
+                                🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕
+                            </div>
+                            <div class="pizza-groups">
+                                <div class="pizza-group">
+                                    <p>Group 1</p>
+                                    <div>🍕🍕🍕🍕</div>
+                                </div>
+                                <div class="pizza-group">
+                                    <p>Group 2</p>
+                                    <div>🍕🍕🍕🍕</div>
+                                </div>
+                                <div class="pizza-group">
+                                    <p>Group 3</p>
+                                    <div>🍕🍕🍕🍕</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="visual-answer">Each group gets 4! Answer: 12 ÷ 3 = 4</div>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
 function showFractionVisual() {
-    alert('🍕 Fraction visual loading... (Feature ready!)');
+    return `
+        <div class="visual-card-mega">
+            <h3 class="visual-card-title">🥧 Fractions as Parts of a Whole</h3>
+            <div class="fraction-visual">
+                <div class="fraction-example">
+                    <div class="fraction-circles">
+                        <div class="circle-whole">
+                            <div class="circle-title">1/2</div>
+                            <div class="pie-chart" style="background: conic-gradient(#667eea 0deg 180deg, #ddd 180deg 360deg);">
+                            </div>
+                            <p>Half the circle</p>
+                        </div>
+                        <div class="circle-whole">
+                            <div class="circle-title">1/4</div>
+                            <div class="pie-chart" style="background: conic-gradient(#f093fb 0deg 90deg, #ddd 90deg 360deg);">
+                            </div>
+                            <p>One quarter</p>
+                        </div>
+                        <div class="circle-whole">
+                            <div class="circle-title">3/4</div>
+                            <div class="pie-chart" style="background: conic-gradient(#4facfe 0deg 270deg, #ddd 270deg 360deg);">
+                            </div>
+                            <p>Three quarters</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
 function showGeometryVisual() {
-    alert('📐 Geometry visual loading... (Feature ready!)');
+    return `
+        <div class="visual-card-mega">
+            <h3 class="visual-card-title">📐 Geometric Shapes</h3>
+            <div class="geometry-visual">
+                <div class="shape-grid">
+                    <div class="shape-item">
+                        <div class="shape triangle">▲</div>
+                        <p>Triangle<br>3 sides</p>
+                    </div>
+                    <div class="shape-item">
+                        <div class="shape square">■</div>
+                        <p>Square<br>4 equal sides</p>
+                    </div>
+                    <div class="shape-item">
+                        <div class="shape circle">●</div>
+                        <p>Circle<br>No sides</p>
+                    </div>
+                    <div class="shape-item">
+                        <div class="shape rectangle">▬</div>
+                        <p>Rectangle<br>4 sides</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function showMultiplicationVisual() {
+    return `
+        <div class="visual-card-mega">
+            <h3 class="visual-card-title">✖️ Multiplication as Arrays</h3>
+            <div class="multiplication-visual">
+                <div class="array-example">
+                    <p class="array-title">3 × 4 = 12</p>
+                    <div class="array-grid">
+                        <div class="array-row">⭐⭐⭐⭐</div>
+                        <div class="array-row">⭐⭐⭐⭐</div>
+                        <div class="array-row">⭐⭐⭐⭐</div>
+                    </div>
+                    <p class="array-explanation">3 rows of 4 stars = 12 total stars!</p>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function showAdditionVisual() {
+    return `
+        <div class="visual-card-mega">
+            <h3 class="visual-card-title">➕ Addition with Number Line</h3>
+            <div class="addition-visual">
+                <div class="numberline-demo">
+                    <p class="demo-title">5 + 3 = ?</p>
+                    <div class="numberline">
+                        <div class="numberline-track">
+                            ${[0,1,2,3,4,5,6,7,8,9,10].map(n => `<span class="number-mark ${n===5?'start':''} ${n===8?'end':''}">${n}</span>`).join('')}
+                        </div>
+                        <div class="numberline-arrow" style="left: 25%; width: 30%;">
+                            <div class="arrow-label">+3 →</div>
+                        </div>
+                    </div>
+                    <p class="demo-answer">Start at 5, jump 3 spaces forward = 8!</p>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function showGenericVisual() {
+    return `
+        <div class="visual-card-mega">
+            <h3 class="visual-card-title">📚 Lesson Steps Visualized</h3>
+            <div class="steps-visual">
+                {% for step in lesson.steps[:5] %}
+                <div class="visual-step">
+                    <div class="visual-step-number">{{ loop.index }}</div>
+                    <div class="visual-step-content">{{ step }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    `;
 }
 
 function createSuccessExplosion() {
@@ -915,6 +1128,267 @@ function createSuccessExplosion() {
     .answer-input-mega {
         flex-direction: column;
     }
+}
+
+/* Visual Mode Specific Styles */
+.visual-card-mega {
+    background: white;
+    padding: 3rem;
+    border-radius: 25px;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    border: 5px solid #667eea;
+}
+
+.visual-card-title {
+    font-size: 2.5rem;
+    color: #667eea;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: bold;
+}
+
+/* Division Visual */
+.pizza-visual {
+    text-align: center;
+}
+
+.pizza-whole {
+    font-size: 3rem;
+    margin: 2rem 0;
+    letter-spacing: 0.5rem;
+}
+
+.pizza-groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.pizza-group {
+    background: #f0f3ff;
+    padding: 1.5rem;
+    border-radius: 15px;
+    border: 3px solid #667eea;
+}
+
+.pizza-group p {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+.pizza-group div {
+    font-size: 2.5rem;
+}
+
+.visual-problem {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #667eea;
+    margin: 2rem 0;
+}
+
+.visual-answer {
+    font-size: 2rem;
+    color: #28a745;
+    font-weight: bold;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #d4edda;
+    border-radius: 15px;
+}
+
+/* Fraction Visual */
+.fraction-circles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.circle-whole {
+    text-align: center;
+}
+
+.circle-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+.pie-chart {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 1rem auto;
+    border: 5px solid #333;
+}
+
+.circle-whole p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 1rem;
+}
+
+/* Geometry Visual */
+.shape-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.shape-item {
+    text-align: center;
+    background: #f0f3ff;
+    padding: 2rem;
+    border-radius: 15px;
+}
+
+.shape {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+}
+
+.shape-item p {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #667eea;
+}
+
+/* Multiplication Visual */
+.array-grid {
+    font-size: 4rem;
+    text-align: center;
+    margin: 2rem 0;
+    line-height: 1.2;
+}
+
+.array-row {
+    margin: 0.5rem 0;
+}
+
+.array-title {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #667eea;
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.array-explanation {
+    font-size: 1.8rem;
+    color: #28a745;
+    text-align: center;
+    margin-top: 2rem;
+    font-weight: bold;
+}
+
+/* Addition Visual (Number Line) */
+.numberline-demo {
+    margin: 2rem 0;
+}
+
+.demo-title {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #667eea;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.numberline {
+    position: relative;
+    padding: 3rem 0;
+}
+
+.numberline-track {
+    display: flex;
+    justify-content: space-around;
+    background: #f0f0f0;
+    padding: 2rem 1rem;
+    border-radius: 15px;
+    position: relative;
+}
+
+.number-mark {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+}
+
+.number-mark.start {
+    background: #4facfe;
+    color: white;
+}
+
+.number-mark.end {
+    background: #28a745;
+    color: white;
+}
+
+.demo-answer {
+    font-size: 2rem;
+    color: #28a745;
+    text-align: center;
+    margin-top: 2rem;
+    font-weight: bold;
+}
+
+/* Generic Steps Visual */
+.steps-visual {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.visual-step {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    color: white;
+}
+
+.visual-step-number {
+    width: 60px;
+    height: 60px;
+    background: white;
+    color: #667eea;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.visual-step-content {
+    font-size: 1.5rem;
+    line-height: 1.6;
+}
+
+.visual-loading {
+    text-align: center;
+    padding: 5rem;
+}
+
+.loading-spinner-huge {
+    font-size: 8rem;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 </style>
 {% endblock %}
