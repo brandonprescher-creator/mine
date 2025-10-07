@@ -829,160 +829,372 @@ def create_simple_visuals(lesson_data: Dict) -> Dict:
     }
 
 def create_division_visual() -> Dict:
-    """Create a simple division visual"""
+    """Create an amazing division visual with pizzas!"""
     return {
         "type": "division",
-        "title": "Division Visual",
-        "description": "See how division works with groups!",
+        "title": "🍕 Pizza Division Adventure!",
+        "description": "Watch 12 delicious pizzas get shared fairly!",
         "svg": """
-        <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
-            <rect width="400" height="300" fill="#f0f8ff"/>
-            <text x="200" y="30" text-anchor="middle" font-size="24" font-weight="bold" fill="#333">12 ÷ 3 = ?</text>
+        <svg width="500" height="400" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background gradient -->
+            <defs>
+                <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ff9a9e;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#fecfef;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="pizza" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ffd89b;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#19547b;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <rect width="500" height="400" fill="url(#bg)"/>
             
-            <!-- Original group -->
-            <text x="50" y="80" font-size="16" fill="#666">12 items:</text>
-            <g transform="translate(50, 100)">
-                <circle cx="0" cy="0" r="8" fill="#ff6b6b"/>
-                <circle cx="25" cy="0" r="8" fill="#4ecdc4"/>
-                <circle cx="50" cy="0" r="8" fill="#45b7d1"/>
-                <circle cx="75" cy="0" r="8" fill="#ffa07a"/>
-                <circle cx="100" cy="0" r="8" fill="#98d8c8"/>
-                <circle cx="125" cy="0" r="8" fill="#ff6b6b"/>
-                <circle cx="150" cy="0" r="8" fill="#4ecdc4"/>
-                <circle cx="175" cy="0" r="8" fill="#45b7d1"/>
-                <circle cx="200" cy="0" r="8" fill="#ffa07a"/>
-                <circle cx="225" cy="0" r="8" fill="#98d8c8"/>
-                <circle cx="250" cy="0" r="8" fill="#ff6b6b"/>
-                <circle cx="275" cy="0" r="8" fill="#4ecdc4"/>
+            <!-- Title with emoji -->
+            <text x="250" y="40" text-anchor="middle" font-size="28" font-weight="bold" fill="#8B4513">🍕 12 Pizzas ÷ 3 Friends = ? 🍕</text>
+            
+            <!-- Original 12 pizzas -->
+            <text x="50" y="80" font-size="18" font-weight="bold" fill="#8B4513">12 Delicious Pizzas:</text>
+            <g transform="translate(30, 100)">
+                <!-- Row 1 -->
+                <circle cx="0" cy="0" r="15" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                <text x="0" y="5" text-anchor="middle" font-size="12" fill="white">🍕</text>
+                <circle cx="40" cy="0" r="15" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                <text x="40" y="5" text-anchor="middle" font-size="12" fill="white">🍕</text>
+                <circle cx="80" cy="0" r="15" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                <text x="80" y="5" text-anchor="middle" font-size="12" fill="white">🍕</text>
+                <circle cx="120" cy="0" r="15" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                <text x="120" y="5" text-anchor="middle" font-size="12" fill="white">🍕</text>
+                
+                <!-- Row 2 -->
+                <circle cx="0" cy="40" r="15" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                <text x="0" y="45" text-anchor="middle" font-size="12" fill="white">🍕</text>
+                <circle cx="40" cy="40" r="15" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                <text x="40" y="45" text-anchor="middle" font-size="12" fill="white">🍕</text>
+                <circle cx="80" cy="40" r="15" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                <text x="80" y="45" text-anchor="middle" font-size="12" fill="white">🍕</text>
+                <circle cx="120" cy="40" r="15" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                <text x="120" y="45" text-anchor="middle" font-size="12" fill="white">🍕</text>
+                
+                <!-- Row 3 -->
+                <circle cx="0" cy="80" r="15" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                <text x="0" y="85" text-anchor="middle" font-size="12" fill="white">🍕</text>
+                <circle cx="40" cy="80" r="15" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                <text x="40" y="85" text-anchor="middle" font-size="12" fill="white">🍕</text>
+                <circle cx="80" cy="80" r="15" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                <text x="80" y="85" text-anchor="middle" font-size="12" fill="white">🍕</text>
+                <circle cx="120" cy="80" r="15" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                <text x="120" y="85" text-anchor="middle" font-size="12" fill="white">🍕</text>
             </g>
             
-            <!-- Arrow -->
-            <path d="M 200 130 L 200 150" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+            <!-- Magic wand arrow -->
+            <g transform="translate(200, 140)">
+                <path d="M 0 0 L 80 0" stroke="#FFD700" stroke-width="6" marker-end="url(#magicArrow)"/>
+                <text x="40" y="-10" text-anchor="middle" font-size="16" fill="#8B4513">✨ Magic Division ✨</text>
+            </g>
+            
             <defs>
-                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+                <marker id="magicArrow" markerWidth="15" markerHeight="12" refX="14" refY="6" orient="auto">
+                    <polygon points="0 0, 15 6, 0 12" fill="#FFD700"/>
                 </marker>
             </defs>
             
-            <!-- 3 groups -->
-            <text x="200" y="180" text-anchor="middle" font-size="16" fill="#666">Split into 3 groups:</text>
+            <!-- 3 Friends with their pizzas -->
+            <text x="250" y="200" text-anchor="middle" font-size="20" font-weight="bold" fill="#8B4513">3 Friends Share Fairly:</text>
             
-            <!-- Group 1 -->
-            <text x="80" y="220" text-anchor="middle" font-size="14" fill="#333">Group 1</text>
-            <g transform="translate(50, 240)">
-                <circle cx="0" cy="0" r="8" fill="#ff6b6b"/>
-                <circle cx="20" cy="0" r="8" fill="#4ecdc4"/>
-                <circle cx="40" cy="0" r="8" fill="#45b7d1"/>
-                <circle cx="60" cy="0" r="8" fill="#ffa07a"/>
+            <!-- Friend 1 -->
+            <g transform="translate(50, 220)">
+                <circle cx="0" cy="0" r="20" fill="#FFB6C1" stroke="#FF69B4" stroke-width="3"/>
+                <text x="0" y="5" text-anchor="middle" font-size="16">😊</text>
+                <text x="0" y="35" text-anchor="middle" font-size="14" font-weight="bold" fill="#8B4513">Alice</text>
+                <g transform="translate(-30, 50)">
+                    <circle cx="0" cy="0" r="12" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                    <text x="0" y="3" text-anchor="middle" font-size="10" fill="white">🍕</text>
+                    <circle cx="20" cy="0" r="12" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                    <text x="20" y="3" text-anchor="middle" font-size="10" fill="white">🍕</text>
+                    <circle cx="40" cy="0" r="12" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                    <text x="40" y="3" text-anchor="middle" font-size="10" fill="white">🍕</text>
+                    <circle cx="60" cy="0" r="12" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                    <text x="60" y="3" text-anchor="middle" font-size="10" fill="white">🍕</text>
+                </g>
+                <text x="0" y="85" text-anchor="middle" font-size="12" font-weight="bold" fill="#28a745">4 Pizzas!</text>
             </g>
             
-            <!-- Group 2 -->
-            <text x="200" y="220" text-anchor="middle" font-size="14" fill="#333">Group 2</text>
-            <g transform="translate(170, 240)">
-                <circle cx="0" cy="0" r="8" fill="#98d8c8"/>
-                <circle cx="20" cy="0" r="8" fill="#ff6b6b"/>
-                <circle cx="40" cy="0" r="8" fill="#4ecdc4"/>
-                <circle cx="60" cy="0" r="8" fill="#45b7d1"/>
+            <!-- Friend 2 -->
+            <g transform="translate(200, 220)">
+                <circle cx="0" cy="0" r="20" fill="#87CEEB" stroke="#4169E1" stroke-width="3"/>
+                <text x="0" y="5" text-anchor="middle" font-size="16">😄</text>
+                <text x="0" y="35" text-anchor="middle" font-size="14" font-weight="bold" fill="#8B4513">Bob</text>
+                <g transform="translate(-30, 50)">
+                    <circle cx="0" cy="0" r="12" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                    <text x="0" y="3" text-anchor="middle" font-size="10" fill="white">🍕</text>
+                    <circle cx="20" cy="0" r="12" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                    <text x="20" y="3" text-anchor="middle" font-size="10" fill="white">🍕</text>
+                    <circle cx="40" cy="0" r="12" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                    <text x="40" y="3" text-anchor="middle" font-size="10" fill="white">🍕</text>
+                    <circle cx="60" cy="0" r="12" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                    <text x="60" y="3" text-anchor="middle" font-size="10" fill="white">🍕</text>
+                </g>
+                <text x="0" y="85" text-anchor="middle" font-size="12" font-weight="bold" fill="#28a745">4 Pizzas!</text>
             </g>
             
-            <!-- Group 3 -->
-            <text x="320" y="220" text-anchor="middle" font-size="14" fill="#333">Group 3</text>
-            <g transform="translate(290, 240)">
-                <circle cx="0" cy="0" r="8" fill="#ffa07a"/>
-                <circle cx="20" cy="0" r="8" fill="#98d8c8"/>
-                <circle cx="40" cy="0" r="8" fill="#ff6b6b"/>
-                <circle cx="60" cy="0" r="8" fill="#4ecdc4"/>
+            <!-- Friend 3 -->
+            <g transform="translate(350, 220)">
+                <circle cx="0" cy="0" r="20" fill="#98FB98" stroke="#32CD32" stroke-width="3"/>
+                <text x="0" y="5" text-anchor="middle" font-size="16">😃</text>
+                <text x="0" y="35" text-anchor="middle" font-size="14" font-weight="bold" fill="#8B4513">Charlie</text>
+                <g transform="translate(-30, 50)">
+                    <circle cx="0" cy="0" r="12" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                    <text x="0" y="3" text-anchor="middle" font-size="10" fill="white">🍕</text>
+                    <circle cx="20" cy="0" r="12" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                    <text x="20" y="3" text-anchor="middle" font-size="10" fill="white">🍕</text>
+                    <circle cx="40" cy="0" r="12" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                    <text x="40" y="3" text-anchor="middle" font-size="10" fill="white">🍕</text>
+                    <circle cx="60" cy="0" r="12" fill="url(#pizza)" stroke="#8B4513" stroke-width="2"/>
+                    <text x="60" y="3" text-anchor="middle" font-size="10" fill="white">🍕</text>
+                </g>
+                <text x="0" y="85" text-anchor="middle" font-size="12" font-weight="bold" fill="#28a745">4 Pizzas!</text>
             </g>
             
-            <text x="200" y="280" text-anchor="middle" font-size="18" font-weight="bold" fill="#28a745">Answer: 4 items per group!</text>
+            <!-- Big answer -->
+            <rect x="150" y="320" width="200" height="60" fill="#FFD700" stroke="#FFA500" stroke-width="3" rx="10"/>
+            <text x="250" y="345" text-anchor="middle" font-size="20" font-weight="bold" fill="#8B4513">🎉 ANSWER: 4 Pizzas Each! 🎉</text>
+            <text x="250" y="365" text-anchor="middle" font-size="14" fill="#8B4513">12 ÷ 3 = 4</text>
         </svg>
         """,
-        "caption": "12 items divided into 3 equal groups = 4 items per group"
+        "caption": "12 delicious pizzas shared fairly among 3 friends = 4 pizzas each! 🍕✨"
     }
 
 def create_fraction_visual() -> Dict:
-    """Create a simple fraction visual"""
+    """Create an amazing fraction visual with pizza slices!"""
     return {
         "type": "fraction",
-        "title": "Fraction Visual",
-        "description": "See fractions as parts of a whole!",
+        "title": "🍕 Pizza Fraction Fun!",
+        "description": "Learn fractions with delicious pizza slices!",
         "svg": """
-        <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
-            <rect width="400" height="300" fill="#fff5f5"/>
+        <svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background gradient -->
+            <defs>
+                <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#a8edea;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#fed6e3;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="pizza2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ffd89b;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#19547b;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="cheese" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <rect width="600" height="400" fill="url(#bg2)"/>
             
-            <!-- 1/2 -->
-            <text x="100" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">1/2</text>
-            <circle cx="100" cy="80" r="40" fill="none" stroke="#333" stroke-width="3"/>
-            <path d="M 60 80 L 140 80" stroke="#ff6b6b" stroke-width="4"/>
-            <path d="M 100 40 L 100 80" stroke="#ff6b6b" stroke-width="4"/>
-            <text x="100" y="140" text-anchor="middle" font-size="14" fill="#666">Half shaded</text>
+            <!-- Title -->
+            <text x="300" y="40" text-anchor="middle" font-size="28" font-weight="bold" fill="#8B4513">🍕 Pizza Fractions Adventure! 🍕</text>
             
-            <!-- 1/4 -->
-            <text x="300" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">1/4</text>
-            <circle cx="300" cy="80" r="40" fill="none" stroke="#333" stroke-width="3"/>
-            <path d="M 300 40 L 300 80" stroke="#4ecdc4" stroke-width="4"/>
-            <path d="M 300 80 L 340 80" stroke="#4ecdc4" stroke-width="4"/>
-            <path d="M 300 40 L 340 40" stroke="#4ecdc4" stroke-width="4"/>
-            <path d="M 340 40 L 340 80" stroke="#4ecdc4" stroke-width="4"/>
-            <text x="300" y="140" text-anchor="middle" font-size="14" fill="#666">Quarter shaded</text>
+            <!-- 1/2 Pizza -->
+            <g transform="translate(100, 80)">
+                <text x="0" y="-20" text-anchor="middle" font-size="24" font-weight="bold" fill="#8B4513">1/2 = Half Pizza</text>
+                <!-- Pizza base -->
+                <circle cx="0" cy="0" r="60" fill="url(#pizza2)" stroke="#8B4513" stroke-width="4"/>
+                <!-- Cheese on half -->
+                <path d="M 0 0 L 60 0 A 60 60 0 0 1 0 -60 Z" fill="url(#cheese)" opacity="0.8"/>
+                <!-- Pepperoni -->
+                <circle cx="20" cy="-20" r="8" fill="#FF0000"/>
+                <circle cx="-20" cy="-20" r="8" fill="#FF0000"/>
+                <circle cx="0" cy="-40" r="8" fill="#FF0000"/>
+                <!-- Slice line -->
+                <line x1="0" y1="0" x2="0" y2="-60" stroke="#8B4513" stroke-width="3"/>
+                <text x="0" y="80" text-anchor="middle" font-size="16" fill="#8B4513">😋 Yummy Half!</text>
+            </g>
             
-            <!-- 3/4 -->
-            <text x="200" y="180" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">3/4</text>
-            <circle cx="200" cy="230" r="40" fill="none" stroke="#333" stroke-width="3"/>
-            <path d="M 200 190 L 200 230" stroke="#45b7d1" stroke-width="4"/>
-            <path d="M 200 230 L 240 230" stroke="#45b7d1" stroke-width="4"/>
-            <path d="M 200 190 L 240 190" stroke="#45b7d1" stroke-width="4"/>
-            <path d="M 240 190 L 240 230" stroke="#45b7d1" stroke-width="4"/>
-            <path d="M 200 190 L 240 230" stroke="#45b7d1" stroke-width="4"/>
-            <text x="200" y="290" text-anchor="middle" font-size="14" fill="#666">Three quarters shaded</text>
+            <!-- 1/4 Pizza -->
+            <g transform="translate(300, 80)">
+                <text x="0" y="-20" text-anchor="middle" font-size="24" font-weight="bold" fill="#8B4513">1/4 = Quarter Pizza</text>
+                <!-- Pizza base -->
+                <circle cx="0" cy="0" r="60" fill="url(#pizza2)" stroke="#8B4513" stroke-width="4"/>
+                <!-- Cheese on quarter -->
+                <path d="M 0 0 L 60 0 A 60 60 0 0 1 42.4 -42.4 Z" fill="url(#cheese)" opacity="0.8"/>
+                <!-- Pepperoni -->
+                <circle cx="30" cy="-15" r="8" fill="#FF0000"/>
+                <circle cx="15" cy="-30" r="8" fill="#FF0000"/>
+                <!-- Slice lines -->
+                <line x1="0" y1="0" x2="60" y2="0" stroke="#8B4513" stroke-width="3"/>
+                <line x1="0" y1="0" x2="42.4" y2="-42.4" stroke="#8B4513" stroke-width="3"/>
+                <text x="0" y="80" text-anchor="middle" font-size="16" fill="#8B4513">🍕 One Quarter!</text>
+            </g>
+            
+            <!-- 3/4 Pizza -->
+            <g transform="translate(500, 80)">
+                <text x="0" y="-20" text-anchor="middle" font-size="24" font-weight="bold" fill="#8B4513">3/4 = Three Quarters</text>
+                <!-- Pizza base -->
+                <circle cx="0" cy="0" r="60" fill="url(#pizza2)" stroke="#8B4513" stroke-width="4"/>
+                <!-- Cheese on three quarters -->
+                <path d="M 0 0 L 60 0 A 60 60 0 0 1 0 -60 A 60 60 0 0 1 -42.4 -42.4 Z" fill="url(#cheese)" opacity="0.8"/>
+                <!-- Pepperoni -->
+                <circle cx="30" cy="-15" r="8" fill="#FF0000"/>
+                <circle cx="15" cy="-30" r="8" fill="#FF0000"/>
+                <circle cx="0" cy="-45" r="8" fill="#FF0000"/>
+                <circle cx="-20" cy="-20" r="8" fill="#FF0000"/>
+                <circle cx="-35" cy="-35" r="8" fill="#FF0000"/>
+                <!-- Slice line -->
+                <line x1="0" y1="0" x2="-42.4" y2="-42.4" stroke="#8B4513" stroke-width="3"/>
+                <text x="0" y="80" text-anchor="middle" font-size="16" fill="#8B4513">🤤 Almost Whole!</text>
+            </g>
+            
+            <!-- Interactive comparison -->
+            <g transform="translate(300, 220)">
+                <rect x="-200" y="0" width="400" height="100" fill="#FFD700" stroke="#FFA500" stroke-width="3" rx="15"/>
+                <text x="0" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#8B4513">🎯 Fraction Comparison 🎯</text>
+                <text x="0" y="55" text-anchor="middle" font-size="16" fill="#8B4513">1/2 = 2/4 = 4/8 (All the same!)</text>
+                <text x="0" y="80" text-anchor="middle" font-size="14" fill="#8B4513">The more you cut, the smaller the pieces!</text>
+            </g>
+            
+            <!-- Fun facts -->
+            <g transform="translate(300, 350)">
+                <text x="0" y="0" text-anchor="middle" font-size="18" font-weight="bold" fill="#8B4513">💡 Fun Fact: Fractions are everywhere!</text>
+                <text x="0" y="25" text-anchor="middle" font-size="14" fill="#8B4513">Half an hour, quarter past, three-quarters full... 🕐</text>
+            </g>
         </svg>
         """,
-        "caption": "Fractions show parts of a whole circle"
+        "caption": "Learn fractions with delicious pizza slices! The more you cut, the smaller the pieces! 🍕✨"
     }
 
 def create_multiplication_visual() -> Dict:
-    """Create a simple multiplication visual"""
+    """Create an amazing multiplication visual with cupcakes!"""
     return {
         "type": "multiplication",
-        "title": "Multiplication Visual",
-        "description": "See multiplication as arrays!",
+        "title": "🧁 Cupcake Multiplication Magic!",
+        "description": "See multiplication as delicious cupcake arrays!",
         "svg": """
-        <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
-            <rect width="400" height="300" fill="#f0fff0"/>
-            <text x="200" y="30" text-anchor="middle" font-size="24" font-weight="bold" fill="#333">3 × 4 = 12</text>
+        <svg width="600" height="450" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background gradient -->
+            <defs>
+                <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ffecd2;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#fcb69f;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="cupcake" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ff9a9e;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#fecfef;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="frosting" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#a8edea;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#fed6e3;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <rect width="600" height="450" fill="url(#bg3)"/>
             
-            <!-- Array grid -->
-            <g transform="translate(150, 80)">
+            <!-- Title -->
+            <text x="300" y="40" text-anchor="middle" font-size="28" font-weight="bold" fill="#8B4513">🧁 3 Rows × 4 Cupcakes = ? 🧁</text>
+            
+            <!-- Cupcake array -->
+            <g transform="translate(150, 100)">
                 <!-- Row 1 -->
-                <circle cx="0" cy="0" r="12" fill="#ff6b6b"/>
-                <circle cx="30" cy="0" r="12" fill="#4ecdc4"/>
-                <circle cx="60" cy="0" r="12" fill="#45b7d1"/>
-                <circle cx="90" cy="0" r="12" fill="#ffa07a"/>
+                <g transform="translate(0, 0)">
+                    <ellipse cx="0" cy="0" rx="20" ry="15" fill="url(#cupcake)" stroke="#8B4513" stroke-width="2"/>
+                    <ellipse cx="0" cy="-8" rx="18" ry="12" fill="url(#frosting)" stroke="#FF69B4" stroke-width="2"/>
+                    <circle cx="-5" cy="-12" r="3" fill="#FF0000"/>
+                    <text x="0" y="25" text-anchor="middle" font-size="12" font-weight="bold" fill="#8B4513">1</text>
+                </g>
+                <g transform="translate(50, 0)">
+                    <ellipse cx="0" cy="0" rx="20" ry="15" fill="url(#cupcake)" stroke="#8B4513" stroke-width="2"/>
+                    <ellipse cx="0" cy="-8" rx="18" ry="12" fill="url(#frosting)" stroke="#FF69B4" stroke-width="2"/>
+                    <circle cx="-5" cy="-12" r="3" fill="#FF0000"/>
+                    <text x="0" y="25" text-anchor="middle" font-size="12" font-weight="bold" fill="#8B4513">2</text>
+                </g>
+                <g transform="translate(100, 0)">
+                    <ellipse cx="0" cy="0" rx="20" ry="15" fill="url(#cupcake)" stroke="#8B4513" stroke-width="2"/>
+                    <ellipse cx="0" cy="-8" rx="18" ry="12" fill="url(#frosting)" stroke="#FF69B4" stroke-width="2"/>
+                    <circle cx="-5" cy="-12" r="3" fill="#FF0000"/>
+                    <text x="0" y="25" text-anchor="middle" font-size="12" font-weight="bold" fill="#8B4513">3</text>
+                </g>
+                <g transform="translate(150, 0)">
+                    <ellipse cx="0" cy="0" rx="20" ry="15" fill="url(#cupcake)" stroke="#8B4513" stroke-width="2"/>
+                    <ellipse cx="0" cy="-8" rx="18" ry="12" fill="url(#frosting)" stroke="#FF69B4" stroke-width="2"/>
+                    <circle cx="-5" cy="-12" r="3" fill="#FF0000"/>
+                    <text x="0" y="25" text-anchor="middle" font-size="12" font-weight="bold" fill="#8B4513">4</text>
+                </g>
                 
                 <!-- Row 2 -->
-                <circle cx="0" cy="30" r="12" fill="#98d8c8"/>
-                <circle cx="30" cy="30" r="12" fill="#ff6b6b"/>
-                <circle cx="60" cy="30" r="12" fill="#4ecdc4"/>
-                <circle cx="90" cy="30" r="12" fill="#45b7d1"/>
+                <g transform="translate(0, 50)">
+                    <ellipse cx="0" cy="0" rx="20" ry="15" fill="url(#cupcake)" stroke="#8B4513" stroke-width="2"/>
+                    <ellipse cx="0" cy="-8" rx="18" ry="12" fill="url(#frosting)" stroke="#FF69B4" stroke-width="2"/>
+                    <circle cx="-5" cy="-12" r="3" fill="#FF0000"/>
+                    <text x="0" y="25" text-anchor="middle" font-size="12" font-weight="bold" fill="#8B4513">5</text>
+                </g>
+                <g transform="translate(50, 50)">
+                    <ellipse cx="0" cy="0" rx="20" ry="15" fill="url(#cupcake)" stroke="#8B4513" stroke-width="2"/>
+                    <ellipse cx="0" cy="-8" rx="18" ry="12" fill="url(#frosting)" stroke="#FF69B4" stroke-width="2"/>
+                    <circle cx="-5" cy="-12" r="3" fill="#FF0000"/>
+                    <text x="0" y="25" text-anchor="middle" font-size="12" font-weight="bold" fill="#8B4513">6</text>
+                </g>
+                <g transform="translate(100, 50)">
+                    <ellipse cx="0" cy="0" rx="20" ry="15" fill="url(#cupcake)" stroke="#8B4513" stroke-width="2"/>
+                    <ellipse cx="0" cy="-8" rx="18" ry="12" fill="url(#frosting)" stroke="#FF69B4" stroke-width="2"/>
+                    <circle cx="-5" cy="-12" r="3" fill="#FF0000"/>
+                    <text x="0" y="25" text-anchor="middle" font-size="12" font-weight="bold" fill="#8B4513">7</text>
+                </g>
+                <g transform="translate(150, 50)">
+                    <ellipse cx="0" cy="0" rx="20" ry="15" fill="url(#cupcake)" stroke="#8B4513" stroke-width="2"/>
+                    <ellipse cx="0" cy="-8" rx="18" ry="12" fill="url(#frosting)" stroke="#FF69B4" stroke-width="2"/>
+                    <circle cx="-5" cy="-12" r="3" fill="#FF0000"/>
+                    <text x="0" y="25" text-anchor="middle" font-size="12" font-weight="bold" fill="#8B4513">8</text>
+                </g>
                 
                 <!-- Row 3 -->
-                <circle cx="0" cy="60" r="12" fill="#ffa07a"/>
-                <circle cx="30" cy="60" r="12" fill="#98d8c8"/>
-                <circle cx="60" cy="60" r="12" fill="#ff6b6b"/>
-                <circle cx="90" cy="60" r="12" fill="#4ecdc4"/>
+                <g transform="translate(0, 100)">
+                    <ellipse cx="0" cy="0" rx="20" ry="15" fill="url(#cupcake)" stroke="#8B4513" stroke-width="2"/>
+                    <ellipse cx="0" cy="-8" rx="18" ry="12" fill="url(#frosting)" stroke="#FF69B4" stroke-width="2"/>
+                    <circle cx="-5" cy="-12" r="3" fill="#FF0000"/>
+                    <text x="0" y="25" text-anchor="middle" font-size="12" font-weight="bold" fill="#8B4513">9</text>
+                </g>
+                <g transform="translate(50, 100)">
+                    <ellipse cx="0" cy="0" rx="20" ry="15" fill="url(#cupcake)" stroke="#8B4513" stroke-width="2"/>
+                    <ellipse cx="0" cy="-8" rx="18" ry="12" fill="url(#frosting)" stroke="#FF69B4" stroke-width="2"/>
+                    <circle cx="-5" cy="-12" r="3" fill="#FF0000"/>
+                    <text x="0" y="25" text-anchor="middle" font-size="12" font-weight="bold" fill="#8B4513">10</text>
+                </g>
+                <g transform="translate(100, 100)">
+                    <ellipse cx="0" cy="0" rx="20" ry="15" fill="url(#cupcake)" stroke="#8B4513" stroke-width="2"/>
+                    <ellipse cx="0" cy="-8" rx="18" ry="12" fill="url(#frosting)" stroke="#FF69B4" stroke-width="2"/>
+                    <circle cx="-5" cy="-12" r="3" fill="#FF0000"/>
+                    <text x="0" y="25" text-anchor="middle" font-size="12" font-weight="bold" fill="#8B4513">11</text>
+                </g>
+                <g transform="translate(150, 100)">
+                    <ellipse cx="0" cy="0" rx="20" ry="15" fill="url(#cupcake)" stroke="#8B4513" stroke-width="2"/>
+                    <ellipse cx="0" cy="-8" rx="18" ry="12" fill="url(#frosting)" stroke="#FF69B4" stroke-width="2"/>
+                    <circle cx="-5" cy="-12" r="3" fill="#FF0000"/>
+                    <text x="0" y="25" text-anchor="middle" font-size="12" font-weight="bold" fill="#8B4513">12</text>
+                </g>
             </g>
             
-            <!-- Labels -->
-            <text x="120" y="110" font-size="16" fill="#666">3 rows</text>
-            <text x="280" y="110" font-size="16" fill="#666">4 columns</text>
+            <!-- Row and column labels -->
+            <text x="100" y="180" text-anchor="middle" font-size="20" font-weight="bold" fill="#8B4513">3 Rows</text>
+            <text x="400" y="180" text-anchor="middle" font-size="20" font-weight="bold" fill="#8B4513">4 Columns</text>
             
-            <text x="200" y="180" text-anchor="middle" font-size="18" font-weight="bold" fill="#28a745">3 rows × 4 columns = 12 total!</text>
+            <!-- Counting animation -->
+            <g transform="translate(300, 220)">
+                <rect x="-150" y="0" width="300" height="80" fill="#FFD700" stroke="#FFA500" stroke-width="3" rx="15"/>
+                <text x="0" y="25" text-anchor="middle" font-size="18" font-weight="bold" fill="#8B4513">🔢 Count the Cupcakes! 🔢</text>
+                <text x="0" y="50" text-anchor="middle" font-size="16" fill="#8B4513">1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12</text>
+            </g>
             
-            <!-- Count animation -->
-            <text x="200" y="220" text-anchor="middle" font-size="14" fill="#666">Count all the circles: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12</text>
+            <!-- Answer -->
+            <g transform="translate(300, 320)">
+                <rect x="-120" y="0" width="240" height="60" fill="#32CD32" stroke="#228B22" stroke-width="3" rx="15"/>
+                <text x="0" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="white">🎉 3 × 4 = 12 🎉</text>
+                <text x="0" y="45" text-anchor="middle" font-size="14" fill="white">Total Cupcakes!</text>
+            </g>
+            
+            <!-- Fun fact -->
+            <g transform="translate(300, 400)">
+                <text x="0" y="0" text-anchor="middle" font-size="16" font-weight="bold" fill="#8B4513">💡 Multiplication is just repeated addition!</text>
+                <text x="0" y="20" text-anchor="middle" font-size="14" fill="#8B4513">3 × 4 = 4 + 4 + 4 = 12 🧁</text>
+            </g>
         </svg>
         """,
-        "caption": "3 rows of 4 items = 12 total items"
+        "caption": "3 rows of 4 delicious cupcakes = 12 total cupcakes! Multiplication is just repeated addition! 🧁✨"
     }
 
 def create_addition_visual() -> Dict:
