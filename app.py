@@ -87,7 +87,11 @@ def create_app(config_override=None):
 # Register Open Learning Blueprint (50+ free APIs!)
 from open_learning.router import bp as open_learning_bp
 
+# Register Parent Dashboard Blueprint
+from blueprints.parent import parent_bp
+
 app.register_blueprint(open_learning_bp)
+app.register_blueprint(parent_bp)
 
 # Game state for multiplayer
 game_rooms = {}

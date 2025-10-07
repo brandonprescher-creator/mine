@@ -53,6 +53,11 @@
                 <span class="extra-emoji">👭</span>
                 <span>SISTER QUESTS!</span>
             </button>
+            
+            <button class="extra-btn" onclick="goToParentLogin()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <span class="extra-emoji">👨‍👩‍👧‍👦</span>
+                <span>PARENT LOGIN</span>
+            </button>
         </div>
     </div>
     
@@ -286,6 +291,11 @@ function readBooks() {
 function goToSisterQuests() {
     playSound('correct');
     window.location.href = '/sister-quests';
+}
+
+function goToParentLogin() {
+    playSound('correct');
+    window.location.href = '/parent/login';
 }
 
 function playGame(gameType) {

@@ -18,8 +18,11 @@ from database_parent_features import (
 
 parent_bp = Blueprint("parent", __name__)
 
-# Simple password protection (in production, use proper authentication)
-PARENT_PASSWORD = "homeschool2024"  # Change this!
+# Parent user credentials
+PARENT_USERS = {
+    "Brandon": "Creatine",
+    "Haley": "Creatine"
+}
 
 
 def parent_required(f):
@@ -38,12 +41,15 @@ def parent_required(f):
 def parent_login():
     """Parent login page"""
     if request.method == "POST":
-        password = request.form.get("password")
-        if password == PARENT_PASSWORD:
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "").strip()
+        
+        if username in PARENT_USERS and PARENT_USERS[username] == password:
             session["parent_authenticated"] = True
+            session["parent_username"] = username
             return redirect(url_for("parent.parent_dashboard_home"))
         else:
-            return render_template("parent_login.html", error="Incorrect password")
+            return render_template("parent_login.html", error="Invalid username or password")
 
     return render_template("parent_login.html")
 
