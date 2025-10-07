@@ -1,0 +1,902 @@
+{% extends "base.html" %}
+
+{% block title %}EPIC GAMES - ULTIMATE BADASS TUTOR{% endblock %}
+
+{% block content %}
+<div class="games-mega-page">
+    <!-- MASSIVE GAMES HERO -->
+    <div class="games-hero-ultra">
+        <div class="hero-game-bg"></div>
+        
+        <!-- Navigation -->
+        <a href="/" class="games-back-btn">⬅️ Back to Home</a>
+        
+        <!-- Hero Content -->
+        <div class="games-hero-content">
+            <div class="games-mascot-huge">🎮</div>
+            <h1 class="games-ultra-title">
+                <span class="game-word">EPIC</span>
+                <span class="game-word">LEARNING</span>
+                <span class="game-word">GAMES!</span>
+            </h1>
+            <p class="games-tagline">Learn while having the TIME OF YOUR LIFE! 🌟</p>
+            
+            <!-- Quick Stats -->
+            <div class="games-quick-stats">
+                <div class="quick-stat">
+                    <span class="stat-emoji">🎯</span>
+                    <span class="stat-text">4+ Games</span>
+                </div>
+                <div class="quick-stat">
+                    <span class="stat-emoji">🏆</span>
+                    <span class="stat-text">Earn Points</span>
+                </div>
+                <div class="quick-stat">
+                    <span class="stat-emoji">👥</span>
+                    <span class="stat-text">Multiplayer</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAMES GRID - ABSOLUTELY MASSIVE -->
+    <div class="games-container-mega">
+        <h2 class="games-section-title">
+            <span class="section-emoji">⚔️</span>
+            CHOOSE YOUR GAME!
+            <span class="section-emoji">⚔️</span>
+        </h2>
+        
+        <div class="games-grid-ultra">
+            <!-- MATH BATTLE -->
+            <div class="game-card-ultra" data-game="math-battle">
+                <div class="game-glow-red"></div>
+                <div class="game-badge-mega hot">🔥 SUPER HOT!</div>
+                
+                <div class="game-icon-ultra">⚔️</div>
+                <h3 class="game-title-ultra">MATH BATTLE</h3>
+                <p class="game-desc-ultra">Fight epic monsters by solving math problems! Defeat the boss and become a LEGEND!</p>
+                
+                <div class="game-features">
+                    <div class="feature-tag">✨ Boss Battles</div>
+                    <div class="feature-tag">🎯 Power-Ups</div>
+                    <div class="feature-tag">🏆 High Scores</div>
+                </div>
+                
+                <div class="game-difficulty">
+                    <span class="diff-label">Difficulty:</span>
+                    <span class="diff-stars">⭐⭐⭐</span>
+                </div>
+                
+                <button class="play-ultra-btn" onclick="playGame('math-battle')">
+                    <div class="btn-mega-glow"></div>
+                    <span class="play-content">
+                        <span class="play-emoji">⚔️</span>
+                        <span class="play-text">BATTLE NOW!</span>
+                        <span class="play-emoji">⚔️</span>
+                    </span>
+                </button>
+                
+                <div class="game-corner-decoration">💥</div>
+            </div>
+
+            <!-- WORD HUNT -->
+            <div class="game-card-ultra" data-game="word-hunt">
+                <div class="game-glow-green"></div>
+                <div class="game-badge-mega new">✨ FUN!</div>
+                
+                <div class="game-icon-ultra">🔍</div>
+                <h3 class="game-title-ultra">WORD HUNT</h3>
+                <p class="game-desc-ultra">Search the jungle for hidden words! Find them all before time runs out and win BIG!</p>
+                
+                <div class="game-features">
+                    <div class="feature-tag">🌴 Jungle Theme</div>
+                    <div class="feature-tag">⏱️ Timed Challenge</div>
+                    <div class="feature-tag">🎁 Bonus Words</div>
+                </div>
+                
+                <div class="game-difficulty">
+                    <span class="diff-label">Difficulty:</span>
+                    <span class="diff-stars">⭐⭐</span>
+                </div>
+                
+                <button class="play-ultra-btn" onclick="playGame('word-hunt')">
+                    <div class="btn-mega-glow"></div>
+                    <span class="play-content">
+                        <span class="play-emoji">🔍</span>
+                        <span class="play-text">START HUNT!</span>
+                        <span class="play-emoji">🔍</span>
+                    </span>
+                </button>
+                
+                <div class="game-corner-decoration">🌟</div>
+            </div>
+
+            <!-- SCIENCE LAB -->
+            <div class="game-card-ultra" data-game="science-lab">
+                <div class="game-glow-blue"></div>
+                <div class="game-badge-mega cool">🧪 AMAZING!</div>
+                
+                <div class="game-icon-ultra">🧪</div>
+                <h3 class="game-title-ultra">SCIENCE LAB</h3>
+                <p class="game-desc-ultra">Mix ingredients and create CRAZY experiments! Discover new combinations and earn scientist points!</p>
+                
+                <div class="game-features">
+                    <div class="feature-tag">🧬 Experiments</div>
+                    <div class="feature-tag">💎 Rare Elements</div>
+                    <div class="feature-tag">🏅 Scientist Rank</div>
+                </div>
+                
+                <div class="game-difficulty">
+                    <span class="diff-label">Difficulty:</span>
+                    <span class="diff-stars">⭐⭐⭐⭐</span>
+                </div>
+                
+                <button class="play-ultra-btn" onclick="playGame('science-lab')">
+                    <div class="btn-mega-glow"></div>
+                    <span class="play-content">
+                        <span class="play-emoji">🧪</span>
+                        <span class="play-text">START LAB!</span>
+                        <span class="play-emoji">🧪</span>
+                    </span>
+                </button>
+                
+                <div class="game-corner-decoration">💫</div>
+            </div>
+
+            <!-- SPACE RACE -->
+            <div class="game-card-ultra" data-game="space-race">
+                <div class="game-glow-purple"></div>
+                <div class="game-badge-mega epic">🚀 EPIC!</div>
+                
+                <div class="game-icon-ultra">🚀</div>
+                <h3 class="game-title-ultra">SPACE RACE</h3>
+                <p class="game-desc-ultra">Race through the galaxy while avoiding obstacles! Answer questions to boost your rocket!</p>
+                
+                <div class="game-features">
+                    <div class="feature-tag">🌌 Galaxy Travel</div>
+                    <div class="feature-tag">💨 Speed Boosts</div>
+                    <div class="feature-tag">🛸 UFO Enemies</div>
+                </div>
+                
+                <div class="game-difficulty">
+                    <span class="diff-label">Difficulty:</span>
+                    <span class="diff-stars">⭐⭐⭐</span>
+                </div>
+                
+                <button class="play-ultra-btn" onclick="playGame('space-race')">
+                    <div class="btn-mega-glow"></div>
+                    <span class="play-content">
+                        <span class="play-emoji">🚀</span>
+                        <span class="play-text">BLAST OFF!</span>
+                        <span class="play-emoji">🚀</span>
+                    </span>
+                </button>
+                
+                <div class="game-corner-decoration">⭐</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEADERBOARD SECTION -->
+    <div class="leaderboard-mega-section">
+        <h2 class="leaderboard-mega-title">
+            <span class="lb-emoji">👑</span>
+            TOP PLAYERS!
+            <span class="lb-emoji">👑</span>
+        </h2>
+        
+        <div class="leaderboard-mega-container">
+            <div class="leader-item mega-1">
+                <div class="leader-rank">1st</div>
+                <div class="leader-avatar">👑</div>
+                <div class="leader-info">
+                    <div class="leader-name">MathMaster99</div>
+                    <div class="leader-score">2,847 points</div>
+                </div>
+                <div class="leader-crown">🏆</div>
+            </div>
+            
+            <div class="leader-item mega-2">
+                <div class="leader-rank">2nd</div>
+                <div class="leader-avatar">🥈</div>
+                <div class="leader-info">
+                    <div class="leader-name">ScienceWiz</div>
+                    <div class="leader-score">2,634 points</div>
+                </div>
+                <div class="leader-medal">🥈</div>
+            </div>
+            
+            <div class="leader-item mega-3">
+                <div class="leader-rank">3rd</div>
+                <div class="leader-avatar">🥉</div>
+                <div class="leader-info">
+                    <div class="leader-name">WordHunter</div>
+                    <div class="leader-score">2,421 points</div>
+                </div>
+                <div class="leader-medal">🥉</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ENCOURAGEMENT -->
+    <div class="games-encouragement">
+        <div class="encourage-mascot">💪</div>
+        <h2 class="encourage-title">YOU CAN DO IT!</h2>
+        <p class="encourage-text">Every game makes you SMARTER and MORE AWESOME! 🌈</p>
+        <div class="encourage-badges">
+            <div class="encourage-badge">🎯 Have Fun!</div>
+            <div class="encourage-badge">🧠 Get Smarter!</div>
+            <div class="encourage-badge">🏆 Win Prizes!</div>
+        </div>
+    </div>
+</div>
+
+<script>
+function playGame(gameType) {
+    const card = event.currentTarget.closest('.game-card-ultra');
+    
+    // Epic animation
+    card.style.transform = 'scale(1.3) rotateY(720deg)';
+    card.style.opacity = '0.5';
+    
+    // Sound
+    if (typeof badassTutor !== 'undefined') {
+        badassTutor.playSound('level-up');
+    }
+    
+    // MASSIVE explosion
+    createGameExplosion(gameType);
+    
+    // Navigate
+    setTimeout(() => {
+        // For now, show message
+        alert(`🎮 ${gameType.toUpperCase()} is loading! Get ready for EPIC fun!`);
+        card.style.transform = 'scale(1)';
+        card.style.opacity = '1';
+    }, 1000);
+}
+
+function createGameExplosion(gameType) {
+    const emojiSets = {
+        'math-battle': ['⚔️', '🛡️', '⚡', '💥', '🔥', '💪', '🎯'],
+        'word-hunt': ['🔍', '📖', '✏️', '📝', '🎯', '⭐', '✨'],
+        'science-lab': ['🧪', '🔬', '⚗️', '🧬', '💡', '🌟', '✨'],
+        'space-race': ['🚀', '🌟', '⭐', '💫', '🌌', '🛸', '👽']
+    };
+    
+    const emojis = emojiSets[gameType] || ['🎮', '🎯', '⭐', '✨'];
+    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#feca57', '#ff9ff3'];
+    
+    for (let i = 0; i < 100; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'game-explosion-particle';
+        
+        if (Math.random() > 0.3) {
+            particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            particle.style.fontSize = (Math.random() * 2.5 + 2) + 'rem';
+        } else {
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.width = (Math.random() * 20 + 10) + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.borderRadius = '50%';
+        }
+        
+        particle.style.left = (Math.random() * window.innerWidth) + 'px';
+        particle.style.top = (Math.random() * window.innerHeight) + 'px';
+        particle.style.setProperty('--tx', (Math.random() - 0.5) * 800 + 'px');
+        particle.style.setProperty('--ty', (Math.random() - 0.5) * 800 + 'px');
+        particle.style.setProperty('--rotation', (Math.random() * 1080) + 'deg');
+        
+        document.body.appendChild(particle);
+        
+        setTimeout(() => particle.remove(), 2500);
+    }
+}
+
+// Add hover effects
+document.addEventListener('DOMContentLoaded', function() {
+    const gameCards = document.querySelectorAll('.game-card-ultra');
+    
+    gameCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            const icon = this.querySelector('.game-icon-ultra');
+            icon.style.transform = 'scale(1.3) rotate(360deg)';
+            
+            // Create small particles on hover
+            for (let i = 0; i < 10; i++) {
+                createHoverParticle(this);
+            }
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            const icon = this.querySelector('.game-icon-ultra');
+            icon.style.transform = 'scale(1) rotate(0deg)';
+        });
+    });
+});
+
+function createHoverParticle(card) {
+    const rect = card.getBoundingClientRect();
+    const particle = document.createElement('div');
+    particle.className = 'hover-particle';
+    particle.textContent = ['✨', '⭐', '🌟'][Math.floor(Math.random() * 3)];
+    particle.style.left = (rect.left + Math.random() * rect.width) + 'px';
+    particle.style.top = (rect.top + Math.random() * rect.height) + 'px';
+    
+    document.body.appendChild(particle);
+    setTimeout(() => particle.remove(), 1000);
+}
+</script>
+
+<style>
+.games-mega-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 30%, #f093fb 60%, #667eea 100%);
+    background-size: 400% 400%;
+    animation: megaGradient 15s ease infinite;
+}
+
+@keyframes megaGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.games-hero-ultra {
+    padding: 4rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 0 100px 100px;
+    margin-bottom: 4rem;
+}
+
+.hero-game-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-image: 
+        linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.1) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.1) 75%);
+    background-size: 60px 60px;
+    background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
+    animation: patternMove 20s linear infinite;
+}
+
+@keyframes patternMove {
+    0% { background-position: 0 0, 0 30px, 30px -30px, -30px 0px; }
+    100% { background-position: 60px 60px, 60px 90px, 90px 30px, 30px 60px; }
+}
+
+.games-back-btn {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(15px);
+    color: white;
+    padding: 1.2rem 2.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.3rem;
+    border: 4px solid rgba(255,255,255,0.5);
+    transition: all 0.3s ease;
+}
+
+.games-back-btn:hover {
+    background: rgba(255,255,255,0.5);
+    transform: translateX(-15px) scale(1.1);
+}
+
+.games-mascot-huge {
+    font-size: 15rem;
+    animation: bounce 2s ease-in-out infinite;
+    filter: drop-shadow(0 25px 50px rgba(0,0,0,0.4));
+}
+
+.games-ultra-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 6rem;
+    color: white;
+    text-shadow: 8px 8px 20px rgba(0,0,0,0.5);
+    margin: 2rem 0;
+    line-height: 1.2;
+}
+
+.game-word {
+    display: inline-block;
+    animation: gameWordPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    animation-fill-mode: both;
+}
+
+.game-word:nth-child(1) { animation-delay: 0.1s; }
+.game-word:nth-child(2) { animation-delay: 0.3s; }
+.game-word:nth-child(3) { animation-delay: 0.5s; }
+
+@keyframes gameWordPop {
+    0% {
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+.games-tagline {
+    font-size: 2.5rem;
+    color: white;
+    font-weight: bold;
+    text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+}
+
+.games-quick-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+
+.quick-stat {
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(15px);
+    padding: 1.5rem 3rem;
+    border-radius: 50px;
+    border: 4px solid rgba(255,255,255,0.5);
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stat-emoji {
+    font-size: 2.5rem;
+}
+
+.games-container-mega {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.games-section-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 5rem;
+    text-align: center;
+    color: white;
+    text-shadow: 6px 6px 20px rgba(0,0,0,0.4);
+    margin-bottom: 4rem;
+}
+
+.section-emoji {
+    font-size: 5rem;
+    animation: spin 4s linear infinite;
+}
+
+.games-grid-ultra {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 4rem;
+}
+
+.game-card-ultra {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+    border-radius: 50px;
+    padding: 3.5rem;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border: 8px solid transparent;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.game-card-ultra:hover {
+    transform: translateY(-35px) scale(1.1) rotate(3deg);
+    box-shadow: 0 40px 90px rgba(0,0,0,0.4);
+    border-color: #ff6b6b;
+}
+
+.game-glow-red, .game-glow-green, .game-glow-blue, .game-glow-purple {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s;
+    border-radius: 50px;
+}
+
+.game-glow-red { background: radial-gradient(circle, rgba(255,107,107,0.3) 0%, transparent 70%); }
+.game-glow-green { background: radial-gradient(circle, rgba(67,233,123,0.3) 0%, transparent 70%); }
+.game-glow-blue { background: radial-gradient(circle, rgba(69,183,209,0.3) 0%, transparent 70%); }
+.game-glow-purple { background: radial-gradient(circle, rgba(118,75,162,0.3) 0%, transparent 70%); }
+
+.game-card-ultra:hover .game-glow-red,
+.game-card-ultra:hover .game-glow-green,
+.game-card-ultra:hover .game-glow-blue,
+.game-card-ultra:hover .game-glow-purple {
+    opacity: 1;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.game-badge-mega {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    padding: 0.8rem 1.8rem;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    z-index: 10;
+}
+
+.game-badge-mega.hot {
+    background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+    color: white;
+}
+
+.game-badge-mega.new {
+    background: linear-gradient(45deg, #43e97b, #38f9d7);
+    color: white;
+}
+
+.game-badge-mega.cool {
+    background: linear-gradient(45deg, #4facfe, #00f2fe);
+    color: white;
+}
+
+.game-badge-mega.epic {
+    background: linear-gradient(45deg, #764ba2, #f093fb);
+    color: white;
+}
+
+.game-icon-ultra {
+    font-size: 10rem;
+    margin: 2rem 0;
+    transition: all 0.5s ease;
+    display: inline-block;
+    filter: drop-shadow(0 15px 40px rgba(0,0,0,0.3));
+}
+
+.game-title-ultra {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3rem;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+.game-desc-ultra {
+    font-size: 1.4rem;
+    color: #555;
+    line-height: 1.9;
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+.game-features {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin: 2rem 0;
+}
+
+.feature-tag {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    padding: 0.7rem 1.5rem;
+    border-radius: 25px;
+    font-weight: bold;
+    border: 3px solid white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.game-difficulty {
+    text-align: center;
+    margin: 2rem 0;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.diff-stars {
+    font-size: 1.8rem;
+}
+
+.play-ultra-btn {
+    background: linear-gradient(45deg, #ff6b6b 0%, #ff8e53 25%, #feca57 50%, #ff8e53 75%, #ff6b6b 100%);
+    background-size: 400% 100%;
+    border: none;
+    color: white;
+    padding: 2.5rem 4rem;
+    border-radius: 80px;
+    font-size: 2.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 18px 55px rgba(255,107,107,0.6);
+    transition: all 0.5s ease;
+    animation: rainbowPulse 4s ease infinite;
+}
+
+@keyframes rainbowPulse {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.play-ultra-btn:hover {
+    transform: scale(1.15);
+    box-shadow: 0 25px 70px rgba(255,107,107,0.8);
+}
+
+.btn-mega-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    animation: megaShine 2s infinite;
+}
+
+@keyframes megaShine {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
+
+.play-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    font-family: 'Fredoka One', cursive;
+}
+
+.play-emoji {
+    font-size: 3rem;
+    animation: wiggle 1s ease-in-out infinite;
+}
+
+.game-corner-decoration {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    font-size: 4rem;
+    animation: spin 3s linear infinite;
+}
+
+.leaderboard-mega-section {
+    max-width: 1200px;
+    margin: 5rem auto;
+    padding: 3rem;
+}
+
+.leaderboard-mega-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 4rem;
+    text-align: center;
+    color: white;
+    text-shadow: 5px 5px 15px rgba(0,0,0,0.4);
+    margin-bottom: 3rem;
+}
+
+.lb-emoji {
+    font-size: 5rem;
+}
+
+.leaderboard-mega-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.leader-item {
+    background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+    border-radius: 40px;
+    padding: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    transition: all 0.4s ease;
+    border: 6px solid transparent;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+.leader-item:hover {
+    transform: translateX(20px) scale(1.05);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.leader-item.mega-1 {
+    border-color: #ffd700;
+    background: linear-gradient(135deg, #fff9e6 0%, #ffe9a3 100%);
+}
+
+.leader-item.mega-2 {
+    border-color: #c0c0c0;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+}
+
+.leader-item.mega-3 {
+    border-color: #cd7f32;
+    background: linear-gradient(135deg, #ffe6d5 0%, #ffcba3 100%);
+}
+
+.leader-rank {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #333;
+    min-width: 80px;
+    text-align: center;
+}
+
+.leader-avatar {
+    font-size: 5rem;
+}
+
+.leader-info {
+    flex: 1;
+}
+
+.leader-name {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.leader-score {
+    font-size: 1.5rem;
+    color: #666;
+    font-weight: bold;
+}
+
+.leader-crown, .leader-medal {
+    font-size: 5rem;
+}
+
+.games-encouragement {
+    max-width: 1200px;
+    margin: 5rem auto 3rem;
+    padding: 4rem;
+    background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+    border-radius: 70px;
+    text-align: center;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+}
+
+.encourage-mascot {
+    font-size: 12rem;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+.encourage-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 5rem;
+    color: #333;
+    margin: 2rem 0;
+}
+
+.encourage-text {
+    font-size: 2rem;
+    color: #555;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.encourage-badges {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.encourage-badge {
+    background: rgba(255,255,255,0.8);
+    padding: 1.5rem 3rem;
+    border-radius: 40px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: 4px solid white;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.game-explosion-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    animation: gameExplosion 2.5s ease-out forwards;
+}
+
+@keyframes gameExplosion {
+    0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0) rotate(var(--rotation));
+        opacity: 0;
+    }
+}
+
+.hover-particle {
+    position: fixed;
+    font-size: 1.5rem;
+    pointer-events: none;
+    z-index: 9999;
+    animation: floatUp 1s ease-out forwards;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Mode Content Styles */
+.learn-container-mega, .practice-container-mega, .visual-container-mega {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .games-ultra-title {
+        font-size: 3.5rem;
+    }
+    
+    .games-mascot-huge {
+        font-size: 8rem;
+    }
+    
+    .games-grid-ultra {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+    
+    .game-icon-ultra {
+        font-size: 6rem;
+    }
+    
+    .play-ultra-btn {
+        font-size: 1.8rem;
+        padding: 2rem 3rem;
+    }
+    
+    .leaderboard-mega-container {
+        gap: 1.5rem;
+    }
+    
+    .leader-name {
+        font-size: 1.8rem;
+    }
+}
+</style>
+{% endblock %}

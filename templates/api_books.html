@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+
+{% block title %}Open Library API - 20M+ Books{% endblock %}
+
+{% block content %}
+<div class="books-page-mega">
+    <!-- HERO -->
+    <div class="books-hero">
+        <a href="/api-explorer" class="books-back-btn">⬅️ All APIs</a>
+        
+        <div class="books-mascot">📚</div>
+        <h1 class="books-title-mega">OPEN LIBRARY API</h1>
+        <p class="books-subtitle">Search 20 MILLION Books - FREE! 📖</p>
+        
+        <div class="books-stats">
+            <div class="books-stat">
+                <div class="stat-huge">20M+</div>
+                <div class="stat-label-books">Books</div>
+            </div>
+            <div class="books-stat">
+                <div class="stat-huge">📸</div>
+                <div class="stat-label-books">Covers</div>
+            </div>
+            <div class="books-stat">
+                <div class="stat-huge">FREE</div>
+                <div class="stat-label-books">Always</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="books-search-section">
+        <h2 class="books-search-title">🔍 Find Any Book!</h2>
+        <div class="books-search-box">
+            <input type="text" id="book-search" placeholder="Search for books..." value="Mathematics for Kids" class="books-input-mega">
+            <button onclick="searchBooks()" class="books-search-btn-mega">
+                <span class="search-emoji">📖</span>
+                <span>SEARCH BOOKS!</span>
+            </button>
+        </div>
+        
+        <div id="books-results" class="books-results-mega"></div>
+    </div>
+
+    <!-- QUICK SEARCHES -->
+    <div class="quick-searches-section">
+        <h2 class="quick-title-mega">⚡ Popular Searches!</h2>
+        <div class="quick-btns-grid">
+            <button class="quick-search-btn" onclick="quickBookSearch('Science')">🔬 Science Books</button>
+            <button class="quick-search-btn" onclick="quickBookSearch('Math')">📐 Math Books</button>
+            <button class="quick-search-btn" onclick="quickBookSearch('History')">📜 History Books</button>
+            <button class="quick-search-btn" onclick="quickBookSearch('Fiction')">📖 Fiction</button>
+            <button class="quick-search-btn" onclick="quickBookSearch('Poetry')">✍️ Poetry</button>
+            <button class="quick-search-btn" onclick="quickBookSearch('Animals')">🦁 Animals</button>
+        </div>
+    </div>
+
+    <!-- LIVE SHOWCASE -->
+    <div class="books-showcase">
+        <h2 class="showcase-title-books">📚 Featured Books</h2>
+        <div id="featured-books" class="featured-books-grid"></div>
+    </div>
+</div>
+
+<script>
+// Search books
+async function searchBooks() {
+    const query = document.getElementById('book-search').value;
+    if (!query) return;
+    
+    const container = document.getElementById('books-results');
+    container.innerHTML = '<div class="loading-books">📚 Searching 20 million books...</div>';
+    
+    try {
+        const response = await fetch(`/api/open/books/${encodeURIComponent(query)}?limit=12`);
+        const books = await response.json();
+        
+        if (books.length > 0) {
+            container.innerHTML = `
+                <div class="books-results-header">
+                    <h3>Found ${books.length} books!</h3>
+                </div>
+                <div class="books-grid-mega">
+                    ${books.map(book => `
+                        <div class="book-card-mega">
+                            <div class="book-cover-container">
+                                ${book.image ? 
+                                    `<img src="${book.image}" alt="${book.title}" class="book-cover-img">` :
+                                    `<div class="book-cover-placeholder">📚</div>`
+                                }
+                            </div>
+                            <div class="book-info-mega">
+                                <h4 class="book-title-card">${book.title}</h4>
+                                <p class="book-author-card">${book.text}</p>
+                                ${book.url ? `<a href="${book.url}" target="_blank" class="book-link-btn">View Book →</a>` : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } else {
+            container.innerHTML = '<div class="no-books-found">No books found. Try a different search!</div>';
+        }
+    } catch (error) {
+        container.innerHTML = '<div class="error-books">Error loading books!</div>';
+    }
+}
+
+function quickBookSearch(topic) {
+    document.getElementById('book-search').value = topic;
+    searchBooks();
+}
+
+// Load featured books on page load
+document.addEventListener('DOMContentLoaded', async function() {
+    const topics = ['Science for Kids', 'Adventure Stories', 'History'];
+    const container = document.getElementById('featured-books');
+    
+    container.innerHTML = '<div class="loading-books">Loading featured books...</div>';
+    
+    let allBooks = [];
+    for (const topic of topics) {
+        try {
+            const response = await fetch(`/api/open/books/${encodeURIComponent(topic)}?limit=4`);
+            const books = await response.json();
+            allBooks = allBooks.concat(books);
+        } catch (e) {}
+    }
+    
+    container.innerHTML = allBooks.slice(0, 8).map(book => `
+        <div class="featured-book-card">
+            ${book.image ? `<img src="${book.image}" class="featured-cover">` : '<div class="featured-placeholder">📚</div>'}
+            <h4>${book.title.substring(0, 50)}...</h4>
+            <p>${book.text}</p>
+        </div>
+    `).join('');
+});
+</script>
+
+<style>
+.books-page-mega {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 50%, #ffeaa7 100%);
+}
+
+.books-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 4rem 2rem;
+    text-align: center;
+    position: relative;
+    border-radius: 0 0 70px 70px;
+    margin-bottom: 4rem;
+}
+
+.books-mascot {
+    font-size: 14rem;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+.books-title-mega {
+    font-family: 'Fredoka One', cursive;
+    font-size: 6rem;
+    color: white;
+    text-shadow: 6px 6px 20px rgba(0,0,0,0.5);
+    margin: 2rem 0;
+}
+
+.books-subtitle {
+    font-size: 2.5rem;
+    color: white;
+    font-weight: bold;
+}
+
+.books-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+
+.books-stat {
+    background: rgba(255,255,255,0.25);
+    padding: 2rem 3rem;
+    border-radius: 35px;
+    border: 4px solid rgba(255,255,255,0.5);
+}
+
+.stat-huge {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3.5rem;
+    color: white;
+}
+
+.books-search-section {
+    max-width: 1200px;
+    margin: 0 auto 4rem;
+    padding: 0 2rem;
+}
+
+.books-search-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 4rem;
+    text-align: center;
+    color: #333;
+    margin-bottom: 2.5rem;
+}
+
+.books-search-box {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.books-input-mega {
+    flex: 1;
+    padding: 2rem 2.5rem;
+    border: 6px solid #667eea;
+    border-radius: 50px;
+    font-size: 1.8rem;
+    outline: none;
+    font-weight: bold;
+}
+
+.books-search-btn-mega {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    border: none;
+    color: white;
+    padding: 2rem 4rem;
+    border-radius: 50px;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.books-search-btn-mega:hover {
+    transform: scale(1.1);
+}
+
+.books-grid-mega {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+    margin-top: 2rem;
+}
+
+.book-card-mega {
+    background: white;
+    border-radius: 25px;
+    padding: 2rem;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+    border: 5px solid #4ecdc4;
+    transition: all 0.3s ease;
+}
+
+.book-card-mega:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 20px 55px rgba(0,0,0,0.25);
+}
+
+.book-cover-img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin-bottom: 1.5rem;
+}
+
+.book-cover-placeholder {
+    width: 100%;
+    height: 300px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8rem;
+    border-radius: 15px;
+    margin-bottom: 1.5rem;
+}
+
+.book-title-card {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.6rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.book-link-btn {
+    display: block;
+    background: #667eea;
+    color: white;
+    padding: 0.8rem;
+    border-radius: 20px;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 1rem;
+    font-weight: bold;
+}
+
+.quick-btns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.quick-search-btn {
+    background: linear-gradient(135deg, #a8edea, #fed6e3);
+    border: none;
+    padding: 1.5rem 2rem;
+    border-radius: 30px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    cursor: pointer;
+    border: 4px solid white;
+    transition: all 0.3s ease;
+}
+
+.quick-search-btn:hover {
+    transform: translateY(-10px) scale(1.05);
+}
+
+.featured-books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 2rem auto 0;
+    padding: 0 2rem;
+}
+
+.featured-book-card {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    border: 4px solid #4ecdc4;
+}
+
+.featured-cover {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+</style>
+{% endblock %}
+

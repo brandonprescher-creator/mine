@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+
+{% block title %}ULTIMATE BADASS TUTOR - Home{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">
+            <span class="title-word" data-word="ULTIMATE">ULTIMATE</span>
+            <span class="title-word" data-word="BADASS">BADASS</span>
+            <span class="title-word" data-word="TUTOR">TUTOR</span>
+        </h1>
+        
+        <p class="hero-subtitle">
+            🎮 The most EPIC learning adventure ever created! 🎮
+        </p>
+        
+        <div class="hero-buttons">
+            <button class="badass-btn primary" onclick="startAdventure()">
+                <i class="fas fa-rocket"></i>
+                <span>START ADVENTURE!</span>
+                <div class="btn-particles"></div>
+            </button>
+            
+            <button class="badass-btn secondary" onclick="showGames()">
+                <i class="fas fa-gamepad"></i>
+                <span>PLAY GAMES!</span>
+            </button>
+            
+            <button class="badass-btn tertiary" onclick="uploadWorksheet()">
+                <i class="fas fa-upload"></i>
+                <span>UPLOAD WORKSHEET!</span>
+            </button>
+            
+            <button class="badass-btn quaternary" onclick="generateWorksheet()">
+                <i class="fas fa-file-alt"></i>
+                <span>GENERATE WORKSHEET!</span>
+            </button>
+        </div>
+        
+        <div class="hero-extra-buttons">
+            <button class="extra-btn api-btn" onclick="exploreAPIs()">
+                <span class="extra-emoji">🌐</span>
+                <span>EXPLORE 50+ APIs!</span>
+            </button>
+            
+            <button class="extra-btn books-btn" onclick="readBooks()">
+                <span class="extra-emoji">📚</span>
+                <span>READ FREE BOOKS!</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- 3D Character -->
+    <div class="character-3d">
+        <div class="character-model" id="character-model">
+            <div class="character-body">
+                <div class="character-head">🤖</div>
+                <div class="character-arms">
+                    <div class="arm left">👋</div>
+                    <div class="arm right">👋</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="quick-stats">
+    <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-number" id="lessons-count">0</div>
+        <div class="stat-label">Lessons</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-number" id="problems-solved">0</div>
+        <div class="stat-label">Problems Solved</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-number" id="achievements">0</div>
+        <div class="stat-label">Achievements</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-number" id="streak">0</div>
+        <div class="stat-label">Day Streak</div>
+    </div>
+</div>
+
+<!-- Featured Games -->
+<div class="featured-section">
+    <h2 class="section-title">
+        <span class="title-icon">🎮</span>
+        FEATURED GAMES
+        <span class="title-icon">🎮</span>
+    </h2>
+    
+    <div class="games-grid">
+        <div class="game-card" onclick="playGame('math-battle')">
+            <div class="game-icon">⚔️</div>
+            <h3>Math Battle</h3>
+            <p>Fight monsters with math!</p>
+            <div class="game-difficulty">
+                <span class="difficulty-star">⭐</span>
+                <span class="difficulty-star">⭐</span>
+                <span class="difficulty-star">⭐</span>
+            </div>
+        </div>
+        
+        <div class="game-card" onclick="playGame('word-hunt')">
+            <div class="game-icon">🔍</div>
+            <h3>Word Hunt</h3>
+            <p>Find words in the jungle!</p>
+            <div class="game-difficulty">
+                <span class="difficulty-star">⭐</span>
+                <span class="difficulty-star">⭐</span>
+            </div>
+        </div>
+        
+        <div class="game-card" onclick="playGame('science-lab')">
+            <div class="game-icon">🧪</div>
+            <h3>Science Lab</h3>
+            <p>Mix potions and discover!</p>
+            <div class="game-difficulty">
+                <span class="difficulty-star">⭐</span>
+                <span class="difficulty-star">⭐</span>
+                <span class="difficulty-star">⭐</span>
+                <span class="difficulty-star">⭐</span>
+            </div>
+        </div>
+        
+        <div class="game-card" onclick="playGame('space-race')">
+            <div class="game-icon">🚀</div>
+            <h3>Space Race</h3>
+            <p>Race through the galaxy!</p>
+            <div class="game-difficulty">
+                <span class="difficulty-star">⭐</span>
+                <span class="difficulty-star">⭐</span>
+                <span class="difficulty-star">⭐</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Division Mastery Showcase -->
+<div class="showcase-section">
+    <h2 class="section-title">
+        <span class="title-icon">🌟</span>
+        DIVISION MASTERY
+        <span class="title-icon">🌟</span>
+    </h2>
+    
+    <div class="showcase-content">
+        <div class="showcase-text">
+            <h3>Master Division with 10 EPIC Methods!</h3>
+            <p>From Long Division to Bar Models - become a division CHAMPION!</p>
+            <ul class="method-list">
+                <li>⚔️ Long Division</li>
+                <li>🎯 Partial Quotients</li>
+                <li>🔧 Distributive Property</li>
+                <li>🔄 Repeated Subtraction</li>
+                <li>👥 Equal Groups</li>
+                <li>📐 Array/Area Model</li>
+                <li>📏 Number Line Jumps</li>
+                <li>📊 Ratio Table</li>
+                <li>🏠 Place Value Division</li>
+                <li>📊 Bar Model</li>
+            </ul>
+            
+            <button class="badass-btn primary" onclick="startDivisionMastery()">
+                <i class="fas fa-crown"></i>
+                <span>BECOME A DIVISION CHAMPION!</span>
+            </button>
+        </div>
+        
+        <div class="showcase-visual">
+            <div class="division-demo">
+                <div class="demo-problem">
+                    <div class="problem-text">156 ÷ 12 = ?</div>
+                    <div class="solution-steps">
+                        <div class="step">Step 1: 12 goes into 15 once</div>
+                        <div class="step">Step 2: 1 × 12 = 12</div>
+                        <div class="step">Step 3: 15 - 12 = 3</div>
+                        <div class="step">Step 4: Bring down 6</div>
+                        <div class="step">Step 5: 12 goes into 36 three times</div>
+                        <div class="step result">Answer: 13</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Live Leaderboard -->
+<div class="leaderboard-section">
+    <h2 class="section-title">
+        <span class="title-icon">🏆</span>
+        LIVE LEADERBOARD
+        <span class="title-icon">🏆</span>
+    </h2>
+    
+    <div class="leaderboard">
+        <div class="leaderboard-item rank-1">
+            <div class="rank">1</div>
+            <div class="player-info">
+                <div class="player-avatar">👑</div>
+                <div class="player-name">MathMaster99</div>
+            </div>
+            <div class="player-score">2,847</div>
+        </div>
+        
+        <div class="leaderboard-item rank-2">
+            <div class="rank">2</div>
+            <div class="player-info">
+                <div class="player-avatar">🥈</div>
+                <div class="player-name">ScienceWiz</div>
+            </div>
+            <div class="player-score">2,634</div>
+        </div>
+        
+        <div class="leaderboard-item rank-3">
+            <div class="rank">3</div>
+            <div class="player-info">
+                <div class="player-avatar">🥉</div>
+                <div class="player-name">WordHunter</div>
+            </div>
+            <div class="player-score">2,421</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Initialize home page
+document.addEventListener('DOMContentLoaded', function() {
+    initializeParticles();
+    startCharacterAnimation();
+    loadUserStats();
+    startLeaderboardUpdates();
+});
+
+function startAdventure() {
+    playSound('level-up');
+    showParticleExplosion();
+    setTimeout(() => {
+        window.location.href = '/subjects';
+    }, 1000);
+}
+
+function showGames() {
+    playSound('correct');
+    window.location.href = '/games';
+}
+
+function uploadWorksheet() {
+    playSound('correct');
+    window.location.href = '/upload';
+}
+
+function generateWorksheet() {
+    playSound('correct');
+    window.location.href = '/worksheets';
+}
+
+function exploreAPIs() {
+    playSound('correct');
+    window.location.href = '/api-explorer';  // This goes to the API directory
+}
+
+function readBooks() {
+    playSound('correct');
+    window.location.href = '/books-reader';  // Go to book reader
+}
+
+function playGame(gameType) {
+    playSound('correct');
+    showGamePreview(gameType);
+}
+
+function startDivisionMastery() {
+    playSound('level-up');
+    showParticleExplosion();
+    // Navigate to division mastery
+    window.location.href = '/subject/1'; // Math subject
+}
+
+function initializeParticles() {
+    particlesJS('particles-js', {
+        particles: {
+            number: { value: 80 },
+            color: { value: ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57'] },
+            shape: { type: 'circle' },
+            opacity: { value: 0.5 },
+            size: { value: 3 },
+            line_linked: { enable: true, distance: 150, color: '#ffffff', opacity: 0.4 },
+            move: { enable: true, speed: 2 }
+        },
+        interactivity: {
+            detect_on: 'canvas',
+            events: { onhover: { enable: true, mode: 'repulse' } }
+        }
+    });
+}
+
+function startCharacterAnimation() {
+    const character = document.getElementById('character-model');
+    setInterval(() => {
+        character.style.transform = `rotateY(${Math.random() * 360}deg)`;
+    }, 3000);
+}
+
+function loadUserStats() {
+    // Load user stats from API
+    fetch('/api/user/stats')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('lessons-count').textContent = data.lessons || 0;
+            document.getElementById('problems-solved').textContent = data.problems || 0;
+            document.getElementById('achievements').textContent = data.achievements || 0;
+            document.getElementById('streak').textContent = data.streak || 0;
+        });
+}
+
+function startLeaderboardUpdates() {
+    // Update leaderboard every 30 seconds
+    setInterval(() => {
+        fetch('/api/leaderboard')
+            .then(response => response.json())
+            .then(data => {
+                updateLeaderboard(data);
+            });
+    }, 30000);
+}
+
+function showParticleExplosion() {
+    // Create particle explosion effect
+    for (let i = 0; i < 50; i++) {
+        createParticle();
+    }
+}
+
+function createParticle() {
+    const particle = document.createElement('div');
+    particle.className = 'explosion-particle';
+    particle.style.left = Math.random() * window.innerWidth + 'px';
+    particle.style.top = Math.random() * window.innerHeight + 'px';
+    particle.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
+    document.body.appendChild(particle);
+    
+    setTimeout(() => {
+        particle.remove();
+    }, 2000);
+}
+</script>
+{% endblock %}

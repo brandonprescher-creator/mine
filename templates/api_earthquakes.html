@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}USGS Earthquakes API - Real-Time Data{% endblock %}
+
+{% block content %}
+<div class="quake-page-mega">
+    <div class="quake-hero">
+        <a href="/api-explorer" class="quake-back-btn">⬅️ All APIs</a>
+        
+        <div class="quake-mascot">🌍</div>
+        <h1 class="quake-title-mega">USGS EARTHQUAKES API</h1>
+        <p class="quake-subtitle">Real-Time Earthquake Data! ⚡</p>
+    </div>
+
+    <div class="quake-load-section">
+        <h2 class="quake-section-title">🌍 Recent Earthquakes</h2>
+        <button onclick="loadEarthquakes()" class="quake-load-btn">
+            <span class="quake-emoji">⚡</span>
+            <span>SHOW RECENT EARTHQUAKES!</span>
+            <span class="quake-emoji">⚡</span>
+        </button>
+        
+        <div id="quake-results" class="quake-results-container"></div>
+    </div>
+</div>
+
+<script>
+async function loadEarthquakes() {
+    const container = document.getElementById('quake-results');
+    container.innerHTML = '<div class="loading-quake">🌍 Loading earthquake data...</div>';
+    
+    try {
+        const response = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson');
+        const data = await response.json();
+        
+        if (data.features && data.features.length > 0) {
+            const quakes = data.features.slice(0, 20);
+            
+            container.innerHTML = `
+                <div class="quake-stats-mega">
+                    <div class="quake-stat-card">
+                        <div class="stat-num">${quakes.length}</div>
+                        <div class="stat-label">Earthquakes</div>
+                    </div>
+                    <div class="quake-stat-card">
+                        <div class="stat-num">${Math.max(...quakes.map(q => q.properties.mag)).toFixed(1)}</div>
+                        <div class="stat-label">Max Magnitude</div>
+                    </div>
+                </div>
+                
+                <div class="quake-list-mega">
+                    ${quakes.map(quake => {
+                        const mag = quake.properties.mag;
+                        const place = quake.properties.place;
+                        const time = new Date(quake.properties.time).toLocaleString();
+                        const depth = quake.geometry.coordinates[2];
+                        
+                        return `
+                            <div class="quake-card">
+                                <div class="quake-mag ${mag >= 6 ? 'mag-high' : mag >= 5 ? 'mag-medium' : 'mag-low'}">
+                                    ${mag.toFixed(1)}
+                                </div>
+                                <div class="quake-info">
+                                    <h3 class="quake-place">${place}</h3>
+                                    <p class="quake-time">📅 ${time}</p>
+                                    <p class="quake-depth">📏 Depth: ${depth.toFixed(1)} km</p>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        } else {
+            container.innerHTML = '<div class="no-results-quake">No significant earthquakes recently!</div>';
+        }
+    } catch (e) {
+        container.innerHTML = '<div class="error-quake">Error loading earthquake data!</div>';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => setTimeout(loadEarthquakes, 500));
+</script>
+
+<style>
+.quake-page-mega { min-height: 100vh; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+.quake-hero { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); padding: 4rem 2rem; text-align: center; border-radius: 0 0 70px 70px; margin-bottom: 4rem; }
+.quake-mascot { font-size: 14rem; animation: shake 2s ease-in-out infinite; }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+.quake-title-mega { font-family: 'Fredoka One', cursive; font-size: 5rem; color: white; text-shadow: 6px 6px 20px rgba(0,0,0,0.5); margin: 2rem 0; }
+.quake-load-section { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+.quake-section-title { font-family: 'Fredoka One', cursive; font-size: 4rem; text-align: center; color: #333; margin-bottom: 2.5rem; }
+.quake-load-btn { background: linear-gradient(45deg, #e74c3c, #f39c12); border: none; color: white; padding: 2.5rem 5rem; border-radius: 60px; font-size: 2.5rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 2rem; margin: 0 auto 3rem; transition: all 0.3s ease; }
+.quake-load-btn:hover { transform: scale(1.1); }
+.quake-emoji { font-size: 3rem; }
+.quake-stats-mega { display: flex; justify-content: center; gap: 3rem; margin: 3rem 0; flex-wrap: wrap; }
+.quake-stat-card { background: white; padding: 2rem 3rem; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 5px solid #e74c3c; }
+.stat-num { font-family: 'Fredoka One', cursive; font-size: 4rem; color: #e74c3c; }
+.quake-list-mega { display: grid; gap: 1.5rem; }
+.quake-card { display: flex; gap: 2rem; background: white; border-radius: 25px; padding: 2rem; box-shadow: 0 8px 25px rgba(0,0,0,0.12); border: 4px solid #e74c3c; }
+.quake-mag { font-family: 'Fredoka One', cursive; font-size: 3rem; width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; }
+.mag-high { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.mag-medium { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.mag-low { background: linear-gradient(135deg, #3498db, #2980b9); }
+.quake-info { flex: 1; }
+.quake-place { font-family: 'Fredoka One', cursive; font-size: 1.8rem; color: #333; margin-bottom: 1rem; }
+.quake-time, .quake-depth { font-size: 1.2rem; color: #666; margin: 0.5rem 0; }
+</style>
+{% endblock %}
+

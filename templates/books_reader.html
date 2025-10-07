@@ -1,0 +1,1242 @@
+{% extends "base.html" %}
+
+{% block title %}EPIC BOOK ADVENTURES - The Ultimate Reading Experience!{% endblock %}
+
+{% block content %}
+<div class="epic-books-mega">
+    <!-- MEGA HERO -->
+    <div class="epic-hero">
+        <a href="/" class="epic-back-btn">🏠 HOME</a>
+        
+        <div class="epic-mascot">📚✨</div>
+        <h1 class="epic-title">EPIC BOOK ADVENTURES!</h1>
+        <p class="epic-subtitle">Choose Your Adventure & Become the Hero! 🦸‍♀️🦸‍♂️</p>
+        
+        <div class="epic-stats">
+            <div class="stat-card">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Epic Stories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">1000+</div>
+                <div class="stat-label">Adventure Pages</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Fun Level</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADVENTURE CATEGORIES -->
+    <div class="categories-section">
+        <h2 class="categories-title">🌟 CHOOSE YOUR EPIC ADVENTURE! 🌟</h2>
+        
+        <div class="category-tabs">
+            <button class="tab-btn active" onclick="showCategory('all')">ALL ADVENTURES</button>
+            <button class="tab-btn" onclick="showCategory('fantasy')">🧚 FANTASY</button>
+            <button class="tab-btn" onclick="showCategory('sci-fi')">🚀 SPACE</button>
+            <button class="tab-btn" onclick="showCategory('adventure')">🏴‍☠️ ADVENTURE</button>
+            <button class="tab-btn" onclick="showCategory('mystery')">🔍 MYSTERY</button>
+            <button class="tab-btn" onclick="showCategory('animals')">🐾 ANIMALS</button>
+        </div>
+    </div>
+
+    <!-- EPIC STORIES GRID -->
+    <div class="epic-stories-grid" id="stories-container">
+        <!-- Fantasy Stories -->
+        <div class="epic-story-card fantasy" data-category="fantasy" onclick="startEpicAdventure('dragon-quest')">
+            <div class="story-badge">🔥 HOT</div>
+            <div class="story-icon">🐉</div>
+            <h3>Dragon Quest</h3>
+            <p>Become a dragon rider and save the kingdom!</p>
+            <div class="story-stats">
+                <span class="stat">⭐ 4.9/5</span>
+                <span class="stat">📖 8 Chapters</span>
+                <span class="stat">⏱️ 15 min read</span>
+            </div>
+            <button class="epic-read-btn">START ADVENTURE!</button>
+        </div>
+
+        <div class="epic-story-card fantasy" data-category="fantasy" onclick="startEpicAdventure('magic-academy')">
+            <div class="story-badge">✨ NEW</div>
+            <div class="story-icon">🎓</div>
+            <h3>Magic Academy</h3>
+            <p>Learn spells and become the greatest wizard!</p>
+            <div class="story-stats">
+                <span class="stat">⭐ 4.8/5</span>
+                <span class="stat">📖 10 Chapters</span>
+                <span class="stat">⏱️ 20 min read</span>
+            </div>
+            <button class="epic-read-btn">START ADVENTURE!</button>
+        </div>
+
+        <div class="epic-story-card sci-fi" data-category="sci-fi" onclick="startEpicAdventure('space-explorer')">
+            <div class="story-badge">🚀 EPIC</div>
+            <div class="story-icon">👨‍🚀</div>
+            <h3>Space Explorer</h3>
+            <p>Pilot a starship and discover alien worlds!</p>
+            <div class="story-stats">
+                <span class="stat">⭐ 4.9/5</span>
+                <span class="stat">📖 12 Chapters</span>
+                <span class="stat">⏱️ 25 min read</span>
+            </div>
+            <button class="epic-read-btn">START ADVENTURE!</button>
+        </div>
+
+        <div class="epic-story-card sci-fi" data-category="sci-fi" onclick="startEpicAdventure('robot-revolution')">
+            <div class="story-badge">🤖 FUTURE</div>
+            <div class="story-icon">🤖</div>
+            <h3>Robot Revolution</h3>
+            <p>Help friendly robots save the future!</p>
+            <div class="story-stats">
+                <span class="stat">⭐ 4.7/5</span>
+                <span class="stat">📖 9 Chapters</span>
+                <span class="stat">⏱️ 18 min read</span>
+            </div>
+            <button class="epic-read-btn">START ADVENTURE!</button>
+        </div>
+
+        <div class="epic-story-card adventure" data-category="adventure" onclick="startEpicAdventure('pirate-treasure')">
+            <div class="story-badge">🏴‍☠️ CLASSIC</div>
+            <div class="story-icon">⚓</div>
+            <h3>Pirate Treasure</h3>
+            <p>Find the lost treasure of Captain Goldbeard!</p>
+            <div class="story-stats">
+                <span class="stat">⭐ 4.8/5</span>
+                <span class="stat">📖 11 Chapters</span>
+                <span class="stat">⏱️ 22 min read</span>
+            </div>
+            <button class="epic-read-btn">START ADVENTURE!</button>
+        </div>
+
+        <div class="epic-story-card adventure" data-category="adventure" onclick="startEpicAdventure('jungle-expedition')">
+            <div class="story-badge">🌿 WILD</div>
+            <div class="story-icon">🐯</div>
+            <h3>Jungle Expedition</h3>
+            <p>Explore the Amazon and discover ancient secrets!</p>
+            <div class="story-stats">
+                <span class="stat">⭐ 4.6/5</span>
+                <span class="stat">📖 7 Chapters</span>
+                <span class="stat">⏱️ 14 min read</span>
+            </div>
+            <button class="epic-read-btn">START ADVENTURE!</button>
+        </div>
+
+        <div class="epic-story-card mystery" data-category="mystery" onclick="startEpicAdventure('detective-club')">
+            <div class="story-badge">🔍 MYSTERY</div>
+            <div class="story-icon">🕵️</div>
+            <h3>Detective Club</h3>
+            <p>Solve mysteries and catch the culprit!</p>
+            <div class="story-stats">
+                <span class="stat">⭐ 4.9/5</span>
+                <span class="stat">📖 13 Chapters</span>
+                <span class="stat">⏱️ 26 min read</span>
+            </div>
+            <button class="epic-read-btn">START ADVENTURE!</button>
+        </div>
+
+        <div class="epic-story-card mystery" data-category="mystery" onclick="startEpicAdventure('haunted-mansion')">
+            <div class="story-badge">👻 SPOOKY</div>
+            <div class="story-icon">🏚️</div>
+            <h3>Haunted Mansion</h3>
+            <p>Explore a spooky mansion and solve its secrets!</p>
+            <div class="story-stats">
+                <span class="stat">⭐ 4.5/5</span>
+                <span class="stat">📖 8 Chapters</span>
+                <span class="stat">⏱️ 16 min read</span>
+            </div>
+            <button class="epic-read-btn">START ADVENTURE!</button>
+        </div>
+
+        <div class="epic-story-card animals" data-category="animals" onclick="startEpicAdventure('animal-rescue')">
+            <div class="story-badge">🐾 HERO</div>
+            <div class="story-icon">🦁</div>
+            <h3>Animal Rescue</h3>
+            <p>Save endangered animals and protect wildlife!</p>
+            <div class="story-stats">
+                <span class="stat">⭐ 4.8/5</span>
+                <span class="stat">📖 10 Chapters</span>
+                <span class="stat">⏱️ 20 min read</span>
+            </div>
+            <button class="epic-read-btn">START ADVENTURE!</button>
+        </div>
+
+        <div class="epic-story-card animals" data-category="animals" onclick="startEpicAdventure('ocean-guardian')">
+            <div class="story-badge">🌊 DEEP</div>
+            <div class="story-icon">🐋</div>
+            <h3>Ocean Guardian</h3>
+            <p>Protect the ocean and its amazing creatures!</p>
+            <div class="story-stats">
+                <span class="stat">⭐ 4.7/5</span>
+                <span class="stat">📖 9 Chapters</span>
+                <span class="stat">⏱️ 18 min read</span>
+            </div>
+            <button class="epic-read-btn">START ADVENTURE!</button>
+        </div>
+    </div>
+
+    <!-- EPIC READER -->
+    <div id="epic-reader" class="epic-reader-overlay" style="display: none;">
+        <div class="epic-reader-container">
+            <div class="epic-reader-header">
+                <button onclick="closeEpicReader()" class="epic-close-btn">❌ CLOSE</button>
+                <h2 id="epic-story-title" class="epic-story-title"></h2>
+                <div class="epic-progress">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <span id="progress-text" class="progress-text">Chapter 1 of 10</span>
+                </div>
+            </div>
+            
+            <div class="epic-reader-content">
+                <div id="epic-story-content" class="epic-story-text"></div>
+            </div>
+            
+            <div class="epic-reader-footer">
+                <button onclick="prevChapter()" class="epic-nav-btn">◀️ PREVIOUS</button>
+                <div class="epic-controls">
+                    <button onclick="toggleSound()" class="control-btn" id="sound-btn">🔊 SOUND</button>
+                    <button onclick="toggleFullscreen()" class="control-btn" id="fullscreen-btn">⛶ FULLSCREEN</button>
+                    <button onclick="showBookmarks()" class="control-btn">🔖 BOOKMARKS</button>
+                </div>
+                <button onclick="nextChapter()" class="epic-nav-btn">NEXT ▶️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACHIEVEMENTS POPUP -->
+    <div id="achievement-popup" class="achievement-popup" style="display: none;" onclick="closeAchievement()">
+        <div class="achievement-content">
+            <button class="achievement-close-btn" onclick="closeAchievement()">✖️</button>
+            <div class="achievement-icon">🏆</div>
+            <h3 id="achievement-title">Achievement Unlocked!</h3>
+            <p id="achievement-desc">You've completed your first chapter!</p>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentStory = null;
+let currentChapter = 0;
+let soundEnabled = true;
+let achievements = [];
+
+// EPIC STORIES DATABASE
+const EPIC_STORIES = {
+    'dragon-quest': {
+        title: '🐉 Dragon Quest: Rise of the Dragon Rider',
+        category: 'fantasy',
+        totalChapters: 8,
+        chapters: [
+            "🐉 DRAGON QUEST: RISE OF THE DRAGON RIDER 🐉",
+            "",
+            "Chapter 1: The Dragon Egg",
+            "",
+            "You are Alex, a brave 12-year-old who dreams of becoming a dragon rider. One stormy night, while exploring the ancient Dragon Caves near your village, you discover a mysterious glowing egg hidden behind a waterfall.",
+            "",
+            "The egg pulses with golden light and feels warm to the touch. As you pick it up, the entire cave begins to glow, and you hear a voice whisper, 'The chosen one has found the last dragon egg...'",
+            "",
+            "Suddenly, the egg cracks open, and a tiny golden dragon emerges! The baby dragon looks at you with intelligent eyes and chirps happily. 'I am Ember,' the dragon says in your mind. 'You are my rider, and together we will save the kingdom!'",
+            "",
+            "But danger approaches! The evil Shadow Lord has sensed the dragon's awakening and sends his dark minions to capture you both. You must escape the caves and reach the safety of Dragon Valley!",
+            "",
+            "What do you do?",
+            "A) Run toward the village for help",
+            "B) Hide in the deeper caves",
+            "C) Try to fly away with Ember",
+            "",
+            "You choose to run toward the village, but Ember is too young to fly yet. As you race through the forest, you hear the sound of dark creatures pursuing you. Ember clings to your shoulder, his tiny claws gripping your shirt.",
+            "",
+            "Just as you think you're safe, three shadow wolves block your path! Their eyes glow red, and they snarl menacingly. Ember, despite being just hatched, breathes a small flame that scares them away!",
+            "",
+            "'Well done, Ember!' you say proudly. 'We make a great team!'",
+            "",
+            "You reach the village safely, but you know this is just the beginning of your adventure. The Shadow Lord will not give up easily, and you must prepare for the challenges ahead.",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: First Dragon Bond!",
+            "",
+            "Chapter 2: The Dragon Academy",
+            "",
+            "The next morning, you wake up to find Ember has grown significantly overnight! He's now the size of a large dog and can speak more clearly. 'We must go to Dragon Academy,' he tells you. 'There, you will learn to be a proper dragon rider.'",
+            "",
+            "Dragon Academy is located high in the Crystal Mountains, accessible only by dragon flight. Since Ember is still too small to carry you, you must find another way to get there.",
+            "",
+            "You meet an old wizard named Merlin who offers to help. 'I can teleport you to the academy,' he says, 'but first you must prove your worth by completing three trials.'",
+            "",
+            "The trials test your courage, wisdom, and compassion. In the first trial, you must rescue a trapped phoenix from a burning tree. In the second, you solve a complex riddle about the nature of friendship. In the third, you help a lost unicorn find its way home.",
+            "",
+            "After completing all three trials, Merlin is impressed. 'You have the heart of a true dragon rider,' he says. 'You are ready for the academy.'",
+            "",
+            "With a wave of his staff, Merlin teleports you and Ember to Dragon Academy, where you meet other young dragon riders and their dragons. The academy is a magnificent castle built into the side of a mountain, with training grounds, libraries, and dormitories.",
+            "",
+            "Your instructor, Master Stormwind, is a legendary dragon rider with a massive silver dragon named Thunder. 'Welcome to Dragon Academy,' he says. 'Here you will learn the ancient arts of dragon riding, combat, and magic.'",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: Academy Student!",
+            "",
+            "Chapter 3: Training Begins",
+            "",
+            "Your first day at Dragon Academy is filled with excitement and challenges. You learn that dragon riding is not just about flying - it's about forming a deep bond with your dragon and working together as one.",
+            "",
+            "Ember continues to grow rapidly and can now carry you for short flights. You practice basic maneuvers like takeoff, landing, and turning. At first, you're nervous and make mistakes, but Ember is patient and encouraging.",
+            "",
+            "'Trust me, Alex,' Ember says. 'I will never let you fall.'",
+            "",
+            "You also learn about dragon magic - the ability to cast spells together with your dragon. Ember teaches you your first spell: Dragon Fire, which creates a protective barrier around you both.",
+            "",
+            "Your classmates include Sarah and her water dragon Aqua, Marcus and his earth dragon Boulder, and Luna and her wind dragon Zephyr. You all become fast friends and help each other learn.",
+            "",
+            "One day, during a training exercise, you discover that Ember has a special ability - he can sense danger before it happens. This proves invaluable when a group of shadow creatures attacks the academy!",
+            "",
+            "You and your friends work together to defend the academy, using your newly learned skills to drive away the attackers. Master Stormwind is proud of your quick thinking and teamwork.",
+            "",
+            "'You are all becoming true dragon riders,' he says. 'But remember, with great power comes great responsibility.'",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: Team Player!",
+            "",
+            "Chapter 4: The Shadow Lord's Plan",
+            "",
+            "That night, you have a disturbing dream. You see the Shadow Lord in his dark fortress, plotting to capture all the dragons and use their power to rule the world. He has discovered a way to break the bond between dragons and their riders.",
+            "",
+            "When you wake up, you find Ember looking worried. 'I had the same dream,' he says. 'The Shadow Lord is planning something terrible. We must warn the others.'",
+            "",
+            "You gather your friends and tell them about the dream. They all had similar visions, which means the Shadow Lord is using dark magic to communicate his plans - or perhaps he wants you to know what's coming.",
+            "",
+            "Master Stormwind listens to your concerns and nods gravely. 'The Shadow Lord is indeed planning an attack,' he says. 'We must prepare for war. But first, you must complete your training and master the most powerful dragon magic.'",
+            "",
+            "The next few weeks are intense. You learn advanced combat techniques, how to cast powerful spells, and how to work together in formation with other dragon riders. Ember grows to his full size - a magnificent golden dragon with wings that span 20 feet.",
+            "",
+            "You also learn about the Dragon Heart - a legendary artifact that can amplify a dragon rider's power. It's hidden in the Forbidden Valley, a dangerous place filled with ancient traps and magical creatures.",
+            "",
+            "'The Dragon Heart is our only hope against the Shadow Lord,' Master Stormwind says. 'But retrieving it will be extremely dangerous. Are you ready for this quest?'",
+            "",
+            "You and your friends exchange determined looks. 'We're ready,' you say. 'We'll do whatever it takes to protect our dragons and our world.'",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: Quest Accepted!",
+            "",
+            "Chapter 5: The Forbidden Valley",
+            "",
+            "The journey to the Forbidden Valley is treacherous. You must fly through a storm of magical lightning, avoid the territorial griffins that guard the mountain passes, and navigate through a maze of floating islands.",
+            "",
+            "When you finally reach the valley, you're amazed by its beauty. Crystal formations grow like trees, and streams of liquid light flow through the landscape. But you can sense the danger lurking beneath the surface.",
+            "",
+            "The Dragon Heart is hidden in the center of the valley, protected by three ancient guardians: the Stone Golem, the Fire Phoenix, and the Ice Dragon. Each guardian tests a different aspect of your abilities.",
+            "",
+            "The Stone Golem tests your strength and determination. You must work together with Ember to move massive boulders and solve a puzzle that requires both physical and mental power.",
+            "",
+            "The Fire Phoenix tests your courage and quick thinking. You must navigate through a maze of flames while the phoenix tries to confuse you with illusions and false paths.",
+            "",
+            "The Ice Dragon tests your wisdom and compassion. Instead of fighting, you must convince the dragon that you're worthy of the Dragon Heart by showing that you understand the true nature of power - that it should be used to help others, not to dominate them.",
+            "",
+            "After passing all three tests, the guardians allow you to approach the Dragon Heart. It's a beautiful crystal that pulses with golden light and seems to contain the essence of all dragons that have ever lived.",
+            "",
+            "As you touch the Dragon Heart, you feel an incredible surge of power. Ember glows with golden light, and you realize that your bond has been strengthened beyond anything you imagined. You can now sense each other's thoughts and emotions perfectly.",
+            "",
+            "'We are truly one now,' Ember says. 'Together, we can face any challenge.'",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: Dragon Heart Master!",
+            "",
+            "Chapter 6: The Shadow Lord's Attack",
+            "",
+            "As you return to Dragon Academy with the Dragon Heart, you see smoke rising from the mountains. The Shadow Lord has launched his attack! His army of shadow creatures, dark wizards, and corrupted dragons is besieging the academy.",
+            "",
+            "You and your friends rush to join the battle. The sky is filled with dragons fighting dragons, while on the ground, wizards cast spells and warriors clash with shadow creatures. It's chaos and destruction everywhere.",
+            "",
+            "The Shadow Lord himself appears, riding a massive black dragon that seems to be made of pure darkness. His power is overwhelming, and he's using dark magic to break the bonds between dragons and their riders.",
+            "",
+            "You see some of your classmates' dragons turn against them, their eyes glowing red with corruption. The Shadow Lord laughs cruelly. 'Your dragons will serve me now!' he shouts.",
+            "",
+            "But you and Ember, strengthened by the Dragon Heart, are immune to his dark magic. You realize that you're the only ones who can stop him. You must face the Shadow Lord in single combat.",
+            "",
+            "The battle is epic. You and Ember work together perfectly, using all the skills you've learned. You cast powerful spells, dodge attacks, and strike back with everything you have. The Shadow Lord is strong, but your bond is stronger.",
+            "",
+            "In the end, you use the power of the Dragon Heart to cast the ultimate spell - Light of Hope. A brilliant golden light explodes from you and Ember, purifying the corrupted dragons and driving away the shadow creatures.",
+            "",
+            "The Shadow Lord screams in rage and disappears in a cloud of dark smoke. The battle is won, but you know he'll be back. Evil never truly dies - it just waits for another opportunity.",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: Shadow Lord Defeated!",
+            "",
+            "Chapter 7: The New Era",
+            "",
+            "With the Shadow Lord defeated, peace returns to the kingdom. The corrupted dragons are healed, and all the dragon riders are reunited with their partners. The academy celebrates your victory with a grand feast.",
+            "",
+            "Master Stormwind announces that you and Ember will be the new leaders of the Dragon Riders. 'You have proven yourselves worthy,' he says. 'You will protect the kingdom and train the next generation of dragon riders.'",
+            "",
+            "You accept the responsibility with pride. You know that being a dragon rider is not just about power - it's about protecting others and using your abilities for good.",
+            "",
+            "Over the next few months, you help rebuild the academy and train new students. You teach them everything you've learned about dragon riding, magic, and the importance of the bond between rider and dragon.",
+            "",
+            "Ember continues to grow and develop new abilities. He can now breathe different types of fire - healing flames, protective barriers, and even flames that can purify corrupted magic. He's become a true legend among dragons.",
+            "",
+            "You also discover that the Dragon Heart has given you a special ability - you can communicate with all dragons, not just Ember. This makes you a bridge between humans and dragons, helping to strengthen the bond between your species.",
+            "",
+            "One day, a young girl arrives at the academy with a dragon egg. She's nervous and unsure, just like you were when you first found Ember. You take her under your wing and help her begin her own journey as a dragon rider.",
+            "",
+            "'Every dragon rider starts with a single step,' you tell her. 'Trust your dragon, and trust yourself. Together, you can achieve anything.'",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: Master Teacher!",
+            "",
+            "Chapter 8: The Eternal Bond",
+            "",
+            "Years pass, and you and Ember become the greatest dragon riders the world has ever known. You've protected the kingdom from countless threats, trained hundreds of new dragon riders, and helped dragons and humans live in harmony.",
+            "",
+            "But you know that your greatest adventure is still ahead. The Shadow Lord may be gone, but there are always new challenges and new threats. The world is vast and full of mysteries waiting to be discovered.",
+            "",
+            "You and Ember decide to explore the unknown lands beyond the kingdom. You want to meet other dragon riders, discover new types of dragons, and learn about different cultures and ways of life.",
+            "",
+            "As you prepare for your journey, you reflect on everything you've accomplished. You started as a curious child who found a dragon egg, and now you're a legendary dragon rider with the power to change the world.",
+            "",
+            "But you know that the most important thing you've learned is not about power or magic - it's about friendship, loyalty, and the unbreakable bond between you and Ember. You are not just rider and dragon - you are family.",
+            "",
+            "'Are you ready for our next adventure?' Ember asks as you climb onto his back.",
+            "",
+            "'I'm ready for anything, as long as we're together,' you reply.",
+            "",
+            "With a powerful beat of his golden wings, Ember launches into the sky. You soar higher and higher, until you're flying among the clouds. The sun shines on your scales and armor, and you feel invincible.",
+            "",
+            "You're not just flying - you're free. Free to explore, free to help others, free to be the hero you were always meant to be. And you know that no matter where your adventures take you, you and Ember will always be together.",
+            "",
+            "The bond between a dragon and their rider is eternal. It transcends time, space, and even death. You and Ember are connected by something deeper than magic - you're connected by love, trust, and the shared dream of making the world a better place.",
+            "",
+            "As you disappear into the horizon, the people of the kingdom look up and smile. They know that their protectors are out there, watching over them, ready to return whenever they're needed.",
+            "",
+            "And somewhere in the distance, a new dragon egg begins to glow, waiting for the next chosen one to discover it and begin their own epic adventure.",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: Legendary Dragon Rider!",
+            "",
+            "THE END",
+            "",
+            "But remember - every ending is just a new beginning. Your adventure may be over, but the world of dragons is vast and full of possibilities. Who knows what amazing stories await in the future?",
+            "",
+            "Thank you for joining Alex and Ember on their epic journey. You are now a true dragon rider, and your own adventures are just beginning!",
+            "",
+            "🐉 THE DRAGON RIDER'S CREED 🐉",
+            "",
+            "I am a Dragon Rider, bound by honor and magic.",
+            "I protect the innocent and fight for what is right.",
+            "My dragon is my partner, my friend, my family.",
+            "Together we are stronger than we could ever be alone.",
+            "I will use my power wisely and with compassion.",
+            "I will teach others the ways of the dragon riders.",
+            "I will never give up, never surrender, never lose hope.",
+            "For I am a Dragon Rider, and my story is just beginning.",
+            "",
+            "🌟 EPIC ADVENTURE COMPLETE! 🌟",
+            "",
+            "You have successfully completed the Dragon Quest! You are now a legendary Dragon Rider with the power to protect the kingdom and inspire others to follow in your footsteps.",
+            "",
+            "Your achievements:",
+            "✅ First Dragon Bond",
+            "✅ Academy Student", 
+            "✅ Team Player",
+            "✅ Quest Accepted",
+            "✅ Dragon Heart Master",
+            "✅ Shadow Lord Defeated",
+            "✅ Master Teacher",
+            "✅ Legendary Dragon Rider",
+            "",
+            "Congratulations, Dragon Rider! Your epic adventure has made you a true hero! 🐉✨"
+        ]
+    },
+    'magic-academy': {
+        title: '🎓 Magic Academy: The Greatest Wizard',
+        category: 'fantasy',
+        totalChapters: 10,
+        chapters: [
+            "🎓 MAGIC ACADEMY: THE GREATEST WIZARD 🎓",
+            "",
+            "Chapter 1: The Letter",
+            "",
+            "You are Maya, an 11-year-old who has always felt different from other kids. You can make things move without touching them, predict when it's going to rain, and sometimes your emotions cause strange things to happen around you.",
+            "",
+            "One morning, a magnificent owl delivers a letter to your window. The envelope is made of shimmering silver paper, and your name is written in golden ink that seems to glow. You open it with trembling hands.",
+            "",
+            "'Dear Maya,' the letter reads, 'You have been accepted to the prestigious Magic Academy for Young Wizards. Your magical abilities have been detected, and we believe you have the potential to become one of the greatest wizards of your generation. Please report to Platform 9¾ at the train station tomorrow at 11:00 AM. Bring only what you can carry. Sincerely, Headmaster Starweaver.'",
+            "",
+            "You can't believe your eyes! Magic is real, and you're going to learn how to use it properly. You pack your bags with excitement, wondering what amazing adventures await you at Magic Academy.",
+            "",
+            "The next day, you arrive at the train station and find Platform 9¾ hidden between platforms 9 and 10. You run straight at the brick wall, and instead of crashing, you pass through into a magical world!",
+            "",
+            "A magnificent steam train waits on the platform, its engine painted in deep purple and gold. The train is called the 'Starlight Express,' and it's filled with other young wizards just like you.",
+            "",
+            "You find an empty compartment and meet your first magical friends: Zara, who can talk to animals, and Kai, who can make plants grow instantly. You're all nervous but excited about starting your magical education.",
+            "",
+            "As the train chugs through the countryside, you see amazing sights: flying horses, talking trees, and even a dragon soaring through the clouds. You realize that the magical world is far more incredible than you ever imagined.",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: Magic Academy Student!",
+            "",
+            "Chapter 2: Arrival at Magic Academy",
+            "",
+            "The Starlight Express arrives at Magic Academy, and you're amazed by what you see. The school is a massive castle that seems to be built into the side of a mountain, with towers that reach up to touch the clouds.",
+            "",
+            "The castle is made of a special stone that changes color depending on the time of day - pink at sunrise, golden at noon, purple at sunset, and silver at night. Windows glow with warm light, and you can hear the sound of magical music floating through the air.",
+            "",
+            "Headmaster Starweaver greets you at the entrance. She's a tall woman with silver hair that sparkles like starlight and eyes that seem to contain entire galaxies. 'Welcome to Magic Academy, young wizards,' she says. 'Here you will learn to master your magical abilities and use them to make the world a better place.'",
+            "",
+            "You're sorted into your house by the Sorting Crystal, a magnificent gem that glows with different colors as it determines which house best matches your personality and magical abilities. You're placed in House Starlight, known for producing wizards who are brave, creative, and always ready to help others.",
+            "",
+            "Your dormitory is in the Starlight Tower, high above the clouds. The room is circular with windows that show different views of the magical world. Your bed is made of clouds that never lose their fluffiness, and your desk is enchanted to help you with your homework.",
+            "",
+            "You meet your roommate, Luna, who has the ability to control light and shadows. She's kind and funny, and you become fast friends. Together, you explore the academy and discover secret passages, hidden gardens, and even a room where time moves differently.",
+            "",
+            "That evening, you attend your first feast in the Great Hall. The ceiling shows the night sky with real stars that twinkle and move. Food appears on your plate as soon as you think about it, and the tables are decorated with floating candles and singing flowers.",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: House Starlight Member!",
+            "",
+            "Chapter 3: First Magic Lessons",
+            "",
+            "Your first day of classes begins with Professor Moonbeam's Introduction to Magic. She's a gentle woman who can transform into a silver wolf and teaches you about the fundamental principles of magic.",
+            "",
+            "'Magic is not just about casting spells,' she explains. 'It's about understanding the natural world and working with it, not against it. Every spell you cast affects the balance of nature, so you must always use your magic responsibly.'",
+            "",
+            "You learn your first spell: Lumos, which creates a small ball of light in your hand. At first, you can only make a tiny spark, but with practice, you can create a bright orb that illuminates an entire room.",
+            "",
+            "Next, you have Potions class with Professor Brewmaster, a cheerful man with a long beard that changes color depending on his mood. He teaches you how to brew a simple healing potion using magical herbs and crystals.",
+            "",
+            "'The key to potion-making is patience and precision,' he says. 'One wrong ingredient or one moment of impatience can turn a healing potion into something completely different!'",
+            "",
+            "You also attend Transfiguration class with Professor Shapechanger, who can transform into any animal. She teaches you how to change a feather into a flower, and you're amazed when your first attempt actually works!",
+            "",
+            "In Defense Against Dark Magic class, Professor Shield teaches you how to protect yourself from harmful spells. You learn the Shield Charm, which creates a protective barrier around you, and the Disarming Spell, which can knock a wand out of an opponent's hand.",
+            "",
+            "By the end of the day, you're exhausted but excited. You've learned so much and can already feel your magical abilities growing stronger. You can't wait to see what tomorrow will bring.",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: First Spells Mastered!",
+            "",
+            "Chapter 4: The Magical Creatures",
+            "",
+            "One of your favorite classes is Magical Creatures with Professor Wildheart, a woman who can communicate with any animal. She takes you to the Enchanted Forest behind the academy, where you meet all kinds of magical creatures.",
+            "",
+            "You learn to care for unicorns, which are incredibly gentle and can only be approached by those with pure hearts. You feed them golden apples and brush their silvery manes, and they nuzzle you affectionately.",
+            "",
+            "You also meet phoenixes, magnificent birds that can burst into flames and be reborn from their ashes. They're incredibly wise and can live for thousands of years. One phoenix named Ember becomes your special friend.",
+            "",
+            "In the forest, you encounter centaurs, who are half-human and half-horse. They're excellent archers and have deep knowledge of the stars and nature. They teach you how to read the night sky and predict the weather.",
+            "",
+            "You also meet house-elves, small creatures with big ears and even bigger hearts. They love to help others and are incredibly loyal. You befriend one named Dobby, who becomes your personal assistant and friend.",
+            "",
+            "But not all magical creatures are friendly. You learn about dangerous creatures like basilisks, which can turn people to stone with their gaze, and dementors, which feed on happiness and can drain a person's soul.",
+            "",
+            "Professor Wildheart teaches you how to protect yourself from dangerous creatures and how to help injured magical animals. You learn healing spells and how to create safe spaces for creatures in need.",
+            "",
+            "One day, you discover a wounded griffin in the forest. It's a magnificent creature with the body of a lion and the head and wings of an eagle. You use your healing spells to help it recover, and it becomes your loyal companion.",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: Creature Friend!",
+            "",
+            "Chapter 5: The Dark Wizard's Threat",
+            "",
+            "One evening, while studying in the library, you overhear Headmaster Starweaver talking to the other professors about a grave threat. A dark wizard named Shadowbane has escaped from the magical prison and is gathering an army of dark creatures.",
+            "",
+            "Shadowbane was once a student at Magic Academy, but he was corrupted by dark magic and turned against everything the academy stands for. He wants to use his power to control the magical world and enslave all magical creatures.",
+            "",
+            "The professors are worried because Shadowbane knows the academy's defenses and weaknesses. He could attack at any time, and the students would be in danger.",
+            "",
+            "You and your friends decide to help protect the academy. You form a secret group called the Starlight Defenders and begin training in advanced magic and combat techniques.",
+            "",
+            "You learn powerful spells like the Patronus Charm, which creates a protective spirit animal, and the Expelliarmus spell, which can disarm even the most powerful dark wizard. You also practice working together as a team.",
+            "",
+            "One night, while on patrol, you spot Shadowbane's minions sneaking into the academy. They're trying to steal the Academy's most powerful artifact - the Star Crystal, which amplifies magical power and protects the school.",
+            "",
+            "You and your friends spring into action, using your newly learned spells to fight off the intruders. It's a fierce battle, but you manage to drive them away and protect the Star Crystal.",
+            "",
+            "Headmaster Starweaver is impressed by your bravery and skill. 'You have shown great courage and wisdom,' she says. 'You are true wizards, and I'm proud to have you as students.'",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: Academy Defender!",
+            "",
+            "Chapter 6: The Quest for the Lost Artifacts",
+            "",
+            "The next day, Headmaster Starweaver calls you to her office. 'I have a special mission for you and your friends,' she says. 'Shadowbane is searching for three ancient artifacts that, when combined, will give him unlimited power. We must find them first.'",
+            "",
+            "The three artifacts are: the Crystal of Wisdom, hidden in the Cave of Echoes; the Staff of Power, guarded by the Dragon of the Mountains; and the Book of Spells, locked in the Tower of Time.",
+            "",
+            "Each artifact is protected by powerful magic and dangerous creatures. You'll need to use all your skills and work together as a team to retrieve them.",
+            "",
+            "Your first stop is the Cave of Echoes, where the Crystal of Wisdom is hidden. The cave is filled with magical echoes that can drive people mad if they're not careful. You must solve a series of riddles to reach the crystal.",
+            "",
+            "The riddles test your knowledge of magic, history, and wisdom. With your friends' help, you solve each one and reach the crystal. It's a beautiful gem that glows with inner light and seems to contain all the knowledge in the world.",
+            "",
+            "Next, you travel to the Dragon of the Mountains. The dragon is ancient and wise, and it won't give up the Staff of Power easily. But you remember what you learned about magical creatures - they respond to kindness and respect.",
+            "",
+            "You approach the dragon with respect and offer to help it with a problem it's been having. The dragon is impressed by your kindness and agrees to give you the staff in exchange for your help.",
+            "",
+            "Finally, you must reach the Tower of Time, where the Book of Spells is locked. The tower exists outside of normal time, and you must navigate through different time periods to reach the book.",
+            "",
+            "You travel through the past, present, and future, learning about the history of magic and the importance of using it responsibly. When you finally reach the book, you understand that true power comes from wisdom and compassion, not from controlling others.",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: Artifact Hunter!",
+            "",
+            "Chapter 7: The Final Battle",
+            "",
+            "With all three artifacts in your possession, you return to Magic Academy, but you're too late. Shadowbane has already attacked, and the academy is under siege. Dark creatures are everywhere, and the students are fighting for their lives.",
+            "",
+            "You and your friends rush into battle, using the artifacts to amplify your magical power. The Crystal of Wisdom gives you incredible knowledge and insight, the Staff of Power makes your spells more effective, and the Book of Spells teaches you new and powerful magic.",
+            "",
+            "The battle is epic. You fight shadow wolves, dark wizards, and even a corrupted dragon. But you're not alone - all the students and professors are fighting together, united against the darkness.",
+            "",
+            "Shadowbane appears, wielding dark magic that seems to corrupt everything it touches. He's incredibly powerful, but you remember what you learned about the true nature of magic - it's not about power, it's about love, friendship, and protecting others.",
+            "",
+            "You and your friends combine your powers to create a spell of pure light and hope. The spell overwhelms Shadowbane's dark magic and banishes him from the academy forever.",
+            "",
+            "The dark creatures flee, and peace returns to Magic Academy. The students cheer, and Headmaster Starweaver thanks you for your bravery and wisdom.",
+            "",
+            "'You have proven yourselves to be true wizards,' she says. 'You have used your power to protect others and fight for what is right. That is the highest calling of any wizard.'",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: Dark Wizard Defeated!",
+            "",
+            "Chapter 8: The New Generation",
+            "",
+            "With Shadowbane defeated, Magic Academy returns to normal, but things are different now. The students have learned the importance of working together and using their magic responsibly.",
+            "",
+            "You and your friends are now in your final year at the academy. You've become some of the most powerful and skilled wizards in the school, and you're ready to take on the responsibilities of being a full wizard.",
+            "",
+            "Headmaster Starweaver announces that you and your friends will be the new leaders of the Starlight Defenders, responsible for protecting the academy and training the next generation of young wizards.",
+            "",
+            "You take your new role seriously, teaching younger students about magic, responsibility, and the importance of using their powers for good. You help them develop their abilities and learn to work together as a team.",
+            "",
+            "You also continue to explore the magical world, discovering new creatures, learning new spells, and helping those in need. You use your magic to heal the sick, protect the innocent, and make the world a better place.",
+            "",
+            "One day, a new student arrives at the academy - a young boy who reminds you of yourself when you first arrived. He's nervous and unsure, but you take him under your wing and help him begin his own magical journey.",
+            "",
+            "'Every wizard starts with a single spell,' you tell him. 'But with practice, patience, and the help of friends, you can achieve anything.'",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: Master Wizard!",
+            "",
+            "Chapter 9: The Graduation",
+            "",
+            "The day of your graduation arrives, and it's a grand celebration. The entire magical world has come to witness the graduation of the most talented class in Magic Academy's history.",
+            "",
+            "You and your friends receive your wizard certificates and are officially recognized as full wizards. You're also given special awards for your bravery, wisdom, and dedication to protecting others.",
+            "",
+            "Headmaster Starweaver gives a speech about the importance of using magic responsibly and the responsibility that comes with great power. 'You are now the guardians of the magical world,' she says. 'Use your power wisely, and always remember that true magic comes from the heart.'",
+            "",
+            "After the ceremony, you and your friends celebrate with a grand feast. The Great Hall is decorated with floating lights and singing flowers, and the food is the most delicious you've ever tasted.",
+            "",
+            "You reflect on your time at Magic Academy and all the amazing adventures you've had. You've learned so much, made lifelong friends, and discovered the true meaning of magic.",
+            "",
+            "But you know that your journey is just beginning. As a full wizard, you have the power to make a real difference in the world, and you're excited to see what the future holds.",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: Academy Graduate!",
+            "",
+            "Chapter 10: The Future Awaits",
+            "",
+            "After graduation, you and your friends go your separate ways, but you promise to stay in touch and help each other whenever needed. You've formed bonds that will last a lifetime.",
+            "",
+            "You decide to become a traveling wizard, using your magic to help people and creatures all over the world. You visit distant lands, meet new magical creatures, and learn about different cultures and ways of life.",
+            "",
+            "You also continue to study and learn, discovering new spells and techniques that make you even more powerful. But you never forget the lessons you learned at Magic Academy - that true power comes from wisdom, compassion, and the willingness to help others.",
+            "",
+            "Years pass, and you become one of the most respected wizards in the world. People come to you for help with magical problems, and you're always happy to assist them. You've also become a teacher, passing on your knowledge to the next generation of young wizards.",
+            "",
+            "One day, you receive a letter from Headmaster Starweaver. She's retiring and wants you to become the new headmaster of Magic Academy. You're honored and excited about the opportunity to guide the next generation of young wizards.",
+            "",
+            "As the new headmaster, you continue the tradition of excellence that has made Magic Academy the greatest school of magic in the world. You welcome new students, guide them through their magical education, and help them discover their own potential.",
+            "",
+            "You also continue to protect the magical world from threats, both old and new. You work with other wizards and magical creatures to maintain the balance between magic and the natural world.",
+            "",
+            "But most importantly, you never forget what it means to be a wizard. You use your power to help others, protect the innocent, and make the world a better place. You are a true wizard, and your story is an inspiration to all who follow in your footsteps.",
+            "",
+            "🏆 ACHIEVEMENT UNLOCKED: Headmaster of Magic Academy!",
+            "",
+            "THE END",
+            "",
+            "But remember - every ending is just a new beginning. Your journey as a wizard is far from over, and the magical world is full of endless possibilities and adventures waiting to be discovered.",
+            "",
+            "Thank you for joining Maya on her epic journey from a confused young girl to the headmaster of Magic Academy. You have learned the true meaning of magic and the responsibility that comes with great power.",
+            "",
+            "🎓 THE WIZARD'S CREED 🎓",
+            "",
+            "I am a wizard, bound by honor and magic.",
+            "I use my power to help others and protect the innocent.",
+            "I respect the natural world and work with it, not against it.",
+            "I am a student of knowledge and a teacher of wisdom.",
+            "I stand against darkness and fight for what is right.",
+            "I am a guardian of the magical world and all its creatures.",
+            "I will never abuse my power or use it for selfish gain.",
+            "For I am a wizard, and my story is just beginning.",
+            "",
+            "🌟 EPIC ADVENTURE COMPLETE! 🌟",
+            "",
+            "You have successfully completed the Magic Academy adventure! You are now a legendary wizard with the power to protect the magical world and inspire others to follow in your footsteps.",
+            "",
+            "Your achievements:",
+            "✅ Magic Academy Student",
+            "✅ House Starlight Member",
+            "✅ First Spells Mastered",
+            "✅ Creature Friend",
+            "✅ Academy Defender",
+            "✅ Artifact Hunter",
+            "✅ Dark Wizard Defeated",
+            "✅ Master Wizard",
+            "✅ Academy Graduate",
+            "✅ Headmaster of Magic Academy",
+            "",
+            "Congratulations, Wizard! Your epic adventure has made you a true master of magic! 🎓✨"
+        ]
+    }
+    // More stories would continue here...
+};
+
+function showCategory(category) {
+    const stories = document.querySelectorAll('.epic-story-card');
+    const tabs = document.querySelectorAll('.tab-btn');
+    
+    // Update active tab
+    tabs.forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Show/hide stories based on category
+    stories.forEach(story => {
+        if (category === 'all' || story.dataset.category === category) {
+            story.style.display = 'block';
+        } else {
+            story.style.display = 'none';
+        }
+    });
+}
+
+function startEpicAdventure(storyId) {
+    const story = EPIC_STORIES[storyId];
+    if (!story) return;
+    
+    currentStory = story;
+    currentChapter = 0;
+    
+    document.getElementById('epic-reader').style.display = 'flex';
+    document.getElementById('epic-story-title').textContent = story.title;
+    
+    displayCurrentChapter();
+    showAchievement('Adventure Started!', 'You\'ve begun an epic journey!');
+}
+
+function displayCurrentChapter() {
+    if (!currentStory || !currentStory.chapters[currentChapter]) return;
+    
+    const chapter = currentStory.chapters[currentChapter];
+    document.getElementById('epic-story-content').innerHTML = `<div class="epic-chapter">${chapter}</div>`;
+    
+    // Update progress
+    const progress = ((currentChapter + 1) / currentStory.totalChapters) * 100;
+    document.getElementById('progress-fill').style.width = progress + '%';
+    document.getElementById('progress-text').textContent = `Chapter ${currentChapter + 1} of ${currentStory.totalChapters}`;
+    
+    // Scroll to top
+    document.querySelector('.epic-reader-content').scrollTop = 0;
+}
+
+function nextChapter() {
+    if (currentStory && currentChapter < currentStory.chapters.length - 1) {
+        currentChapter++;
+        displayCurrentChapter();
+        
+        if (currentChapter === currentStory.chapters.length - 1) {
+            showAchievement('Epic Adventure Complete!', 'You\'ve finished an amazing story!');
+        }
+    }
+}
+
+function prevChapter() {
+    if (currentStory && currentChapter > 0) {
+        currentChapter--;
+        displayCurrentChapter();
+    }
+}
+
+function closeEpicReader() {
+    document.getElementById('epic-reader').style.display = 'none';
+    currentStory = null;
+    currentChapter = 0;
+}
+
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+    document.getElementById('sound-btn').textContent = soundEnabled ? '🔊 SOUND' : '🔇 MUTED';
+}
+
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+    } else {
+        document.exitFullscreen();
+    }
+}
+
+function showBookmarks() {
+    alert('Bookmark feature coming soon!');
+}
+
+function showAchievement(title, description) {
+    const popup = document.getElementById('achievement-popup');
+    document.getElementById('achievement-title').textContent = title;
+    document.getElementById('achievement-desc').textContent = description;
+    
+    // Show popup with animation
+    popup.style.display = 'block';
+    popup.style.opacity = '0';
+    popup.style.transform = 'translate(-50%, -50%) scale(0)';
+    
+    // Animate in
+    setTimeout(() => {
+        popup.style.transition = 'all 0.5s ease-out';
+        popup.style.opacity = '1';
+        popup.style.transform = 'translate(-50%, -50%) scale(1)';
+    }, 100);
+    
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+        closeAchievement();
+    }, 3000);
+}
+
+function closeAchievement() {
+    const popup = document.getElementById('achievement-popup');
+    popup.style.transition = 'all 0.5s ease-in';
+    popup.style.opacity = '0';
+    popup.style.transform = 'translate(-50%, -50%) scale(0)';
+    
+    // Hide completely after animation
+    setTimeout(() => {
+        popup.style.display = 'none';
+    }, 500);
+}
+</script>
+
+<style>
+.epic-books-mega {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    padding-bottom: 4rem;
+}
+
+.epic-hero {
+    background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 50%, #45b7d1 100%);
+    padding: 4rem 2rem;
+    text-align: center;
+    border-radius: 0 0 70px 70px;
+    margin-bottom: 4rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.epic-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.8"/></pattern></defs><rect width="100" height="100" fill="url(%23stars)"/></svg>');
+    animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+.epic-back-btn {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    background: rgba(255,255,255,0.3);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: 3px solid rgba(255,255,255,0.5);
+    z-index: 10;
+}
+
+.epic-mascot {
+    font-size: 16rem;
+    animation: bounce 2s ease-in-out infinite;
+    z-index: 10;
+    position: relative;
+}
+
+.epic-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 7rem;
+    color: white;
+    text-shadow: 8px 8px 25px rgba(0,0,0,0.5);
+    margin: 2rem 0;
+    z-index: 10;
+    position: relative;
+}
+
+.epic-subtitle {
+    font-size: 2.5rem;
+    color: white;
+    text-shadow: 4px 4px 15px rgba(0,0,0,0.5);
+    margin-bottom: 3rem;
+    z-index: 10;
+    position: relative;
+}
+
+.epic-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    z-index: 10;
+    position: relative;
+}
+
+.stat-card {
+    background: rgba(255,255,255,0.2);
+    padding: 2rem;
+    border-radius: 20px;
+    text-align: center;
+    border: 3px solid rgba(255,255,255,0.3);
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+}
+
+.stat-label {
+    font-size: 1.2rem;
+    color: white;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+}
+
+.categories-section {
+    max-width: 1600px;
+    margin: 0 auto 4rem;
+    padding: 0 2rem;
+}
+
+.categories-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 5rem;
+    text-align: center;
+    color: white;
+    margin-bottom: 3rem;
+    text-shadow: 4px 4px 15px rgba(0,0,0,0.5);
+}
+
+.category-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    border: none;
+    color: white;
+    padding: 1.5rem 2.5rem;
+    border-radius: 30px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    transform: scale(1.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.epic-stories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.epic-story-card {
+    background: white;
+    border-radius: 30px;
+    padding: 3rem;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    border: 6px solid #4ecdc4;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.epic-story-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.epic-story-card:hover::before {
+    left: 100%;
+}
+
+.epic-story-card:hover {
+    transform: translateY(-25px) scale(1.05);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+}
+
+.story-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.story-icon {
+    font-size: 10rem;
+    margin-bottom: 2rem;
+}
+
+.epic-story-card h3 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5rem;
+    color: #333;
+    margin: 1.5rem 0;
+}
+
+.epic-story-card p {
+    font-size: 1.4rem;
+    color: #666;
+    margin: 1.5rem 0;
+    line-height: 1.6;
+}
+
+.story-stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 15px;
+}
+
+.stat {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #667eea;
+}
+
+.epic-read-btn {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border: none;
+    color: white;
+    padding: 2rem 3rem;
+    border-radius: 30px;
+    font-size: 1.6rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+}
+
+.epic-read-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* EPIC READER */
+.epic-reader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.95);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.epic-reader-container {
+    background: white;
+    border-radius: 30px;
+    width: 100%;
+    max-width: 1400px;
+    max-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 30px 100px rgba(0,0,0,0.5);
+}
+
+.epic-reader-header {
+    padding: 2rem;
+    border-bottom: 4px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.epic-close-btn {
+    background: #ff6b6b;
+    border: none;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.epic-story-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.2rem;
+    color: #333;
+    margin: 0;
+    flex: 1;
+}
+
+.epic-progress {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+.progress-bar {
+    width: 200px;
+    height: 10px;
+    background: #f0f0f0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #667eea;
+}
+
+.epic-reader-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 3rem;
+}
+
+.epic-story-text {
+    font-size: 1.7rem;
+    line-height: 2.4;
+    color: #333;
+}
+
+.epic-chapter {
+    white-space: pre-line;
+    text-align: left;
+}
+
+.epic-reader-footer {
+    padding: 2rem;
+    border-top: 4px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.epic-nav-btn {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border: none;
+    color: white;
+    padding: 1.5rem 3rem;
+    border-radius: 30px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.epic-controls {
+    display: flex;
+    gap: 1rem;
+}
+
+.control-btn {
+    background: #4ecdc4;
+    border: none;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.achievement-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    color: white;
+    padding: 3rem;
+    border-radius: 30px;
+    text-align: center;
+    z-index: 10001;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    cursor: pointer;
+}
+
+.achievement-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255,255,255,0.3);
+    border: none;
+    color: white;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.achievement-close-btn:hover {
+    background: rgba(255,255,255,0.5);
+}
+
+.achievement-content {
+    position: relative;
+}
+
+.achievement-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.achievement-content h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.achievement-content p {
+    font-size: 1.3rem;
+}
+</style>
+{% endblock %}

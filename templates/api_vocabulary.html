@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}Datamuse Vocabulary API - Words & Rhymes{% endblock %}
+
+{% block content %}
+<div class="vocab-page-mega">
+    <div class="vocab-hero">
+        <a href="/api-explorer" class="vocab-back-btn">⬅️ All APIs</a>
+        
+        <div class="vocab-mascot">📝</div>
+        <h1 class="vocab-title-mega">DATAMUSE VOCABULARY API</h1>
+        <p class="vocab-subtitle">Find Words, Rhymes, Synonyms & MORE! ✍️</p>
+    </div>
+
+    <div class="vocab-tools-section">
+        <h2 class="vocab-section-title">🎯 Word Tools</h2>
+        
+        <!-- RHYME FINDER -->
+        <div class="vocab-tool-card">
+            <h3 class="tool-title">🎵 Rhyme Finder</h3>
+            <div class="tool-controls">
+                <input type="text" id="rhyme-input" placeholder="Enter word..." value="cat" class="vocab-input">
+                <button onclick="findRhymes()" class="vocab-btn">Find Rhymes!</button>
+            </div>
+            <div id="rhyme-results" class="tool-results"></div>
+        </div>
+
+        <!-- SYNONYM FINDER -->
+        <div class="vocab-tool-card">
+            <h3 class="tool-title">📖 Synonym Finder</h3>
+            <div class="tool-controls">
+                <input type="text" id="synonym-input" placeholder="Enter word..." value="happy" class="vocab-input">
+                <button onclick="findSynonyms()" class="vocab-btn">Find Synonyms!</button>
+            </div>
+            <div id="synonym-results" class="tool-results"></div>
+        </div>
+
+        <!-- RELATED WORDS -->
+        <div class="vocab-tool-card">
+            <h3 class="tool-title">🔗 Related Words</h3>
+            <div class="tool-controls">
+                <input type="text" id="related-input" placeholder="Enter word..." value="ocean" class="vocab-input">
+                <button onclick="findRelated()" class="vocab-btn">Find Related!</button>
+            </div>
+            <div id="related-results" class="tool-results"></div>
+        </div>
+
+        <!-- ADJECTIVES -->
+        <div class="vocab-tool-card">
+            <h3 class="tool-title">✨ Adjective Finder</h3>
+            <div class="tool-controls">
+                <input type="text" id="adjective-input" placeholder="Describes what?" value="pizza" class="vocab-input">
+                <button onclick="findAdjectives()" class="vocab-btn">Find Adjectives!</button>
+            </div>
+            <div id="adjective-results" class="tool-results"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function findRhymes() {
+    const word = document.getElementById('rhyme-input').value;
+    const results = document.getElementById('rhyme-results');
+    results.innerHTML = '<div class="loading-vocab">🎵 Finding rhymes...</div>';
+    
+    try {
+        const response = await fetch(`/api/open/vocabulary/rhymes/${word}`);
+        const data = await response.json();
+        displayWords(data, results, '🎵');
+    } catch (e) {
+        results.innerHTML = '<div class="error-vocab">Error loading rhymes!</div>';
+    }
+}
+
+async function findSynonyms() {
+    const word = document.getElementById('synonym-input').value;
+    const results = document.getElementById('synonym-results');
+    results.innerHTML = '<div class="loading-vocab">📖 Finding synonyms...</div>';
+    
+    try {
+        const response = await fetch(`/api/open/vocabulary/synonyms/${word}`);
+        const data = await response.json();
+        displayWords(data, results, '📖');
+    } catch (e) {
+        results.innerHTML = '<div class="error-vocab">Error loading synonyms!</div>';
+    }
+}
+
+async function findRelated() {
+    const word = document.getElementById('related-input').value;
+    const results = document.getElementById('related-results');
+    results.innerHTML = '<div class="loading-vocab">🔗 Finding related words...</div>';
+    
+    try {
+        const response = await fetch(`/api/open/vocabulary/related/${word}`);
+        const data = await response.json();
+        displayWords(data, results, '🔗');
+    } catch (e) {
+        results.innerHTML = '<div class="error-vocab">Error loading related words!</div>';
+    }
+}
+
+async function findAdjectives() {
+    const word = document.getElementById('adjective-input').value;
+    const results = document.getElementById('adjective-results');
+    results.innerHTML = '<div class="loading-vocab">✨ Finding adjectives...</div>';
+    
+    try {
+        const response = await fetch(`/api/open/vocabulary/adjectives/${word}`);
+        const data = await response.json();
+        displayWords(data, results, '✨');
+    } catch (e) {
+        results.innerHTML = '<div class="error-vocab">Error loading adjectives!</div>';
+    }
+}
+
+function displayWords(data, container, emoji) {
+    if (data.text && data.text.length > 0) {
+        const words = data.text.split(',').map(w => w.trim()).filter(w => w);
+        container.innerHTML = `
+            <div class="words-grid">
+                ${words.map(word => `
+                    <div class="word-bubble">${emoji} ${word}</div>
+                `).join('')}
+            </div>
+        `;
+    } else {
+        container.innerHTML = '<div class="no-results-vocab">No results found!</div>';
+    }
+}
+
+// Auto-load examples on page load
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(findRhymes, 300);
+    setTimeout(findSynonyms, 600);
+    setTimeout(findRelated, 900);
+    setTimeout(findAdjectives, 1200);
+});
+</script>
+
+<style>
+.vocab-page-mega {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.vocab-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 4rem 2rem;
+    text-align: center;
+    border-radius: 0 0 70px 70px;
+    margin-bottom: 4rem;
+}
+
+.vocab-mascot {
+    font-size: 14rem;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+.vocab-title-mega {
+    font-family: 'Fredoka One', cursive;
+    font-size: 5rem;
+    color: white;
+    text-shadow: 6px 6px 20px rgba(0,0,0,0.5);
+    margin: 2rem 0;
+}
+
+.vocab-tools-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.vocab-section-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 4rem;
+    text-align: center;
+    color: #333;
+    margin-bottom: 3rem;
+}
+
+.vocab-tool-card {
+    background: white;
+    border-radius: 30px;
+    padding: 3rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    border: 5px solid #4ecdc4;
+}
+
+.tool-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.tool-controls {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.vocab-input {
+    flex: 1;
+    padding: 1.5rem 2rem;
+    border: 4px solid #667eea;
+    border-radius: 30px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    outline: none;
+}
+
+.vocab-btn {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    border: none;
+    color: white;
+    padding: 1.5rem 3rem;
+    border-radius: 30px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.vocab-btn:hover {
+    transform: scale(1.05);
+}
+
+.words-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.word-bubble {
+    background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+    padding: 1rem 1.5rem;
+    border-radius: 25px;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border: 3px solid white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.word-bubble:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.loading-vocab, .error-vocab, .no-results-vocab {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #667eea;
+}
+</style>
+{% endblock %}
+

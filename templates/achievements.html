@@ -1,0 +1,610 @@
+{% extends "base.html" %}
+
+{% block title %}Achievements - Ultimate Badass Tutor{% endblock %}
+
+{% block content %}
+<div class="achievements-container">
+    <!-- Header -->
+    <div class="achievements-header">
+        <h1 class="fun-title">🏆 YOUR AWESOME ACHIEVEMENTS! 🏆</h1>
+        <p class="achievements-subtitle">
+            Track your progress and unlock amazing rewards!
+        </p>
+    </div>
+
+    <!-- Progress Overview -->
+    <div class="progress-overview">
+        <div class="overview-card level-card">
+            <div class="card-icon">⭐</div>
+            <div class="card-content">
+                <div class="card-number" id="user-level">1</div>
+                <div class="card-label">Current Level</div>
+            </div>
+        </div>
+        
+        <div class="overview-card points-card">
+            <div class="card-icon">💎</div>
+            <div class="card-content">
+                <div class="card-number" id="user-points">0</div>
+                <div class="card-label">Total Points</div>
+            </div>
+        </div>
+        
+        <div class="overview-card achievements-card">
+            <div class="card-icon">🏆</div>
+            <div class="card-content">
+                <div class="card-number" id="achievements-count">0/10</div>
+                <div class="card-label">Achievements</div>
+            </div>
+        </div>
+        
+        <div class="overview-card streak-card">
+            <div class="card-icon">🔥</div>
+            <div class="card-content">
+                <div class="card-number" id="streak-count">0</div>
+                <div class="card-label">Day Streak</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Stats -->
+    <div class="stats-section">
+        <h2>📊 Your Learning Stats</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-icon">📚</div>
+                <div class="stat-info">
+                    <div class="stat-number">{{ progress.lessons_started or 0 }}</div>
+                    <div class="stat-label">Lessons Started</div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-icon">✅</div>
+                <div class="stat-info">
+                    <div class="stat-number">{{ progress.problems_mastered or 0 }}</div>
+                    <div class="stat-label">Problems Mastered</div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-info">
+                    <div class="stat-number">{{ progress.total_problems_attempted or 0 }}</div>
+                    <div class="stat-label">Total Attempts</div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-icon">📈</div>
+                <div class="stat-info">
+                    <div class="stat-number" id="accuracy-percent">0%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievement Grid -->
+    <div class="achievements-section">
+        <h2>🏆 Achievement Gallery</h2>
+        <div class="achievements-grid" id="achievements-grid">
+            <!-- Achievements will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Badges Section -->
+    <div class="badges-section">
+        <h2>🎖️ Earned Badges</h2>
+        <div class="badges-grid" id="badges-grid">
+            <!-- Badges will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Level Progress -->
+    <div class="level-progress-section">
+        <h2>⭐ Level Progress</h2>
+        <div class="level-info">
+            <div class="current-level">
+                <span class="level-number" id="current-level-number">1</span>
+                <span class="level-label">Current Level</span>
+            </div>
+            
+            <div class="level-bar">
+                <div class="level-fill" id="level-fill" style="width: 0%"></div>
+                <div class="level-text">
+                    <span id="current-points">0</span> / <span id="next-level-points">100</span> points
+                </div>
+            </div>
+            
+            <div class="next-level">
+                <span class="level-number" id="next-level-number">2</span>
+                <span class="level-label">Next Level</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Motivational Section -->
+    <div class="motivation-section">
+        <h2>💪 Keep Going!</h2>
+        <div class="motivation-card">
+            <div class="motivation-icon">🌟</div>
+            <div class="motivation-text">
+                <h3>You're doing amazing!</h3>
+                <p>Every problem you solve makes you smarter!</p>
+                <p>Every lesson brings you closer to mastery!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Initialize achievements display
+document.addEventListener('DOMContentLoaded', function() {
+    loadAchievements();
+    updateLevelProgress();
+    calculateAccuracy();
+});
+
+function loadAchievements() {
+    const achievementsGrid = document.getElementById('achievements-grid');
+    const achievements = window.achievementSystem.achievements;
+    
+    achievementsGrid.innerHTML = Object.values(achievements).map(achievement => `
+        <div class="achievement-card ${achievement.unlocked ? 'unlocked' : 'locked'}">
+            <div class="achievement-icon">${achievement.icon}</div>
+            <div class="achievement-name">${achievement.name}</div>
+            <div class="achievement-description">${achievement.description}</div>
+            <div class="achievement-points">${achievement.points} points</div>
+            ${achievement.unlocked ? '<div class="unlocked-badge">✅ Unlocked!</div>' : '<div class="locked-badge">🔒 Locked</div>'}
+        </div>
+    `).join('');
+    
+    // Update badges
+    const badgesGrid = document.getElementById('badges-grid');
+    const unlockedAchievements = Object.values(achievements).filter(a => a.unlocked);
+    
+    if (unlockedAchievements.length > 0) {
+        badgesGrid.innerHTML = unlockedAchievements.map(achievement => `
+            <div class="badge-item">
+                <div class="badge-icon">${achievement.icon}</div>
+                <div class="badge-name">${achievement.name}</div>
+            </div>
+        `).join('');
+    } else {
+        badgesGrid.innerHTML = `
+            <div class="no-badges">
+                <p>🎯 Start learning to earn your first badge!</p>
+            </div>
+        `;
+    }
+}
+
+function updateLevelProgress() {
+    const progress = window.achievementSystem.getProgress();
+    
+    // Update level display
+    document.getElementById('user-level').textContent = progress.level;
+    document.getElementById('current-level-number').textContent = progress.level;
+    document.getElementById('next-level-number').textContent = progress.level + 1;
+    
+    // Update points
+    document.getElementById('user-points').textContent = progress.totalPoints;
+    
+    // Calculate progress to next level
+    const pointsInCurrentLevel = progress.totalPoints % 100;
+    const nextLevelPoints = 100;
+    const progressPercent = (pointsInCurrentLevel / nextLevelPoints) * 100;
+    
+    document.getElementById('current-points').textContent = pointsInCurrentLevel;
+    document.getElementById('next-level-points').textContent = nextLevelPoints;
+    document.getElementById('level-fill').style.width = progressPercent + '%';
+    
+    // Update achievements count
+    document.getElementById('achievements-count').textContent = 
+        `${progress.achievements}/${progress.totalAchievements}`;
+}
+
+function calculateAccuracy() {
+    const attempted = {{ progress.total_problems_attempted or 0 }};
+    const mastered = {{ progress.problems_mastered or 0 }};
+    
+    const accuracy = attempted > 0 ? Math.round((mastered / attempted) * 100) : 0;
+    document.getElementById('accuracy-percent').textContent = accuracy + '%';
+}
+</script>
+
+<style>
+.achievements-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.achievements-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.achievements-subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 1rem;
+}
+
+.progress-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.overview-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.overview-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.card-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.card-label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.stats-section, .achievements-section, .badges-section {
+    margin: 3rem 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.stat-item {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+}
+
+.stat-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #4ecdc4;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.achievement-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.achievement-card.unlocked {
+    border: 3px solid #4CAF50;
+}
+
+.achievement-card.locked {
+    opacity: 0.5;
+    border: 3px solid #ddd;
+}
+
+.achievement-card:hover {
+    transform: translateY(-5px);
+}
+
+.achievement-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.achievement-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.achievement-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.achievement-points {
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    color: #333;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.unlocked-badge {
+    background: #4CAF50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    margin-top: 0.5rem;
+    font-weight: bold;
+}
+
+.locked-badge {
+    background: #999;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    margin-top: 0.5rem;
+}
+
+.badges-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.badge-item {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.badge-icon {
+    font-size: 2rem;
+}
+
+.badge-name {
+    font-weight: bold;
+    color: #333;
+}
+
+.no-badges {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+.level-progress-section {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    margin: 3rem 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.level-info {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.current-level, .next-level {
+    text-align: center;
+}
+
+.level-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4ecdc4;
+}
+
+.level-label {
+    display: block;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.level-bar {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 25px;
+    height: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.level-fill {
+    background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+    height: 100%;
+    border-radius: 25px;
+    transition: width 0.5s ease;
+}
+
+.level-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    color: #333;
+    z-index: 1;
+}
+
+.motivation-section {
+    margin: 3rem 0;
+}
+
+.motivation-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    color: white;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.motivation-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.motivation-text h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.motivation-text p {
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+}
+
+/* Achievement Notification */
+.achievement-notification {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    animation: slideInRight 0.5s ease-out;
+}
+
+.achievement-notification.fade-out {
+    animation: slideOutRight 0.5s ease-out;
+}
+
+.achievement-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.achievement-notification .achievement-icon {
+    font-size: 3rem;
+}
+
+.achievement-title {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-bottom: 0.3rem;
+}
+
+.achievement-notification .achievement-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+}
+
+.achievement-notification .achievement-points {
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    display: inline-block;
+}
+
+.achievement-particle {
+    position: fixed;
+    font-size: 2rem;
+    pointer-events: none;
+    z-index: 9999;
+    animation: floatAway 2s ease-out forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+@keyframes floatAway {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-200px) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .progress-overview {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .stats-grid, .achievements-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .level-info {
+        flex-direction: column;
+    }
+    
+    .achievement-notification {
+        right: 10px;
+        left: 10px;
+    }
+}
+</style>
+{% endblock %}
+

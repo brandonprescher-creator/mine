@@ -1,0 +1,508 @@
+{% extends "base.html" %}
+
+{% block title %}Wikipedia API - FREE Encyclopedia{% endblock %}
+
+{% block content %}
+<div class="api-page-mega">
+    <!-- API HERO -->
+    <div class="api-page-hero">
+        <a href="/api-explorer" class="api-back-mega">⬅️ All APIs</a>
+        
+        <div class="api-page-mascot">📖</div>
+        <h1 class="api-page-title">WIKIPEDIA API</h1>
+        <p class="api-page-subtitle">Search MILLIONS of articles - Get instant knowledge! 🌟</p>
+        
+        <div class="api-page-stats">
+            <div class="page-stat">
+                <div class="page-stat-num">6M+</div>
+                <div class="page-stat-label">Articles</div>
+            </div>
+            <div class="page-stat">
+                <div class="page-stat-num">300+</div>
+                <div class="page-stat-label">Languages</div>
+            </div>
+            <div class="page-stat">
+                <div class="page-stat-num">FREE</div>
+                <div class="page-stat-label">Always</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH SECTION -->
+    <div class="api-search-mega">
+        <h2 class="search-section-title">🔍 Search Wikipedia Now!</h2>
+        <div class="search-box-mega">
+            <input type="text" id="wiki-search" placeholder="Search any topic..." value="Photosynthesis" class="api-mega-input">
+            <button onclick="searchWiki()" class="api-mega-search-btn">
+                <span class="search-icon">🚀</span>
+                <span>SEARCH!</span>
+            </button>
+        </div>
+        
+        <div id="wiki-results-container" class="results-container-mega"></div>
+    </div>
+
+    <!-- FEATURED TOPICS -->
+    <div class="featured-topics-section">
+        <h2 class="featured-title-mega">⭐ Try These Popular Topics!</h2>
+        <div class="topics-quick-grid">
+            <button class="quick-topic-btn" onclick="quickSearch('Albert Einstein')">🧠 Albert Einstein</button>
+            <button class="quick-topic-btn" onclick="quickSearch('Solar System')">🌌 Solar System</button>
+            <button class="quick-topic-btn" onclick="quickSearch('Dinosaurs')">🦕 Dinosaurs</button>
+            <button class="quick-topic-btn" onclick="quickSearch('Ancient Egypt')">🏛️ Ancient Egypt</button>
+            <button class="quick-topic-btn" onclick="quickSearch('Mathematics')">📐 Mathematics</button>
+            <button class="quick-topic-btn" onclick="quickSearch('World War II')">⚔️ World War II</button>
+            <button class="quick-topic-btn" onclick="quickSearch('Human Body')">🫀 Human Body</button>
+            <button class="quick-topic-btn" onclick="quickSearch('Climate Change')">🌍 Climate Change</button>
+        </div>
+    </div>
+
+    <!-- REAL CONTENT SHOWCASE -->
+    <div class="showcase-content-section">
+        <h2 class="showcase-title-mega">🌟 Live Content Examples</h2>
+        <div id="live-examples" class="live-examples-grid">
+            <!-- Will be populated with real Wikipedia content -->
+        </div>
+    </div>
+</div>
+
+<script>
+// Search Wikipedia
+async function searchWiki() {
+    const query = document.getElementById('wiki-search').value;
+    if (!query) return;
+    
+    const container = document.getElementById('wiki-results-container');
+    container.innerHTML = '<div class="loading-huge">🔍 Searching Wikipedia...</div>';
+    
+    try {
+        const response = await fetch(`/api/open/wikipedia/${encodeURIComponent(query)}`);
+        const data = await response.json();
+        
+        if (data.title) {
+            container.innerHTML = `
+                <div class="wiki-result-mega">
+                    <div class="wiki-result-header">
+                        <h2 class="wiki-result-title">${data.title}</h2>
+                        <a href="${data.url}" target="_blank" class="wiki-link-btn">Read Full Article →</a>
+                    </div>
+                    
+                    ${data.image ? `
+                        <div class="wiki-image-container">
+                            <img src="${data.image}" alt="${data.title}" class="wiki-result-image">
+                        </div>
+                    ` : ''}
+                    
+                    <div class="wiki-result-content">
+                        <h3>📝 Summary:</h3>
+                        <p class="wiki-text-mega">${data.text}</p>
+                    </div>
+                    
+                    ${data.meta && data.meta.description ? `
+                        <div class="wiki-description">
+                            <strong>Quick Info:</strong> ${data.meta.description}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="wiki-actions">
+                        <button class="action-btn-wiki" onclick="searchWiki()">Search Another</button>
+                        <button class="action-btn-wiki" onclick="shareResult('${data.title}')">Share</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            container.innerHTML = '<div class="no-results-mega">No results found. Try another search!</div>';
+        }
+    } catch (error) {
+        container.innerHTML = '<div class="error-huge">Error loading. Please try again!</div>';
+    }
+}
+
+// Quick search from buttons
+function quickSearch(topic) {
+    document.getElementById('wiki-search').value = topic;
+    searchWiki();
+}
+
+// Load live examples on page load
+document.addEventListener('DOMContentLoaded', async function() {
+    const topics = ['Mathematics', 'Science', 'History', 'Geography'];
+    const container = document.getElementById('live-examples');
+    
+    container.innerHTML = '<div class="loading-huge">Loading live examples...</div>';
+    
+    const examples = [];
+    for (const topic of topics) {
+        try {
+            const response = await fetch(`/api/open/wikipedia/${encodeURIComponent(topic)}`);
+            const data = await response.json();
+            if (data.title) {
+                examples.push(data);
+            }
+        } catch (e) {
+            console.error('Error loading', topic);
+        }
+    }
+    
+    container.innerHTML = examples.map(ex => `
+        <div class="example-card-wiki">
+            <h3>${ex.title}</h3>
+            ${ex.image ? `<img src="${ex.image}" alt="${ex.title}" class="example-image">` : ''}
+            <p>${ex.text.substring(0, 150)}...</p>
+            <a href="${ex.url}" target="_blank" class="example-link">Read More →</a>
+        </div>
+    `).join('');
+});
+
+function shareResult(title) {
+    alert(`Share "${title}" feature coming soon!`);
+}
+
+// Enter key search
+document.getElementById('wiki-search').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        searchWiki();
+    }
+});
+</script>
+
+<style>
+.api-page-mega {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.api-page-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 4rem 2rem;
+    text-align: center;
+    position: relative;
+    border-radius: 0 0 70px 70px;
+    margin-bottom: 4rem;
+}
+
+.api-back-mega {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    background: rgba(255,255,255,0.3);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 40px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: 3px solid rgba(255,255,255,0.5);
+    transition: all 0.3s ease;
+}
+
+.api-back-mega:hover {
+    background: rgba(255,255,255,0.5);
+    transform: translateX(-10px);
+}
+
+.api-page-mascot {
+    font-size: 12rem;
+    animation: bounce 2s ease-in-out infinite;
+    filter: drop-shadow(0 20px 45px rgba(0,0,0,0.4));
+}
+
+.api-page-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 6rem;
+    color: white;
+    text-shadow: 6px 6px 20px rgba(0,0,0,0.5);
+    margin: 2rem 0 1rem;
+}
+
+.api-page-subtitle {
+    font-size: 2.5rem;
+    color: white;
+    font-weight: bold;
+}
+
+.api-page-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+
+.page-stat {
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(10px);
+    padding: 2rem 3rem;
+    border-radius: 35px;
+    border: 4px solid rgba(255,255,255,0.5);
+}
+
+.page-stat-num {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3.5rem;
+    color: white;
+}
+
+.page-stat-label {
+    font-size: 1.2rem;
+    color: white;
+    font-weight: bold;
+}
+
+.api-search-mega {
+    max-width: 1200px;
+    margin: 0 auto 4rem;
+    padding: 0 2rem;
+}
+
+.search-section-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 4rem;
+    text-align: center;
+    color: #333;
+    margin-bottom: 2.5rem;
+}
+
+.search-box-mega {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.api-mega-input {
+    flex: 1;
+    padding: 2rem 2.5rem;
+    border: 6px solid #667eea;
+    border-radius: 50px;
+    font-size: 1.8rem;
+    outline: none;
+    font-weight: bold;
+}
+
+.api-mega-search-btn {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    border: none;
+    color: white;
+    padding: 2rem 4rem;
+    border-radius: 50px;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.api-mega-search-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 20px 50px rgba(255,107,107,0.5);
+}
+
+.search-icon {
+    font-size: 2.5rem;
+}
+
+.results-container-mega {
+    min-height: 200px;
+}
+
+.wiki-result-mega {
+    background: white;
+    border-radius: 35px;
+    padding: 3rem;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+    border: 6px solid #4ecdc4;
+}
+
+.wiki-result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.wiki-result-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3rem;
+    color: #333;
+}
+
+.wiki-link-btn {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.wiki-link-btn:hover {
+    transform: scale(1.05);
+}
+
+.wiki-image-container {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.wiki-result-image {
+    max-width: 100%;
+    max-height: 500px;
+    border-radius: 25px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.2);
+}
+
+.wiki-result-content h3 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.wiki-text-mega {
+    font-size: 1.5rem;
+    line-height: 2;
+    color: #555;
+}
+
+.wiki-description {
+    background: rgba(102,126,234,0.1);
+    padding: 1.5rem;
+    border-radius: 20px;
+    margin: 2rem 0;
+    font-size: 1.3rem;
+}
+
+.wiki-actions {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.action-btn-wiki {
+    background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+    border: none;
+    color: white;
+    padding: 1.2rem 2.5rem;
+    border-radius: 30px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.action-btn-wiki:hover {
+    transform: scale(1.05);
+}
+
+.featured-topics-section {
+    max-width: 1400px;
+    margin: 4rem auto;
+    padding: 2rem;
+}
+
+.featured-title-mega {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3.5rem;
+    text-align: center;
+    color: #333;
+    margin-bottom: 2.5rem;
+}
+
+.topics-quick-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.quick-topic-btn {
+    background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+    border: none;
+    padding: 1.8rem 2rem;
+    border-radius: 30px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 4px solid white;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.quick-topic-btn:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+}
+
+.showcase-content-section {
+    max-width: 1600px;
+    margin: 4rem auto;
+    padding: 2rem;
+}
+
+.showcase-title-mega {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3.5rem;
+    text-align: center;
+    color: #333;
+    margin-bottom: 3rem;
+}
+
+.live-examples-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2.5rem;
+}
+
+.example-card-wiki {
+    background: white;
+    border-radius: 25px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border: 5px solid #4ecdc4;
+    transition: all 0.3s ease;
+}
+
+.example-card-wiki:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+
+.example-card-wiki h3 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.example-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin: 1rem 0;
+}
+
+.example-link {
+    display: inline-block;
+    margin-top: 1rem;
+    background: #667eea;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.loading-huge, .error-huge, .no-results-mega {
+    text-align: center;
+    padding: 4rem;
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5rem;
+    color: #667eea;
+}
+</style>
+{% endblock %}
+

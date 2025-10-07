@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}PoetryDB API - Poems & Poets{% endblock %}
+
+{% block content %}
+<div class="poetry-page-mega">
+    <div class="poetry-hero">
+        <a href="/api-explorer" class="poetry-back-btn">⬅️ All APIs</a>
+        
+        <div class="poetry-mascot">✍️</div>
+        <h1 class="poetry-title-mega">POETRYDB API</h1>
+        <p class="poetry-subtitle">Explore Beautiful Poetry! 📜</p>
+    </div>
+
+    <div class="poetry-search-section">
+        <h2 class="poetry-search-title">🔍 Search Poems!</h2>
+        <div class="poetry-search-box">
+            <input type="text" id="poetry-search" placeholder="Search by author or title..." value="Shakespeare" class="poetry-input">
+            <button onclick="searchPoems()" class="poetry-search-btn">Search!</button>
+        </div>
+        
+        <div id="poetry-results" class="poetry-results-container"></div>
+    </div>
+
+    <div class="poets-quick-section">
+        <h2>🎭 Famous Poets!</h2>
+        <div class="poets-grid">
+            <button class="poet-btn" onclick="searchByPoet('Shakespeare')">🎭 Shakespeare</button>
+            <button class="poet-btn" onclick="searchByPoet('Emily Dickinson')">✨ Emily Dickinson</button>
+            <button class="poet-btn" onclick="searchByPoet('Robert Frost')">🌲 Robert Frost</button>
+            <button class="poet-btn" onclick="searchByPoet('Edgar Allan Poe')">🖤 Edgar Allan Poe</button>
+        </div>
+    </div>
+</div>
+
+<script>
+async function searchPoems() {
+    const query = document.getElementById('poetry-search').value;
+    searchByPoet(query);
+}
+
+async function searchByPoet(author) {
+    const container = document.getElementById('poetry-results');
+    container.innerHTML = '<div class="loading-poetry">✍️ Searching poems...</div>';
+    
+    try {
+        const response = await fetch(`https://poetrydb.org/author/${encodeURIComponent(author)}`);
+        const poems = await response.json();
+        
+        if (poems && Array.isArray(poems) && poems.length > 0) {
+            container.innerHTML = `
+                <div class="poems-list">
+                    ${poems.slice(0, 8).map(poem => `
+                        <div class="poem-card">
+                            <h3 class="poem-title">${poem.title}</h3>
+                            <p class="poem-author">by ${poem.author}</p>
+                            <div class="poem-text">
+                                ${poem.lines.slice(0, 12).map(line => `<p>${line}</p>`).join('')}
+                                ${poem.lines.length > 12 ? '<p class="poem-more">...</p>' : ''}
+                            </div>
+                            <div class="poem-info">📝 ${poem.linecount} lines</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } else {
+            container.innerHTML = '<div class="no-results-poetry">No poems found!</div>';
+        }
+    } catch (e) {
+        container.innerHTML = '<div class="error-poetry">Error loading poems!</div>';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => setTimeout(() => searchByPoet('Shakespeare'), 500));
+</script>
+
+<style>
+.poetry-page-mega { min-height: 100vh; background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 50%, #ffeaa7 100%); }
+.poetry-hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 4rem 2rem; text-align: center; border-radius: 0 0 70px 70px; margin-bottom: 4rem; }
+.poetry-mascot { font-size: 14rem; animation: bounce 2s ease-in-out infinite; }
+.poetry-title-mega { font-family: 'Fredoka One', cursive; font-size: 6rem; color: white; text-shadow: 6px 6px 20px rgba(0,0,0,0.5); margin: 2rem 0; }
+.poetry-search-section { max-width: 1400px; margin: 0 auto 4rem; padding: 0 2rem; }
+.poetry-search-title { font-family: 'Fredoka One', cursive; font-size: 4rem; text-align: center; color: #333; margin-bottom: 2.5rem; }
+.poetry-search-box { display: flex; gap: 1.5rem; margin-bottom: 3rem; }
+.poetry-input { flex: 1; padding: 2rem 2.5rem; border: 6px solid #667eea; border-radius: 50px; font-size: 1.8rem; outline: none; font-weight: bold; }
+.poetry-search-btn { background: linear-gradient(45deg, #ff6b6b, #4ecdc4); border: none; color: white; padding: 2rem 4rem; border-radius: 50px; font-size: 2rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+.poems-list { display: grid; gap: 2.5rem; }
+.poem-card { background: white; border-radius: 25px; padding: 3rem; box-shadow: 0 10px 35px rgba(0,0,0,0.15); border: 5px solid #4ecdc4; }
+.poem-title { font-family: 'Fredoka One', cursive; font-size: 2.5rem; color: #333; margin-bottom: 1rem; }
+.poem-author { font-size: 1.5rem; color: #667eea; font-weight: bold; margin-bottom: 2rem; }
+.poem-text { font-size: 1.3rem; line-height: 2; color: #555; margin-bottom: 1.5rem; font-style: italic; }
+.poem-text p { margin: 0.5rem 0; }
+.poem-more { color: #999; font-size: 1.5rem; }
+.poem-info { font-size: 1.1rem; color: #999; }
+.poets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+.poet-btn { background: linear-gradient(135deg, #a8edea, #fed6e3); border: none; padding: 1.5rem; border-radius: 25px; font-size: 1.4rem; font-weight: bold; cursor: pointer; border: 4px solid white; transition: all 0.3s ease; }
+.poet-btn:hover { transform: translateY(-10px); }
+</style>
+{% endblock %}
+

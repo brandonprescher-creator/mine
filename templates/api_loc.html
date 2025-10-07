@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Library of Congress API - Historical Treasures{% endblock %}
+
+{% block content %}
+<div class="loc-page-mega">
+    <div class="loc-hero">
+        <a href="/api-explorer" class="loc-back-btn">⬅️ All APIs</a>
+        
+        <div class="loc-mascot">🏛️</div>
+        <h1 class="loc-title-mega">LIBRARY OF CONGRESS</h1>
+        <p class="loc-subtitle">America's Historical Treasures! 📜</p>
+    </div>
+
+    <div class="loc-search-section">
+        <h2 class="loc-search-title">🔍 Search History!</h2>
+        <div class="loc-search-box">
+            <input type="text" id="loc-search" placeholder="Search historical content..." value="American Revolution" class="loc-input-mega">
+            <button onclick="searchLoC()" class="loc-search-btn">Search!</button>
+        </div>
+        
+        <div id="loc-results" class="loc-results-container"></div>
+    </div>
+
+    <div class="loc-quick-section">
+        <h2>⭐ Popular Topics!</h2>
+        <div class="loc-quick-grid">
+            <button class="loc-quick-btn" onclick="quickSearchLoC('Civil War')">⚔️ Civil War</button>
+            <button class="loc-quick-btn" onclick="quickSearchLoC('Abraham Lincoln')">🎩 Lincoln</button>
+            <button class="loc-quick-btn" onclick="quickSearchLoC('Declaration of Independence')">📜 Declaration</button>
+            <button class="loc-quick-btn" onclick="quickSearchLoC('World War II')">🌍 WWII</button>
+        </div>
+    </div>
+</div>
+
+<script>
+async function searchLoC() {
+    const query = document.getElementById('loc-search').value;
+    const container = document.getElementById('loc-results');
+    container.innerHTML = '<div class="loading-loc">🏛️ Searching archives...</div>';
+    
+    try {
+        const response = await fetch(`/api/open/loc/${encodeURIComponent(query)}`);
+        const results = await response.json();
+        
+        if (results && results.length > 0) {
+            container.innerHTML = `
+                <div class="loc-results-grid">
+                    ${results.map(item => `
+                        <div class="loc-item-card">
+                            ${item.image ? `<img src="${item.image}" class="loc-item-img">` : '<div class="loc-placeholder">📜</div>'}
+                            <h3>${item.title}</h3>
+                            <p>${item.text.substring(0, 150)}...</p>
+                            ${item.url ? `<a href="${item.url}" target="_blank" class="loc-link">View Item →</a>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } else {
+            container.innerHTML = '<div class="no-results-loc">No results found!</div>';
+        }
+    } catch (e) {
+        container.innerHTML = '<div class="error-loc">Error loading data!</div>';
+    }
+}
+
+function quickSearchLoC(query) {
+    document.getElementById('loc-search').value = query;
+    searchLoC();
+}
+
+document.addEventListener('DOMContentLoaded', () => setTimeout(searchLoC, 500));
+</script>
+
+<style>
+.loc-page-mega { min-height: 100vh; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
+.loc-hero { background: linear-gradient(135deg, #434343 0%, #000000 100%); padding: 4rem 2rem; text-align: center; border-radius: 0 0 70px 70px; margin-bottom: 4rem; }
+.loc-mascot { font-size: 14rem; animation: bounce 2s ease-in-out infinite; }
+.loc-title-mega { font-family: 'Fredoka One', cursive; font-size: 5rem; color: white; text-shadow: 6px 6px 20px rgba(0,0,0,0.5); margin: 2rem 0; }
+.loc-search-section { max-width: 1200px; margin: 0 auto 4rem; padding: 0 2rem; }
+.loc-search-title { font-family: 'Fredoka One', cursive; font-size: 4rem; text-align: center; color: #333; margin-bottom: 2.5rem; }
+.loc-search-box { display: flex; gap: 1.5rem; margin-bottom: 3rem; }
+.loc-input-mega { flex: 1; padding: 2rem 2.5rem; border: 6px solid #434343; border-radius: 50px; font-size: 1.8rem; outline: none; font-weight: bold; }
+.loc-search-btn { background: linear-gradient(45deg, #434343, #000000); border: none; color: white; padding: 2rem 4rem; border-radius: 50px; font-size: 2rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+.loc-results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.loc-item-card { background: white; border-radius: 25px; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 4px solid #434343; }
+.loc-item-img { width: 100%; height: 200px; object-fit: cover; border-radius: 15px; margin-bottom: 1rem; }
+.loc-placeholder { width: 100%; height: 200px; background: #434343; display: flex; align-items: center; justify-content: center; font-size: 6rem; border-radius: 15px; margin-bottom: 1rem; }
+.loc-link { display: inline-block; background: #434343; color: white; padding: 0.8rem 1.5rem; border-radius: 20px; text-decoration: none; margin-top: 1rem; font-weight: bold; }
+.loc-quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+.loc-quick-btn { background: linear-gradient(135deg, #434343, #000000); border: none; color: white; padding: 1.5rem; border-radius: 25px; font-size: 1.4rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+.loc-quick-btn:hover { transform: translateY(-10px); }
+</style>
+{% endblock %}
+

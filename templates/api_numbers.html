@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Numbers API - Fun Math Facts{% endblock %}
+
+{% block content %}
+<div class="numbers-page-mega">
+    <div class="numbers-hero">
+        <a href="/api-explorer" class="numbers-back-btn">⬅️ All APIs</a>
+        
+        <div class="numbers-mascot">🔢</div>
+        <h1 class="numbers-title-mega">NUMBERS API</h1>
+        <p class="numbers-subtitle">Interesting Facts About Numbers! 🎯</p>
+    </div>
+
+    <div class="numbers-section">
+        <h2 class="numbers-section-title">🔢 Get Number Facts!</h2>
+        
+        <div class="number-tools">
+            <div class="number-tool-card">
+                <h3>🎯 Math Fact</h3>
+                <input type="number" id="math-number" value="42" class="number-input">
+                <button onclick="getMathFact()" class="number-btn">Get Math Fact!</button>
+                <div id="math-fact-result" class="fact-result"></div>
+            </div>
+
+            <div class="number-tool-card">
+                <h3>📅 Date Fact</h3>
+                <input type="number" id="date-month" placeholder="Month" value="7" min="1" max="12" class="number-input-small">
+                <input type="number" id="date-day" placeholder="Day" value="4" min="1" max="31" class="number-input-small">
+                <button onclick="getDateFact()" class="number-btn">Get Date Fact!</button>
+                <div id="date-fact-result" class="fact-result"></div>
+            </div>
+
+            <div class="number-tool-card">
+                <h3>🎲 Random Fact</h3>
+                <button onclick="getRandomFact()" class="number-btn-large">Get Random Number Fact!</button>
+                <div id="random-fact-result" class="fact-result"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function getMathFact() {
+    const num = document.getElementById('math-number').value;
+    const result = document.getElementById('math-fact-result');
+    result.innerHTML = '<div class="loading-small">Loading...</div>';
+    
+    try {
+        const response = await fetch(`http://numbersapi.com/${num}/math`);
+        const fact = await response.text();
+        result.innerHTML = `<div class="fact-display">🎯 ${fact}</div>`;
+    } catch (e) {
+        result.innerHTML = '<div class="error-small">Error loading fact!</div>';
+    }
+}
+
+async function getDateFact() {
+    const month = document.getElementById('date-month').value;
+    const day = document.getElementById('date-day').value;
+    const result = document.getElementById('date-fact-result');
+    result.innerHTML = '<div class="loading-small">Loading...</div>';
+    
+    try {
+        const response = await fetch(`http://numbersapi.com/${month}/${day}/date`);
+        const fact = await response.text();
+        result.innerHTML = `<div class="fact-display">📅 ${fact}</div>`;
+    } catch (e) {
+        result.innerHTML = '<div class="error-small">Error loading fact!</div>';
+    }
+}
+
+async function getRandomFact() {
+    const result = document.getElementById('random-fact-result');
+    result.innerHTML = '<div class="loading-small">Loading...</div>';
+    
+    try {
+        const response = await fetch('http://numbersapi.com/random/trivia');
+        const fact = await response.text();
+        result.innerHTML = `<div class="fact-display">🎲 ${fact}</div>`;
+    } catch (e) {
+        result.innerHTML = '<div class="error-small">Error loading fact!</div>';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(getMathFact, 500);
+    setTimeout(getDateFact, 800);
+    setTimeout(getRandomFact, 1100);
+});
+</script>
+
+<style>
+.numbers-page-mega { min-height: 100vh; background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 50%, #ffeaa7 100%); }
+.numbers-hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 4rem 2rem; text-align: center; border-radius: 0 0 70px 70px; margin-bottom: 4rem; }
+.numbers-mascot { font-size: 14rem; animation: bounce 2s ease-in-out infinite; }
+.numbers-title-mega { font-family: 'Fredoka One', cursive; font-size: 6rem; color: white; text-shadow: 6px 6px 20px rgba(0,0,0,0.5); margin: 2rem 0; }
+.numbers-section { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+.numbers-section-title { font-family: 'Fredoka One', cursive; font-size: 4rem; text-align: center; color: #333; margin-bottom: 3rem; }
+.number-tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2.5rem; }
+.number-tool-card { background: white; border-radius: 30px; padding: 3rem; box-shadow: 0 10px 35px rgba(0,0,0,0.15); border: 5px solid #4ecdc4; }
+.number-tool-card h3 { font-family: 'Fredoka One', cursive; font-size: 2.5rem; color: #333; margin-bottom: 2rem; text-align: center; }
+.number-input, .number-input-small { padding: 1.5rem; border: 4px solid #667eea; border-radius: 25px; font-size: 1.5rem; font-weight: bold; outline: none; margin: 0.5rem; }
+.number-input { width: 100%; }
+.number-input-small { width: calc(50% - 1rem); }
+.number-btn, .number-btn-large { background: linear-gradient(45deg, #ff6b6b, #4ecdc4); border: none; color: white; padding: 1.5rem 2.5rem; border-radius: 30px; font-size: 1.5rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 1rem; transition: all 0.3s ease; }
+.number-btn-large { padding: 2rem 3rem; font-size: 1.8rem; }
+.number-btn:hover, .number-btn-large:hover { transform: scale(1.05); }
+.fact-result { margin-top: 2rem; min-height: 100px; }
+.fact-display { background: rgba(102,126,234,0.1); padding: 2rem; border-radius: 20px; font-size: 1.4rem; line-height: 1.8; color: #333; border-left: 5px solid #4ecdc4; }
+.loading-small, .error-small { text-align: center; padding: 1.5rem; font-weight: bold; color: #667eea; }
+</style>
+{% endblock %}
+

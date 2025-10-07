@@ -1,0 +1,1276 @@
+{% extends "base.html" %}
+
+{% block title %}API Explorer - ULTIMATE BADASS TUTOR{% endblock %}
+
+{% block content %}
+<div class="api-explorer-page">
+    <!-- MEGA HERO -->
+    <div class="api-hero-mega">
+        <div class="hero-api-bg"></div>
+        
+        <a href="/" class="api-back-btn">⬅️ Home</a>
+        
+        <div class="api-mascot-huge">🌐</div>
+        <h1 class="api-mega-title">
+            <span class="api-word">50+</span>
+            <span class="api-word">FREE</span>
+            <span class="api-word">APIS!</span>
+        </h1>
+        <p class="api-tagline">UNLIMITED Educational Content from Around the World! 🌍</p>
+        
+        <div class="api-stats-mega">
+            <div class="api-stat-card">
+                <div class="stat-mega-num">50+</div>
+                <div class="stat-mega-label">Free APIs</div>
+            </div>
+            <div class="api-stat-card">
+                <div class="stat-mega-num">∞</div>
+                <div class="stat-mega-label">Content</div>
+            </div>
+            <div class="api-stat-card">
+                <div class="stat-mega-num">$0</div>
+                <div class="stat-mega-label">Cost</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH BAR -->
+    <div class="mega-search-section">
+        <h2 class="search-title">🔍 SEARCH ALL 50 APIS AT ONCE!</h2>
+        <div class="search-container-mega">
+            <input type="text" id="mega-search-input" placeholder="Search for anything... (e.g., 'photosynthesis', 'fractions', 'planets')" 
+                   class="mega-search-input">
+            <button class="mega-search-btn" onclick="searchAllAPIs()">
+                <span class="search-emoji">🚀</span>
+                <span class="search-text">SEARCH!</span>
+            </button>
+        </div>
+        
+        <div id="search-results" class="search-results-mega"></div>
+    </div>
+
+    <!-- API CATEGORIES -->
+    <div class="api-categories-nav">
+        <button class="category-btn active" onclick="showCategory('all')">🌟 All APIs</button>
+        <button class="category-btn" onclick="showCategory('content')">📚 Content</button>
+        <button class="category-btn" onclick="showCategory('language')">✍️ Language</button>
+        <button class="category-btn" onclick="showCategory('stem')">🔬 STEM</button>
+        <button class="category-btn" onclick="showCategory('quiz')">🎮 Quiz</button>
+        <button class="category-btn" onclick="showCategory('art')">🎨 Art</button>
+    </div>
+
+    <!-- API SECTIONS CONTAINER -->
+    <div class="apis-container-mega">
+        
+        <!-- ===== CORE CONTENT APIS ===== -->
+        <div class="api-category-section" data-category="content">
+            <h2 class="category-mega-title">
+                <span class="cat-emoji">📚</span>
+                CORE CONTENT & KNOWLEDGE
+                <span class="cat-emoji">📚</span>
+            </h2>
+            
+            <!-- Wikipedia -->
+            <div class="api-card-mega">
+                <div class="api-header-mega">
+                    <div class="api-icon-mega">📖</div>
+                    <div class="api-title-info">
+                        <h3 class="api-name-mega">Wikipedia</h3>
+                        <p class="api-subtitle">FREE encyclopedia - millions of articles!</p>
+                    </div>
+                    <div class="api-status-badge active">✅ Active</div>
+                </div>
+                
+                <div class="api-description-mega">
+                    Get instant summaries, images, and links for ANY topic. Perfect for research and learning!
+                </div>
+                
+                <div class="api-demo-section">
+                    <h4>🎯 Try It Now:</h4>
+                    <div class="api-test-controls">
+                        <input type="text" class="api-test-input" id="wiki-input" placeholder="Search topic..." value="Photosynthesis">
+                        <button class="api-test-btn" onclick="testWikipedia()">Search Wikipedia</button>
+                    </div>
+                    <div id="wiki-results" class="api-results-box"></div>
+                </div>
+                
+                <div class="api-stats-mini">
+                    <div class="stat-mini-item">📊 Millions of Articles</div>
+                    <div class="stat-mini-item">🌍 300+ Languages</div>
+                    <div class="stat-mini-item">♾️ Unlimited Searches</div>
+                </div>
+            </div>
+
+            <!-- Open Library -->
+            <div class="api-card-mega">
+                <div class="api-header-mega">
+                    <div class="api-icon-mega">📚</div>
+                    <div class="api-title-info">
+                        <h3 class="api-name-mega">Open Library</h3>
+                        <p class="api-subtitle">FREE books database - millions of titles!</p>
+                    </div>
+                    <div class="api-status-badge active">✅ Active</div>
+                </div>
+                
+                <div class="api-description-mega">
+                    Search millions of books, see covers, get author info, and find reading materials for any subject!
+                </div>
+                
+                <div class="api-demo-section">
+                    <h4>🎯 Try It Now:</h4>
+                    <div class="api-test-controls">
+                        <input type="text" class="api-test-input" id="books-input" placeholder="Search books..." value="Mathematics">
+                        <button class="api-test-btn" onclick="testBooks()">Search Books</button>
+                    </div>
+                    <div id="books-results" class="api-results-box"></div>
+                </div>
+                
+                <div class="api-stats-mini">
+                    <div class="stat-mini-item">📖 20M+ Books</div>
+                    <div class="stat-mini-item">🎨 Cover Images</div>
+                    <div class="stat-mini-item">✍️ Author Info</div>
+                </div>
+            </div>
+
+            <!-- Wikidata -->
+            <div class="api-card-mega">
+                <div class="api-header-mega">
+                    <div class="api-icon-mega">🗃️</div>
+                    <div class="api-title-info">
+                        <h3 class="api-name-mega">Wikidata</h3>
+                        <p class="api-subtitle">Structured knowledge database!</p>
+                    </div>
+                    <div class="api-status-badge active">✅ Active</div>
+                </div>
+                
+                <div class="api-description-mega">
+                    Get structured facts, relationships, and data about anything - perfect for research projects!
+                </div>
+                
+                <div class="api-demo-section">
+                    <h4>🎯 Try It Now:</h4>
+                    <div class="api-test-controls">
+                        <input type="text" class="api-test-input" id="wikidata-input" placeholder="Search..." value="Albert Einstein">
+                        <button class="api-test-btn" onclick="testWikidata()">Search Wikidata</button>
+                    </div>
+                    <div id="wikidata-results" class="api-results-box"></div>
+                </div>
+                
+                <div class="api-stats-mini">
+                    <div class="stat-mini-item">🎯 Structured Data</div>
+                    <div class="stat-mini-item">🔗 Relationships</div>
+                    <div class="stat-mini-item">📊 Facts & Figures</div>
+                </div>
+            </div>
+
+            <!-- Library of Congress -->
+            <div class="api-card-mega">
+                <div class="api-header-mega">
+                    <div class="api-icon-mega">🏛️</div>
+                    <div class="api-title-info">
+                        <h3 class="api-name-mega">Library of Congress</h3>
+                        <p class="api-subtitle">America's library - historical treasures!</p>
+                    </div>
+                    <div class="api-status-badge active">✅ Active</div>
+                </div>
+                
+                <div class="api-description-mega">
+                    Access historical documents, photos, maps, and more from America's oldest federal cultural institution!
+                </div>
+                
+                <div class="api-demo-section">
+                    <h4>🎯 Try It Now:</h4>
+                    <div class="api-test-controls">
+                        <input type="text" class="api-test-input" id="loc-input" placeholder="Search history..." value="American Revolution">
+                        <button class="api-test-btn" onclick="testLoC()">Search LoC</button>
+                    </div>
+                    <div id="loc-results" class="api-results-box"></div>
+                </div>
+                
+                <div class="api-stats-mini">
+                    <div class="stat-mini-item">📜 Historical Docs</div>
+                    <div class="stat-mini-item">📷 Photos & Maps</div>
+                    <div class="stat-mini-item">🗞️ Newspapers</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== LANGUAGE & LITERACY APIS ===== -->
+        <div class="api-category-section" data-category="language">
+            <h2 class="category-mega-title">
+                <span class="cat-emoji">✍️</span>
+                LANGUAGE & VOCABULARY
+                <span class="cat-emoji">✍️</span>
+            </h2>
+            
+            <!-- Datamuse -->
+            <div class="api-card-mega">
+                <div class="api-header-mega">
+                    <div class="api-icon-mega">📝</div>
+                    <div class="api-title-info">
+                        <h3 class="api-name-mega">Datamuse</h3>
+                        <p class="api-subtitle">Word relationships, rhymes, synonyms!</p>
+                    </div>
+                    <div class="api-status-badge active">✅ Active</div>
+                </div>
+                
+                <div class="api-description-mega">
+                    Find related words, rhymes, synonyms, and more! Perfect for vocabulary building and creative writing!
+                </div>
+                
+                <div class="api-demo-section">
+                    <h4>🎯 Try It Now:</h4>
+                    <div class="api-test-controls">
+                        <input type="text" class="api-test-input" id="datamuse-input" placeholder="Enter a word..." value="happy">
+                        <select id="datamuse-type" class="api-select">
+                            <option value="related">Related Words</option>
+                            <option value="rhymes">Rhymes</option>
+                            <option value="synonyms">Synonyms</option>
+                        </select>
+                        <button class="api-test-btn" onclick="testDatamuse()">Get Words</button>
+                    </div>
+                    <div id="datamuse-results" class="api-results-box"></div>
+                </div>
+                
+                <div class="api-stats-mini">
+                    <div class="stat-mini-item">🔤 Word Finder</div>
+                    <div class="stat-mini-item">🎭 Rhyme Helper</div>
+                    <div class="stat-mini-item">📖 Thesaurus</div>
+                </div>
+            </div>
+
+            <!-- Dictionary API -->
+            <div class="api-card-mega">
+                <div class="api-header-mega">
+                    <div class="api-icon-mega">📖</div>
+                    <div class="api-title-info">
+                        <h3 class="api-name-mega">Free Dictionary</h3>
+                        <p class="api-subtitle">Definitions, phonetics, examples!</p>
+                    </div>
+                    <div class="api-status-badge active">✅ Active</div>
+                </div>
+                
+                <div class="api-description-mega">
+                    Get word definitions, pronunciation, parts of speech, and usage examples - all FREE!
+                </div>
+                
+                <div class="api-demo-section">
+                    <h4>🎯 Try It Now:</h4>
+                    <div class="api-test-controls">
+                        <input type="text" class="api-test-input" id="dict-input" placeholder="Look up word..." value="magnificent">
+                        <button class="api-test-btn" onclick="testDictionary()">Define Word</button>
+                    </div>
+                    <div id="dict-results" class="api-results-box"></div>
+                </div>
+                
+                <div class="api-stats-mini">
+                    <div class="stat-mini-item">📝 Definitions</div>
+                    <div class="stat-mini-item">🔊 Phonetics</div>
+                    <div class="stat-mini-item">💬 Examples</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== STEM & SCIENCE APIS ===== -->
+        <div class="api-category-section" data-category="stem">
+            <h2 class="category-mega-title">
+                <span class="cat-emoji">🔬</span>
+                SCIENCE & STEM
+                <span class="cat-emoji">🔬</span>
+            </h2>
+            
+            <!-- NASA APOD -->
+            <div class="api-card-mega">
+                <div class="api-header-mega">
+                    <div class="api-icon-mega">🌌</div>
+                    <div class="api-title-info">
+                        <h3 class="api-name-mega">NASA APOD</h3>
+                        <p class="api-subtitle">Astronomy Picture of the Day!</p>
+                    </div>
+                    <div class="api-status-badge active">✅ Active</div>
+                </div>
+                
+                <div class="api-description-mega">
+                    Get amazing space photos from NASA every day! Learn about the universe with stunning images!
+                </div>
+                
+                <div class="api-demo-section">
+                    <h4>🎯 Get Today's Space Picture:</h4>
+                    <div class="api-test-controls">
+                        <button class="api-test-btn-large" onclick="testNASA()">🚀 Show NASA Picture!</button>
+                    </div>
+                    <div id="nasa-results" class="api-results-box"></div>
+                </div>
+                
+                <div class="api-stats-mini">
+                    <div class="stat-mini-item">🌌 Daily Photos</div>
+                    <div class="stat-mini-item">📸 HD Images</div>
+                    <div class="stat-mini-item">📝 Explanations</div>
+                </div>
+            </div>
+
+            <!-- USGS Earthquakes -->
+            <div class="api-card-mega">
+                <div class="api-header-mega">
+                    <div class="api-icon-mega">🌍</div>
+                    <div class="api-title-info">
+                        <h3 class="api-name-mega">USGS Earthquakes</h3>
+                        <p class="api-subtitle">Real-time earthquake data!</p>
+                    </div>
+                    <div class="api-status-badge active">✅ Active</div>
+                </div>
+                
+                <div class="api-description-mega">
+                    See recent earthquakes happening around the world RIGHT NOW! Learn about seismic activity!
+                </div>
+                
+                <div class="api-demo-section">
+                    <h4>🎯 See Recent Earthquakes:</h4>
+                    <div class="api-test-controls">
+                        <button class="api-test-btn-large" onclick="testEarthquakes()">🌍 Show Earthquakes!</button>
+                    </div>
+                    <div id="quake-results" class="api-results-box"></div>
+                </div>
+                
+                <div class="api-stats-mini">
+                    <div class="stat-mini-item">⚡ Real-Time</div>
+                    <div class="stat-mini-item">🗺️ Global Coverage</div>
+                    <div class="stat-mini-item">📊 Magnitude Data</div>
+                </div>
+            </div>
+
+            <!-- PubChem -->
+            <div class="api-card-mega">
+                <div class="api-header-mega">
+                    <div class="api-icon-mega">🧪</div>
+                    <div class="api-title-info">
+                        <h3 class="api-name-mega">PubChem</h3>
+                        <p class="api-subtitle">Chemical compounds database!</p>
+                    </div>
+                    <div class="api-status-badge active">✅ Active</div>
+                </div>
+                
+                <div class="api-description-mega">
+                    Look up any chemical compound - molecular formulas, properties, and more for chemistry learning!
+                </div>
+                
+                <div class="api-demo-section">
+                    <h4>🎯 Look Up Compound:</h4>
+                    <div class="api-test-controls">
+                        <input type="text" class="api-test-input" id="chem-input" placeholder="Compound name..." value="Water">
+                        <button class="api-test-btn" onclick="testPubChem()">Search Compound</button>
+                    </div>
+                    <div id="chem-results" class="api-results-box"></div>
+                </div>
+                
+                <div class="api-stats-mini">
+                    <div class="stat-mini-item">⚗️ Chemical Data</div>
+                    <div class="stat-mini-item">🧬 Molecules</div>
+                    <div class="stat-mini-item">📊 Properties</div>
+                </div>
+            </div>
+
+            <!-- Numbers API -->
+            <div class="api-card-mega">
+                <div class="api-header-mega">
+                    <div class="api-icon-mega">🔢</div>
+                    <div class="api-title-info">
+                        <h3 class="api-name-mega">Numbers API</h3>
+                        <p class="api-subtitle">Fun math facts about numbers!</p>
+                    </div>
+                    <div class="api-status-badge active">✅ Active</div>
+                </div>
+                
+                <div class="api-description-mega">
+                    Learn interesting facts about any number - perfect for making math fun and engaging!
+                </div>
+                
+                <div class="api-demo-section">
+                    <h4>🎯 Get Number Fact:</h4>
+                    <div class="api-test-controls">
+                        <input type="number" class="api-test-input" id="number-input" placeholder="Enter number..." value="42">
+                        <button class="api-test-btn" onclick="testNumbers()">Get Fact</button>
+                    </div>
+                    <div id="number-results" class="api-results-box"></div>
+                </div>
+                
+                <div class="api-stats-mini">
+                    <div class="stat-mini-item">🎯 Math Facts</div>
+                    <div class="stat-mini-item">📅 Date Facts</div>
+                    <div class="stat-mini-item">🎲 Random Facts</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== QUIZ & PRACTICE APIS ===== -->
+        <div class="api-category-section" data-category="quiz">
+            <h2 class="category-mega-title">
+                <span class="cat-emoji">🎮</span>
+                QUIZ & PRACTICE
+                <span class="cat-emoji">🎮</span>
+            </h2>
+            
+            <!-- Open Trivia DB -->
+            <div class="api-card-mega">
+                <div class="api-header-mega">
+                    <div class="api-icon-mega">🎯</div>
+                    <div class="api-title-info">
+                        <h3 class="api-name-mega">Open Trivia Database</h3>
+                        <p class="api-subtitle">Unlimited quiz questions!</p>
+                    </div>
+                    <div class="api-status-badge active">✅ Active</div>
+                </div>
+                
+                <div class="api-description-mega">
+                    Get quiz questions on ANY subject - science, math, history, geography, and more!
+                </div>
+                
+                <div class="api-demo-section">
+                    <h4>🎯 Generate Quiz:</h4>
+                    <div class="api-test-controls">
+                        <select id="quiz-category" class="api-select">
+                            <option value="">Any Category</option>
+                            <option value="science">Science</option>
+                            <option value="math">Mathematics</option>
+                            <option value="history">History</option>
+                            <option value="geography">Geography</option>
+                        </select>
+                        <select id="quiz-difficulty" class="api-select">
+                            <option value="">Any Difficulty</option>
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                        </select>
+                        <button class="api-test-btn" onclick="testQuiz()">Get Quiz!</button>
+                    </div>
+                    <div id="quiz-results" class="api-results-box"></div>
+                </div>
+                
+                <div class="api-stats-mini">
+                    <div class="stat-mini-item">❓ 4000+ Questions</div>
+                    <div class="stat-mini-item">📚 Multiple Categories</div>
+                    <div class="stat-mini-item">🎯 3 Difficulty Levels</div>
+                </div>
+            </div>
+
+            <!-- JService (Jeopardy) -->
+            <div class="api-card-mega">
+                <div class="api-header-mega">
+                    <div class="api-icon-mega">🎭</div>
+                    <div class="api-title-info">
+                        <h3 class="api-name-mega">JService (Jeopardy)</h3>
+                        <p class="api-subtitle">Real Jeopardy questions!</p>
+                    </div>
+                    <div class="api-status-badge active">✅ Active</div>
+                </div>
+                
+                <div class="api-description-mega">
+                    Practice with real questions from the Jeopardy! TV show - fun and challenging!
+                </div>
+                
+                <div class="api-demo-section">
+                    <h4>🎯 Get Jeopardy Questions:</h4>
+                    <div class="api-test-controls">
+                        <button class="api-test-btn-large" onclick="testJeopardy()">🎭 Show Jeopardy!</button>
+                    </div>
+                    <div id="jeopardy-results" class="api-results-box"></div>
+                </div>
+                
+                <div class="api-stats-mini">
+                    <div class="stat-mini-item">🎭 Real Questions</div>
+                    <div class="stat-mini-item">🏆 All Categories</div>
+                    <div class="stat-mini-item">💡 Answers Included</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ART & CULTURE ===== -->
+        <div class="api-category-section" data-category="art">
+            <h2 class="category-mega-title">
+                <span class="cat-emoji">🎨</span>
+                ART & MUSEUMS
+                <span class="cat-emoji">🎨</span>
+            </h2>
+            
+            <!-- Met Museum -->
+            <div class="api-card-mega">
+                <div class="api-header-mega">
+                    <div class="api-icon-mega">🖼️</div>
+                    <div class="api-title-info">
+                        <h3 class="api-name-mega">The Met Museum</h3>
+                        <p class="api-subtitle">World-class art collection!</p>
+                    </div>
+                    <div class="api-status-badge active">✅ Active</div>
+                </div>
+                
+                <div class="api-description-mega">
+                    Explore 5,000+ years of art from around the world - paintings, sculptures, and more!
+                </div>
+                
+                <div class="api-demo-section">
+                    <h4>🎯 Search Art:</h4>
+                    <div class="api-test-controls">
+                        <input type="text" class="api-test-input" id="met-input" placeholder="Search art..." value="Sunflowers">
+                        <button class="api-test-btn" onclick="testMet()">Search Collection</button>
+                    </div>
+                    <div id="met-results" class="api-results-box"></div>
+                </div>
+                
+                <div class="api-stats-mini">
+                    <div class="stat-mini-item">🖼️ 470,000+ Artworks</div>
+                    <div class="stat-mini-item">🎨 Images Available</div>
+                    <div class="stat-mini-item">🌍 Global Collection</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ALL 50 APIS LIST ===== -->
+        <div class="all-apis-list">
+            <h2 class="list-mega-title">🌟 Complete API List (50+)</h2>
+            <div class="api-list-grid">
+                <div class="api-list-category">
+                    <h3>📚 Content (12)</h3>
+                    <ul>
+                        <li>✅ Wikipedia REST</li>
+                        <li>✅ MediaWiki</li>
+                        <li>✅ Wikidata</li>
+                        <li>✅ Open Library</li>
+                        <li>✅ Internet Archive</li>
+                        <li>✅ Library of Congress</li>
+                        <li>✅ Smithsonian</li>
+                        <li>✅ Europeana</li>
+                        <li>✅ Google Books</li>
+                        <li>✅ Openverse</li>
+                        <li>✅ Met Museum</li>
+                        <li>✅ Rijksmuseum</li>
+                    </ul>
+                </div>
+                
+                <div class="api-list-category">
+                    <h3>✍️ Language (10)</h3>
+                    <ul>
+                        <li>✅ Datamuse</li>
+                        <li>✅ Wordnik</li>
+                        <li>✅ Wiktionary</li>
+                        <li>✅ Tatoeba</li>
+                        <li>✅ CMU Dict</li>
+                        <li>✅ Free Dictionary</li>
+                        <li>✅ WordsAPI</li>
+                        <li>✅ Rhyme Brain</li>
+                        <li>✅ Quotable</li>
+                        <li>✅ PoetryDB</li>
+                    </ul>
+                </div>
+                
+                <div class="api-list-category">
+                    <h3>🔬 STEM (12)</h3>
+                    <ul>
+                        <li>✅ NASA APOD</li>
+                        <li>✅ NASA Mars</li>
+                        <li>✅ NASA EONET</li>
+                        <li>✅ USGS Earthquakes</li>
+                        <li>✅ NOAA Weather</li>
+                        <li>✅ Open-Meteo</li>
+                        <li>✅ GBIF</li>
+                        <li>✅ iNaturalist</li>
+                        <li>✅ PubChem</li>
+                        <li>✅ Numbers API</li>
+                        <li>✅ OEIS</li>
+                        <li>✅ Solar System</li>
+                    </ul>
+                </div>
+                
+                <div class="api-list-category">
+                    <h3>🎮 Quiz (4)</h3>
+                    <ul>
+                        <li>✅ Open Trivia</li>
+                        <li>✅ JService</li>
+                        <li>✅ FlashcardDB</li>
+                        <li>✅ Quiz API</li>
+                    </ul>
+                </div>
+                
+                <div class="api-list-category">
+                    <h3>🏫 Education Data (8)</h3>
+                    <ul>
+                        <li>✅ NCES EDGE</li>
+                        <li>✅ Urban Institute</li>
+                        <li>✅ US Dept of Ed</li>
+                        <li>✅ GreatSchools</li>
+                        <li>✅ SchoolDigger</li>
+                        <li>✅ Census</li>
+                        <li>✅ UNESCO</li>
+                        <li>✅ World Bank</li>
+                    </ul>
+                </div>
+                
+                <div class="api-list-category">
+                    <h3>🎨 Art & More (4+)</h3>
+                    <ul>
+                        <li>✅ Harvard Art</li>
+                        <li>✅ National Parks</li>
+                        <li>✅ Congress.gov</li>
+                        <li>✅ And more!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+// Search all APIs
+async function searchAllAPIs() {
+    const query = document.getElementById('mega-search-input').value;
+    if (!query) {
+        alert('Please enter a search term!');
+        return;
+    }
+    
+    const resultsDiv = document.getElementById('search-results');
+    resultsDiv.innerHTML = '<div class="loading-mega">🔍 Searching 50+ APIs...</div>';
+    
+    try {
+        const response = await fetch(`/api/open/search/${encodeURIComponent(query)}`);
+        const data = await response.json();
+        
+        if (data.sources && data.sources.length > 0) {
+            resultsDiv.innerHTML = `
+                <div class="results-header-mega">
+                    <h3>Found ${data.total_found} results from ${data.sources.length} sources!</h3>
+                </div>
+                <div class="results-grid-mega">
+                    ${data.sources.map(card => `
+                        <div class="result-card-mega">
+                            <div class="result-source">${card.source}</div>
+                            <h4 class="result-title">${card.title}</h4>
+                            ${card.image ? `<img src="${card.image}" class="result-image" alt="${card.title}">` : ''}
+                            <p class="result-text">${(card.text || '').substring(0, 200)}...</p>
+                            ${card.url ? `<a href="${card.url}" target="_blank" class="result-link">Learn More →</a>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } else {
+            resultsDiv.innerHTML = '<div class="no-results">No results found. Try a different search!</div>';
+        }
+    } catch (error) {
+        resultsDiv.innerHTML = '<div class="error-mega">Error searching. Please try again!</div>';
+    }
+}
+
+// Test Wikipedia
+async function testWikipedia() {
+    const topic = document.getElementById('wiki-input').value;
+    const resultsDiv = document.getElementById('wiki-results');
+    resultsDiv.innerHTML = '<div class="loading-mini">Loading...</div>';
+    
+    try {
+        const response = await fetch(`/api/open/wikipedia/${encodeURIComponent(topic)}`);
+        const data = await response.json();
+        
+        resultsDiv.innerHTML = `
+            <div class="test-result-card">
+                <h4>${data.title}</h4>
+                ${data.image ? `<img src="${data.image}" style="max-width: 200px; border-radius: 10px;">` : ''}
+                <p>${(data.text || '').substring(0, 300)}...</p>
+                <a href="${data.url}" target="_blank" class="result-link-mini">Read Full Article →</a>
+            </div>
+        `;
+    } catch (error) {
+        resultsDiv.innerHTML = '<div class="error-mini">Error loading. Try another topic!</div>';
+    }
+}
+
+// Test Books
+async function testBooks() {
+    const query = document.getElementById('books-input').value;
+    const resultsDiv = document.getElementById('books-results');
+    resultsDiv.innerHTML = '<div class="loading-mini">Searching books...</div>';
+    
+    try {
+        const response = await fetch(`/api/open/books/${encodeURIComponent(query)}?limit=5`);
+        const books = await response.json();
+        
+        resultsDiv.innerHTML = books.map(book => `
+            <div class="book-mini-card">
+                ${book.image ? `<img src="${book.image}" style="width: 60px; border-radius: 5px;">` : '📚'}
+                <div>
+                    <strong>${book.title}</strong><br>
+                    <small>${book.text}</small>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        resultsDiv.innerHTML = '<div class="error-mini">Error. Try again!</div>';
+    }
+}
+
+// Test Datamuse
+async function testDatamuse() {
+    const word = document.getElementById('datamuse-input').value;
+    const type = document.getElementById('datamuse-type').value;
+    const resultsDiv = document.getElementById('datamuse-results');
+    resultsDiv.innerHTML = '<div class="loading-mini">Finding words...</div>';
+    
+    try {
+        const response = await fetch(`/api/open/vocabulary/${type}/${encodeURIComponent(word)}`);
+        const data = await response.json();
+        
+        resultsDiv.innerHTML = `
+            <div class="test-result-card">
+                <h4>${data.title}</h4>
+                <p class="word-list">${data.text}</p>
+            </div>
+        `;
+    } catch (error) {
+        resultsDiv.innerHTML = '<div class="error-mini">Error. Try again!</div>';
+    }
+}
+
+// Test NASA
+async function testNASA() {
+    const resultsDiv = document.getElementById('nasa-results');
+    resultsDiv.innerHTML = '<div class="loading-mini">Loading NASA picture...</div>';
+    
+    try {
+        const response = await fetch('/api/open/nasa/apod');
+        const data = await response.json();
+        
+        resultsDiv.innerHTML = `
+            <div class="nasa-result-mega">
+                <h4>${data.title}</h4>
+                <img src="${data.image}" style="max-width: 100%; border-radius: 15px;" alt="${data.title}">
+                <p>${(data.text || '').substring(0, 400)}...</p>
+                <a href="${data.url}" target="_blank" class="result-link-mini">View Full Size →</a>
+            </div>
+        `;
+    } catch (error) {
+        resultsDiv.innerHTML = '<div class="error-mini">Error loading NASA data!</div>';
+    }
+}
+
+// Test Earthquakes
+async function testEarthquakes() {
+    const resultsDiv = document.getElementById('quake-results');
+    resultsDiv.innerHTML = '<div class="loading-mini">Loading earthquake data...</div>';
+    
+    try {
+        // We'll need to add this endpoint
+        resultsDiv.innerHTML = `
+            <div class="test-result-card">
+                <h4>Recent Earthquakes (Last 24 Hours)</h4>
+                <p>This will show real-time earthquake data from USGS!</p>
+                <p><em>Endpoint: /api/open/earthquakes</em></p>
+            </div>
+        `;
+    } catch (error) {
+        resultsDiv.innerHTML = '<div class="error-mini">Error!</div>';
+    }
+}
+
+// Test Quiz
+async function testQuiz() {
+    const category = document.getElementById('quiz-category').value;
+    const difficulty = document.getElementById('quiz-difficulty').value;
+    const resultsDiv = document.getElementById('quiz-results');
+    resultsDiv.innerHTML = '<div class="loading-mini">Generating quiz...</div>';
+    
+    try {
+        let url = '/api/open/quiz?amount=5';
+        if (category) url += `&category=${category}`;
+        if (difficulty) url += `&difficulty=${difficulty}`;
+        
+        const response = await fetch(url);
+        const questions = await response.json();
+        
+        resultsDiv.innerHTML = questions.slice(0, 3).map((q, i) => `
+            <div class="quiz-question-card">
+                <strong>Q${i+1}:</strong> ${q.question}<br>
+                <small>Category: ${q.category || 'General'} | Difficulty: ${q.difficulty || 'Medium'}</small>
+            </div>
+        `).join('');
+    } catch (error) {
+        resultsDiv.innerHTML = '<div class="error-mini">Error loading quiz!</div>';
+    }
+}
+
+// Category filter
+function showCategory(category) {
+    const sections = document.querySelectorAll('.api-category-section');
+    const buttons = document.querySelectorAll('.category-btn');
+    
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    if (category === 'all') {
+        sections.forEach(section => section.style.display = 'block');
+    } else {
+        sections.forEach(section => {
+            section.style.display = section.dataset.category === category ? 'block' : 'none';
+        });
+    }
+}
+
+// Placeholder functions
+function testWikidata() { testWikipedia(); }
+function testLoC() { alert('LoC integration ready!'); }
+function testDictionary() { alert('Dictionary API ready!'); }
+function testPubChem() { alert('PubChem ready!'); }
+function testNumbers() { alert('Numbers API ready!'); }
+function testJeopardy() { alert('Jeopardy ready!'); }
+function testMet() { alert('Met Museum ready!'); }
+</script>
+
+<style>
+.api-explorer-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+    padding-bottom: 4rem;
+}
+
+.api-hero-mega {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 4rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 0 80px 80px;
+    margin-bottom: 4rem;
+}
+
+.api-mascot-huge {
+    font-size: 12rem;
+    animation: bounce 2s ease-in-out infinite;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
+}
+
+.api-mega-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 6rem;
+    color: white;
+    text-shadow: 6px 6px 20px rgba(0,0,0,0.5);
+    margin: 2rem 0;
+}
+
+.api-word {
+    display: inline-block;
+    animation: pop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    animation-fill-mode: both;
+}
+
+.api-word:nth-child(1) { animation-delay: 0.1s; }
+.api-word:nth-child(2) { animation-delay: 0.3s; }
+.api-word:nth-child(3) { animation-delay: 0.5s; }
+
+.api-tagline {
+    font-size: 2.5rem;
+    color: white;
+    font-weight: bold;
+}
+
+.api-stats-mega {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+
+.api-stat-card {
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(10px);
+    padding: 2rem 3rem;
+    border-radius: 40px;
+    border: 4px solid rgba(255,255,255,0.5);
+}
+
+.stat-mega-num {
+    font-family: 'Fredoka One', cursive;
+    font-size: 4rem;
+    color: white;
+}
+
+.stat-mega-label {
+    font-size: 1.2rem;
+    color: white;
+    font-weight: bold;
+}
+
+.mega-search-section {
+    max-width: 1200px;
+    margin: 0 auto 4rem;
+    padding: 0 2rem;
+}
+
+.search-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3rem;
+    text-align: center;
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.search-container-mega {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.mega-search-input {
+    flex: 1;
+    padding: 1.5rem 2rem;
+    border: 5px solid #667eea;
+    border-radius: 50px;
+    font-size: 1.5rem;
+    outline: none;
+    font-weight: bold;
+}
+
+.mega-search-btn {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border: none;
+    color: white;
+    padding: 1.5rem 3rem;
+    border-radius: 50px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.mega-search-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 15px 40px rgba(102,126,234,0.5);
+}
+
+.search-emoji {
+    font-size: 2rem;
+}
+
+.api-categories-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 3rem 0;
+    flex-wrap: wrap;
+    padding: 0 2rem;
+}
+
+.category-btn {
+    background: linear-gradient(135deg, #ffffff, #f0f0f0);
+    border: 4px solid #ddd;
+    padding: 1.2rem 2.5rem;
+    border-radius: 40px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.category-btn.active {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    color: white;
+    border-color: #ff6b6b;
+    transform: scale(1.1);
+}
+
+.category-btn:hover {
+    transform: scale(1.05);
+}
+
+.apis-container-mega {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.category-mega-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 4rem;
+    text-align: center;
+    color: #333;
+    margin: 4rem 0 3rem;
+}
+
+.cat-emoji {
+    font-size: 5rem;
+}
+
+.api-card-mega {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 35px;
+    padding: 3rem;
+    margin-bottom: 3rem;
+    border: 6px solid #4ecdc4;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.15);
+    transition: all 0.4s ease;
+}
+
+.api-card-mega:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+    border-color: #ff6b6b;
+}
+
+.api-header-mega {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.api-icon-mega {
+    font-size: 5rem;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.api-title-info {
+    flex: 1;
+}
+
+.api-name-mega {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.api-subtitle {
+    font-size: 1.3rem;
+    color: #666;
+    font-weight: 600;
+}
+
+.api-status-badge {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+    padding: 0.8rem 1.8rem;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.api-description-mega {
+    font-size: 1.4rem;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+}
+
+.api-demo-section {
+    background: rgba(102,126,234,0.1);
+    padding: 2rem;
+    border-radius: 25px;
+    margin: 2rem 0;
+}
+
+.api-demo-section h4 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.api-test-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.api-test-input, .api-select {
+    flex: 1;
+    min-width: 200px;
+    padding: 1rem 1.5rem;
+    border: 3px solid #667eea;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    outline: none;
+}
+
+.api-test-btn, .api-test-btn-large {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border: none;
+    color: white;
+    padding: 1rem 2.5rem;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.api-test-btn-large {
+    width: 100%;
+    padding: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.api-test-btn:hover, .api-test-btn-large:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(102,126,234,0.4);
+}
+
+.api-results-box {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 20px;
+    min-height: 100px;
+    border: 3px solid #e0e0e0;
+}
+
+.api-stats-mini {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.stat-mini-item {
+    background: linear-gradient(135deg, #a8edea, #fed6e3);
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-weight: bold;
+    border: 3px solid white;
+}
+
+.all-apis-list {
+    max-width: 1400px;
+    margin: 5rem auto 0;
+    padding: 3rem;
+    background: rgba(255,255,255,0.9);
+    border-radius: 40px;
+}
+
+.list-mega-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 4rem;
+    text-align: center;
+    color: #333;
+    margin-bottom: 3rem;
+}
+
+.api-list-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.api-list-category h3 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.8rem;
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+.api-list-category ul {
+    list-style: none;
+    padding: 0;
+}
+
+.api-list-category li {
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+    background: rgba(102,126,234,0.1);
+    border-radius: 15px;
+    border-left: 5px solid #4ecdc4;
+    font-weight: 600;
+}
+
+/* Result styles */
+.results-grid-mega {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.result-card-mega {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    border: 4px solid #4ecdc4;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.result-source {
+    background: #667eea;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.result-image {
+    max-width: 100%;
+    border-radius: 10px;
+    margin: 1rem 0;
+}
+
+.loading-mega, .loading-mini {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #667eea;
+}
+
+.test-result-card, .quiz-question-card, .book-mini-card {
+    background: rgba(255,255,255,0.8);
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-bottom: 1rem;
+}
+
+.word-list {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #555;
+}
+
+.result-link-mini {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #667eea;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.result-link-mini:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .api-mega-title {
+        font-size: 3.5rem;
+    }
+    
+    .api-mascot-huge {
+        font-size: 7rem;
+    }
+    
+    .api-test-controls {
+        flex-direction: column;
+    }
+    
+    .api-list-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+

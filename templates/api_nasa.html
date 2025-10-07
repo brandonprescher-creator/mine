@@ -1,0 +1,442 @@
+{% extends "base.html" %}
+
+{% block title %}NASA API - Space & Astronomy{% endblock %}
+
+{% block content %}
+<div class="nasa-page-mega">
+    <!-- NASA HERO -->
+    <div class="nasa-hero-ultra">
+        <a href="/api-explorer" class="nasa-back-btn">⬅️ All APIs</a>
+        
+        <div class="nasa-mascot-huge">🚀</div>
+        <h1 class="nasa-title-mega">NASA API</h1>
+        <p class="nasa-subtitle">REAL Space Photos & Data from NASA! 🌌</p>
+        
+        <div class="nasa-stats-mega">
+            <div class="nasa-stat">
+                <div class="nasa-stat-num">Daily</div>
+                <div class="nasa-stat-label">New Photos</div>
+            </div>
+            <div class="nasa-stat">
+                <div class="nasa-stat-num">HD</div>
+                <div class="nasa-stat-label">Quality</div>
+            </div>
+            <div class="nasa-stat">
+                <div class="nasa-stat-num">FREE</div>
+                <div class="nasa-stat-label">Always</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ASTRONOMY PICTURE OF THE DAY -->
+    <div class="apod-section-mega">
+        <h2 class="apod-title-mega">🌌 Astronomy Picture of the Day</h2>
+        <button class="load-apod-btn" onclick="loadAPOD()">
+            <span class="btn-rocket">🚀</span>
+            <span>SHOW TODAY'S SPACE PICTURE!</span>
+            <span class="btn-rocket">🚀</span>
+        </button>
+        
+        <div id="apod-container" class="apod-container-mega"></div>
+    </div>
+
+    <!-- MARS ROVER PHOTOS -->
+    <div class="mars-section-mega">
+        <h2 class="mars-title-mega">🔴 Mars Rover Photos</h2>
+        <div class="mars-controls">
+            <select id="rover-select" class="rover-select-mega">
+                <option value="curiosity">Curiosity Rover</option>
+                <option value="opportunity">Opportunity Rover</option>
+                <option value="spirit">Spirit Rover</option>
+                <option value="perseverance">Perseverance Rover</option>
+            </select>
+            <input type="number" id="sol-input" placeholder="Sol (Mars day)" value="1000" class="sol-input-mega">
+            <button onclick="loadMarsPhotos()" class="mars-load-btn">
+                <span>🔴 GET MARS PHOTOS!</span>
+            </button>
+        </div>
+        
+        <div id="mars-container" class="mars-container-mega"></div>
+    </div>
+
+    <!-- SPACE FACTS -->
+    <div class="space-facts-section">
+        <h2 class="facts-title-mega">⭐ Amazing Space Facts!</h2>
+        <div class="facts-grid-mega">
+            <div class="fact-card-mega">
+                <div class="fact-icon-mega">🌟</div>
+                <p>There are more stars in the universe than grains of sand on all Earth's beaches!</p>
+            </div>
+            <div class="fact-card-mega">
+                <div class="fact-icon-mega">🌍</div>
+                <p>A day on Venus is longer than a year on Venus!</p>
+            </div>
+            <div class="fact-card-mega">
+                <div class="fact-icon-mega">🌙</div>
+                <p>The Moon is moving away from Earth at 3.8cm per year!</p>
+            </div>
+            <div class="fact-card-mega">
+                <div class="fact-icon-mega">☀️</div>
+                <p>The Sun makes up 99.86% of the Solar System's mass!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Load Astronomy Picture of the Day
+async function loadAPOD() {
+    const container = document.getElementById('apod-container');
+    container.innerHTML = '<div class="loading-space">🌌 Loading from NASA...</div>';
+    
+    try {
+        const response = await fetch('/api/open/nasa/apod');
+        const data = await response.json();
+        
+        container.innerHTML = `
+            <div class="apod-result-mega">
+                <h3 class="apod-result-title">${data.title}</h3>
+                
+                <div class="apod-image-container">
+                    <img src="${data.image}" alt="${data.title}" class="apod-image-mega">
+                </div>
+                
+                <div class="apod-explanation">
+                    <h4>📝 What You're Seeing:</h4>
+                    <p class="apod-text-mega">${data.text}</p>
+                </div>
+                
+                <div class="apod-meta">
+                    ${data.meta && data.meta.date ? `<div class="meta-item">📅 Date: ${data.meta.date}</div>` : ''}
+                    ${data.meta && data.meta.copyright ? `<div class="meta-item">©️ ${data.meta.copyright}</div>` : ''}
+                </div>
+                
+                <a href="${data.url}" target="_blank" class="apod-hd-btn">
+                    <span>🖼️ VIEW IN HD!</span>
+                </a>
+            </div>
+        `;
+        
+        // Celebration
+        createSpaceExplosion();
+        
+    } catch (error) {
+        container.innerHTML = '<div class="error-space">Error loading NASA data. Try again!</div>';
+    }
+}
+
+// Load Mars Photos
+async function loadMarsPhotos() {
+    const rover = document.getElementById('rover-select').value;
+    const sol = document.getElementById('sol-input').value || 1000;
+    const container = document.getElementById('mars-container');
+    
+    container.innerHTML = '<div class="loading-space">🔴 Loading Mars photos...</div>';
+    
+    try {
+        const response = await fetch(`/api/open/nasa/mars/${rover}?sol=${sol}`);
+        const photos = await response.json();
+        
+        if (photos.length > 0) {
+            container.innerHTML = `
+                <div class="mars-results-mega">
+                    <h3>Found ${photos.length} photos from ${rover.toUpperCase()} on Sol ${sol}!</h3>
+                    <div class="mars-photos-grid">
+                        ${photos.map(photo => `
+                            <div class="mars-photo-card">
+                                <img src="${photo.image}" alt="Mars" class="mars-photo-img">
+                                <div class="mars-photo-info">
+                                    <p>${photo.text}</p>
+                                    ${photo.meta && photo.meta.earth_date ? `<small>Earth Date: ${photo.meta.earth_date}</small>` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        } else {
+            container.innerHTML = '<div class="no-results-space">No photos for this Sol. Try another day!</div>';
+        }
+        
+    } catch (error) {
+        container.innerHTML = '<div class="error-space">Error loading Mars data!</div>';
+    }
+}
+
+function createSpaceExplosion() {
+    const emojis = ['⭐', '🌟', '✨', '💫', '🌠', '🚀', '🛸', '👽'];
+    
+    for (let i = 0; i < 60; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'space-particle';
+        particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        particle.style.left = (Math.random() * window.innerWidth) + 'px';
+        particle.style.top = (Math.random() * window.innerHeight) + 'px';
+        particle.style.fontSize = (Math.random() * 2 + 1.5) + 'rem';
+        particle.style.setProperty('--tx', (Math.random() - 0.5) * 600 + 'px');
+        particle.style.setProperty('--ty', (Math.random() - 0.5) * 600 + 'px');
+        
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 2500);
+    }
+}
+
+// Load APOD on page load
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(loadAPOD, 500);
+});
+</script>
+
+<style>
+.nasa-page-mega {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #000428 0%, #004e92 100%);
+    color: white;
+}
+
+.nasa-hero-ultra {
+    padding: 4rem 2rem;
+    text-align: center;
+    position: relative;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+}
+
+.nasa-mascot-huge {
+    font-size: 15rem;
+    animation: bounce 2s ease-in-out infinite;
+    filter: drop-shadow(0 25px 55px rgba(255,255,255,0.3));
+}
+
+.nasa-title-mega {
+    font-family: 'Fredoka One', cursive;
+    font-size: 7rem;
+    color: white;
+    text-shadow: 0 0 30px rgba(255,255,255,0.5);
+    margin: 2rem 0;
+}
+
+.nasa-subtitle {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.nasa-stats-mega {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+
+.nasa-stat {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(15px);
+    padding: 2rem 3rem;
+    border-radius: 35px;
+    border: 4px solid rgba(255,255,255,0.3);
+}
+
+.nasa-stat-num {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3.5rem;
+}
+
+.apod-section-mega, .mars-section-mega {
+    max-width: 1400px;
+    margin: 4rem auto;
+    padding: 2rem;
+}
+
+.apod-title-mega, .mars-title-mega {
+    font-family: 'Fredoka One', cursive;
+    font-size: 4rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.load-apod-btn, .mars-load-btn {
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
+    border: none;
+    color: white;
+    padding: 2rem 4rem;
+    border-radius: 50px;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 0 auto 3rem;
+    transition: all 0.3s ease;
+}
+
+.load-apod-btn:hover, .mars-load-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 20px 50px rgba(255,107,107,0.5);
+}
+
+.btn-rocket {
+    font-size: 2.5rem;
+    animation: wiggle 1s ease-in-out infinite;
+}
+
+.apod-result-mega {
+    background: rgba(255,255,255,0.95);
+    border-radius: 35px;
+    padding: 3rem;
+    color: #333;
+}
+
+.apod-result-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.apod-image-mega {
+    width: 100%;
+    max-height: 700px;
+    object-fit: contain;
+    border-radius: 25px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+}
+
+.apod-explanation {
+    margin: 3rem 0;
+}
+
+.apod-explanation h4 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.apod-text-mega {
+    font-size: 1.5rem;
+    line-height: 2;
+    color: #555;
+}
+
+.apod-hd-btn {
+    display: block;
+    background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+    color: white;
+    padding: 1.5rem 3rem;
+    border-radius: 35px;
+    text-decoration: none;
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 2rem auto 0;
+    max-width: 400px;
+    transition: all 0.3s ease;
+}
+
+.apod-hd-btn:hover {
+    transform: scale(1.05);
+}
+
+.mars-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.rover-select-mega, .sol-input-mega {
+    padding: 1.5rem 2rem;
+    border: 4px solid rgba(255,255,255,0.5);
+    border-radius: 30px;
+    font-size: 1.3rem;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    font-weight: bold;
+}
+
+.mars-photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.mars-photo-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 25px;
+    padding: 1rem;
+    color: #333;
+}
+
+.mars-photo-img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.space-facts-section {
+    max-width: 1400px;
+    margin: 4rem auto;
+    padding: 2rem;
+}
+
+.facts-title-mega {
+    font-family: 'Fredoka One', cursive;
+    font-size: 4rem;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.facts-grid-mega {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+}
+
+.fact-card-mega {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(15px);
+    border-radius: 30px;
+    padding: 2.5rem;
+    text-align: center;
+    border: 4px solid rgba(255,255,255,0.3);
+    transition: all 0.3s ease;
+}
+
+.fact-card-mega:hover {
+    transform: translateY(-15px);
+    background: rgba(255,255,255,0.25);
+}
+
+.fact-icon-mega {
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+}
+
+.fact-card-mega p {
+    font-size: 1.4rem;
+    font-weight: 600;
+    line-height: 1.8;
+}
+
+.space-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    animation: spaceFloat 2.5s ease-out forwards;
+}
+
+@keyframes spaceFloat {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+</style>
+{% endblock %}
+

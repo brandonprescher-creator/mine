@@ -1,0 +1,642 @@
+{% extends "base.html" %}
+
+{% block title %}Generate Worksheets - Ultimate Badass Tutor{% endblock %}
+
+{% block content %}
+<div class="worksheets-container">
+    <!-- Header -->
+    <div class="worksheets-header">
+        <h1 class="fun-title">📝 WORKSHEET GENERATOR! 📝</h1>
+        <p class="worksheets-description">
+            Generate UNLIMITED worksheets from 80+ free educational APIs!<br>
+            Math, Science, English, Social Studies - ALL with answer keys!
+        </p>
+    </div>
+
+    <!-- Generator Form -->
+    <div class="generator-box">
+        <h2>🎯 Create Your Custom Worksheet</h2>
+        
+        <form id="worksheet-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="subject">Subject:</label>
+                    <select id="subject" name="subject" required>
+                        <option value="Math">📐 Mathematics</option>
+                        <option value="Science">🔬 Science</option>
+                        <option value="English">📖 English/Language Arts</option>
+                        <option value="Social Studies">🌍 Social Studies</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="grade">Grade Level:</label>
+                    <select id="grade" name="grade" required>
+                        <option value="1">Grade 1</option>
+                        <option value="2">Grade 2</option>
+                        <option value="3">Grade 3</option>
+                        <option value="4">Grade 4</option>
+                        <option value="5" selected>Grade 5</option>
+                        <option value="6">Grade 6</option>
+                        <option value="7">Grade 7</option>
+                        <option value="8">Grade 8</option>
+                        <option value="9">Grade 9</option>
+                        <option value="10">Grade 10</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="topic">Topic:</label>
+                    <input type="text" id="topic" name="topic" 
+                           placeholder="e.g., Division, Fractions, Photosynthesis, etc." required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="problem-count">Number of Problems:</label>
+                    <select id="problem-count" name="problem_count">
+                        <option value="10">10 Problems</option>
+                        <option value="15">15 Problems</option>
+                        <option value="20" selected>20 Problems</option>
+                        <option value="25">25 Problems</option>
+                        <option value="30">30 Problems</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="difficulty">Difficulty:</label>
+                    <select id="difficulty" name="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                        <option value="mixed">Mixed</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="generate-btn">
+                    🚀 Generate Worksheet
+                </button>
+                <button type="button" class="pack-btn" onclick="generatePack()">
+                    📦 Generate Full Pack (8 worksheets)
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Loading Animation -->
+    <div id="generating" class="generating" style="display: none;">
+        <div class="generating-animation">
+            <div class="spinner"></div>
+            <h3>🤖 Generating Worksheet from 80+ APIs...</h3>
+            <p id="generation-step">Fetching content...</p>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div id="results" class="results" style="display: none;">
+        <div class="results-header">
+            <h2>✅ Worksheet Generated!</h2>
+            <button class="close-results" onclick="closeResults()">×</button>
+        </div>
+        
+        <div class="worksheet-preview">
+            <h3 id="worksheet-title"></h3>
+            <div class="worksheet-info">
+                <span>Subject: <strong id="ws-subject"></strong></span>
+                <span>Grade: <strong id="ws-grade"></strong></span>
+                <span>Problems: <strong id="ws-count"></strong></span>
+            </div>
+            
+            <div class="worksheet-actions">
+                <button class="download-btn" onclick="downloadWorksheet()">
+                    📥 Download PDF
+                </button>
+                <button class="print-btn" onclick="printWorksheet()">
+                    🖨️ Print
+                </button>
+                <button class="email-btn" onclick="emailWorksheet()">
+                    📧 Email
+                </button>
+            </div>
+            
+            <div class="worksheet-content" id="worksheet-content">
+                <!-- Problems will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- API Sources Display -->
+    <div class="api-sources">
+        <h2>🌐 Content Sources (80+ APIs!)</h2>
+        <div class="sources-grid">
+            <div class="source-card">
+                <div class="source-icon">📐</div>
+                <h3>Math APIs (10+)</h3>
+                <p>Newton, Wolfram, Math.js, Numbers API, and more!</p>
+            </div>
+            <div class="source-card">
+                <div class="source-icon">🔬</div>
+                <h3>Science APIs (15+)</h3>
+                <p>NASA, USGS, PubChem, ISS, Weather, and more!</p>
+            </div>
+            <div class="source-card">
+                <div class="source-icon">📚</div>
+                <h3>Language APIs (12+)</h3>
+                <p>Dictionary, Words, Poetry, Quotes, and more!</p>
+            </div>
+            <div class="source-card">
+                <div class="source-icon">🌍</div>
+                <h3>Geography APIs (10+)</h3>
+                <p>Countries, Maps, Wikipedia, History, and more!</p>
+            </div>
+            <div class="source-card">
+                <div class="source-icon">🎓</div>
+                <h3>Educational APIs (8+)</h3>
+                <p>Gutenberg, Khan Academy, TED, Coursera!</p>
+            </div>
+            <div class="source-card">
+                <div class="source-icon">🎮</div>
+                <h3>Quiz APIs (5+)</h3>
+                <p>Trivia, Jeopardy, Custom quizzes!</p>
+            </div>
+            <div class="source-card">
+                <div class="source-icon">🎨</div>
+                <h3>Art APIs (5+)</h3>
+                <p>Museums, Collections, Galleries!</p>
+            </div>
+            <div class="source-card">
+                <div class="source-icon">🎵</div>
+                <h3>More APIs (20+)</h3>
+                <p>Music, Sports, Health, Tech, and more!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="features-section">
+        <h2>✨ What You Get</h2>
+        <div class="features-list">
+            <div class="feature-item">
+                <span class="check">✅</span>
+                <strong>Unlimited Worksheets</strong> - Generate as many as you need!
+            </div>
+            <div class="feature-item">
+                <span class="check">✅</span>
+                <strong>Real Content from APIs</strong> - Live data from 80+ sources!
+            </div>
+            <div class="feature-item">
+                <span class="check">✅</span>
+                <strong>Answer Keys Included</strong> - Full solutions provided!
+            </div>
+            <div class="feature-item">
+                <span class="check">✅</span>
+                <strong>Printable PDFs</strong> - Professional formatting!
+            </div>
+            <div class="feature-item">
+                <span class="check">✅</span>
+                <strong>Customizable</strong> - Pick topic, grade, difficulty!
+            </div>
+            <div class="feature-item">
+                <span class="check">✅</span>
+                <strong>100% Free</strong> - No limits, no cost!
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentWorksheet = null;
+
+// Form submit
+document.getElementById('worksheet-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = {
+        topic: document.getElementById('topic').value,
+        subject: document.getElementById('subject').value,
+        grade: parseInt(document.getElementById('grade').value),
+        problem_count: parseInt(document.getElementById('problem-count').value),
+        difficulty: document.getElementById('difficulty').value
+    };
+    
+    // Show generating
+    document.querySelector('.generator-box').style.display = 'none';
+    document.getElementById('generating').style.display = 'block';
+    
+    // Simulate API fetching
+    simulateGeneration();
+    
+    try {
+        const response = await fetch('/api/generate/worksheet', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(formData)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            showResults(result);
+        } else {
+            showError(result.error || 'Generation failed');
+        }
+    } catch (error) {
+        showError('Network error: ' + error.message);
+    }
+});
+
+function simulateGeneration() {
+    const steps = [
+        'Connecting to Math APIs...',
+        'Fetching content from NASA...',
+        'Getting trivia from Open Trivia DB...',
+        'Pulling data from Wikipedia...',
+        'Requesting from Dictionary API...',
+        'Gathering from 80+ sources...',
+        'Creating problems...',
+        'Generating PDF...',
+        'Finalizing worksheet...'
+    ];
+    
+    let currentStep = 0;
+    const stepElement = document.getElementById('generation-step');
+    
+    const interval = setInterval(() => {
+        if (currentStep < steps.length) {
+            stepElement.textContent = steps[currentStep];
+            currentStep++;
+        } else {
+            clearInterval(interval);
+        }
+    }, 800);
+}
+
+function showResults(worksheet) {
+    document.getElementById('generating').style.display = 'none';
+    document.getElementById('results').style.display = 'block';
+    
+    document.getElementById('worksheet-title').textContent = worksheet.title;
+    document.getElementById('ws-subject').textContent = worksheet.subject;
+    document.getElementById('ws-grade').textContent = worksheet.grade;
+    document.getElementById('ws-count').textContent = worksheet.problems.length;
+    
+    currentWorksheet = worksheet;
+    
+    // Display problems
+    const content = document.getElementById('worksheet-content');
+    content.innerHTML = worksheet.problems.map((p, i) => `
+        <div class="problem-preview">
+            <div class="problem-number">${i + 1}</div>
+            <div class="problem-text">${p.question}</div>
+            ${p.source ? `<div class="problem-source">Source: ${p.source}</div>` : ''}
+        </div>
+    `).join('');
+    
+    // Celebration
+    createCelebration();
+}
+
+function showError(message) {
+    document.getElementById('generating').style.display = 'none';
+    document.querySelector('.generator-box').style.display = 'block';
+    alert('Error: ' + message);
+}
+
+function closeResults() {
+    document.getElementById('results').style.display = 'none';
+    document.querySelector('.generator-box').style.display = 'block';
+}
+
+function downloadWorksheet() {
+    if (currentWorksheet && currentWorksheet.pdf_path) {
+        window.open(currentWorksheet.pdf_path, '_blank');
+    } else {
+        alert('PDF generation in progress...');
+    }
+}
+
+function printWorksheet() {
+    window.print();
+}
+
+function emailWorksheet() {
+    alert('Email feature coming soon!');
+}
+
+async function generatePack() {
+    const subject = document.getElementById('subject').value;
+    const grade = document.getElementById('grade').value;
+    
+    if (confirm(`Generate complete worksheet pack for Grade ${grade} ${subject}? (8 worksheets)`)) {
+        document.querySelector('.generator-box').style.display = 'none';
+        document.getElementById('generating').style.display = 'block';
+        document.getElementById('generation-step').textContent = 'Generating complete worksheet pack...';
+        
+        try {
+            const response = await fetch(`/api/generate/worksheet-pack/${grade}/${subject}`);
+            const result = await response.json();
+            
+            if (response.ok) {
+                alert(`Success! Generated ${result.total_count} worksheets for ${subject}!`);
+                document.getElementById('generating').style.display = 'none';
+                document.querySelector('.generator-box').style.display = 'block';
+            }
+        } catch (error) {
+            showError('Error generating pack: ' + error.message);
+        }
+    }
+}
+
+function createCelebration() {
+    const celebration = document.createElement('div');
+    celebration.className = 'celebration-overlay';
+    celebration.innerHTML = `
+        <div class="celebration-content">
+            <div class="celebration-text">🎉 WORKSHEET GENERATED! 🎉</div>
+        </div>
+    `;
+    document.body.appendChild(celebration);
+    
+    setTimeout(() => {
+        document.body.removeChild(celebration);
+    }, 2000);
+}
+</script>
+
+<style>
+.worksheets-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.worksheets-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.worksheets-description {
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 1rem;
+}
+
+.generator-box {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    flex: 1;
+}
+
+.form-group.full-width {
+    flex: 1 1 100%;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #4ecdc4;
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.generate-btn, .pack-btn {
+    flex: 1;
+    padding: 1.2rem 2rem;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.generate-btn {
+    background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+    color: white;
+}
+
+.pack-btn {
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
+    color: white;
+}
+
+.generate-btn:hover, .pack-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.generating {
+    text-align: center;
+    padding: 3rem;
+}
+
+.spinner {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #4ecdc4;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 2rem auto;
+}
+
+.results {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #4ecdc4;
+}
+
+.close-results {
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.worksheet-preview {
+    margin-top: 1rem;
+}
+
+.worksheet-info {
+    display: flex;
+    gap: 2rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+.worksheet-actions {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.download-btn, .print-btn, .email-btn {
+    flex: 1;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.download-btn {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+}
+
+.print-btn {
+    background: linear-gradient(45deg, #2196F3, #1976D2);
+    color: white;
+}
+
+.email-btn {
+    background: linear-gradient(45deg, #FF9800, #F57C00);
+    color: white;
+}
+
+.download-btn:hover, .print-btn:hover, .email-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.worksheet-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.problem-preview {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 8px;
+    border-left: 4px solid #4ecdc4;
+}
+
+.problem-number {
+    display: inline-block;
+    background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+    margin-right: 1rem;
+}
+
+.problem-source {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+.api-sources {
+    margin: 4rem 0;
+}
+
+.sources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.source-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.source-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.source-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.features-section {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-top: 3rem;
+}
+
+.features-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.feature-item {
+    padding: 1rem;
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 10px;
+    border-left: 4px solid #4CAF50;
+}
+
+.check {
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+}
+</style>
+{% endblock %}
+

@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Met Museum API - World-Class Art{% endblock %}
+
+{% block content %}
+<div class="met-page-mega">
+    <div class="met-hero">
+        <a href="/api-explorer" class="met-back-btn">⬅️ All APIs</a>
+        
+        <div class="met-mascot">🎨</div>
+        <h1 class="met-title-mega">THE MET MUSEUM API</h1>
+        <p class="met-subtitle">Explore 470,000+ Artworks! 🖼️</p>
+    </div>
+
+    <div class="met-search-section">
+        <h2 class="met-search-title">🔍 Search Art Collection!</h2>
+        <div class="met-search-box">
+            <input type="text" id="met-search" placeholder="Search art..." value="Van Gogh" class="met-input-mega">
+            <button onclick="searchMet()" class="met-search-btn">Search Art!</button>
+        </div>
+        
+        <div id="met-results" class="met-results-container"></div>
+    </div>
+
+    <div class="met-quick-section">
+        <h2>🎨 Popular Searches!</h2>
+        <div class="met-quick-grid">
+            <button class="met-quick-btn" onclick="quickSearchMet('Monet')">🌊 Monet</button>
+            <button class="met-quick-btn" onclick="quickSearchMet('Egyptian')">🏺 Egyptian Art</button>
+            <button class="met-quick-btn" onclick="quickSearchMet('Renaissance')">🎭 Renaissance</button>
+            <button class="met-quick-btn" onclick="quickSearchMet('Impressionism')">✨ Impressionism</button>
+        </div>
+    </div>
+</div>
+
+<script>
+async function searchMet() {
+    const query = document.getElementById('met-search').value;
+    const container = document.getElementById('met-results');
+    container.innerHTML = '<div class="loading-met">🎨 Searching art collection...</div>';
+    
+    try {
+        // First get object IDs
+        const searchResp = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?q=${encodeURIComponent(query)}`);
+        const searchData = await searchResp.json();
+        
+        if (searchData.objectIDs && searchData.objectIDs.length > 0) {
+            const objectIds = searchData.objectIDs.slice(0, 12);
+            const artworks = [];
+            
+            for (const id of objectIds) {
+                try {
+                    const objResp = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${id}`);
+                    const obj = await objResp.json();
+                    if (obj.primaryImage || obj.primaryImageSmall) {
+                        artworks.push(obj);
+                    }
+                    if (artworks.length >= 8) break;
+                } catch (e) {}
+            }
+            
+            if (artworks.length > 0) {
+                container.innerHTML = `
+                    <div class="met-results-grid">
+                        ${artworks.map(art => `
+                            <div class="met-art-card">
+                                <img src="${art.primaryImageSmall || art.primaryImage}" class="met-art-img" alt="${art.title}">
+                                <h3>${art.title || 'Untitled'}</h3>
+                                <p class="met-artist">${art.artistDisplayName || 'Unknown Artist'}</p>
+                                <p class="met-date">${art.objectDate || ''}</p>
+                                ${art.objectURL ? `<a href="${art.objectURL}" target="_blank" class="met-link">View at Met →</a>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else {
+                container.innerHTML = '<div class="no-results-met">No artworks with images found!</div>';
+            }
+        } else {
+            container.innerHTML = '<div class="no-results-met">No results found!</div>';
+        }
+    } catch (e) {
+        container.innerHTML = '<div class="error-met">Error loading art!</div>';
+    }
+}
+
+function quickSearchMet(query) {
+    document.getElementById('met-search').value = query;
+    searchMet();
+}
+
+document.addEventListener('DOMContentLoaded', () => setTimeout(searchMet, 500));
+</script>
+
+<style>
+.met-page-mega { min-height: 100vh; background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 50%, #ffeaa7 100%); }
+.met-hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 4rem 2rem; text-align: center; border-radius: 0 0 70px 70px; margin-bottom: 4rem; }
+.met-mascot { font-size: 14rem; animation: bounce 2s ease-in-out infinite; }
+.met-title-mega { font-family: 'Fredoka One', cursive; font-size: 5.5rem; color: white; text-shadow: 6px 6px 20px rgba(0,0,0,0.5); margin: 2rem 0; }
+.met-search-section { max-width: 1400px; margin: 0 auto 4rem; padding: 0 2rem; }
+.met-search-title { font-family: 'Fredoka One', cursive; font-size: 4rem; text-align: center; color: #333; margin-bottom: 2.5rem; }
+.met-search-box { display: flex; gap: 1.5rem; margin-bottom: 3rem; }
+.met-input-mega { flex: 1; padding: 2rem 2.5rem; border: 6px solid #667eea; border-radius: 50px; font-size: 1.8rem; outline: none; font-weight: bold; }
+.met-search-btn { background: linear-gradient(45deg, #ff6b6b, #4ecdc4); border: none; color: white; padding: 2rem 4rem; border-radius: 50px; font-size: 2rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+.met-results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; }
+.met-art-card { background: white; border-radius: 25px; padding: 2rem; box-shadow: 0 10px 35px rgba(0,0,0,0.15); border: 5px solid #4ecdc4; transition: all 0.3s ease; }
+.met-art-card:hover { transform: translateY(-15px); }
+.met-art-img { width: 100%; height: 300px; object-fit: cover; border-radius: 15px; margin-bottom: 1.5rem; }
+.met-artist { font-size: 1.2rem; color: #667eea; font-weight: bold; margin: 0.5rem 0; }
+.met-date { font-size: 1rem; color: #999; }
+.met-link { display: block; background: #667eea; color: white; padding: 0.8rem; border-radius: 20px; text-decoration: none; text-align: center; margin-top: 1rem; font-weight: bold; }
+.met-quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+.met-quick-btn { background: linear-gradient(135deg, #a8edea, #fed6e3); border: none; padding: 1.5rem; border-radius: 25px; font-size: 1.4rem; font-weight: bold; cursor: pointer; border: 4px solid white; transition: all 0.3s ease; }
+.met-quick-btn:hover { transform: translateY(-10px); }
+</style>
+{% endblock %}
+

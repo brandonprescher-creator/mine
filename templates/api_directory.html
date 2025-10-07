@@ -1,0 +1,376 @@
+{% extends "base.html" %}
+
+{% block title %}API Directory - 50+ Free Education APIs{% endblock %}
+
+{% block content %}
+<div class="api-directory-mega">
+    <!-- HERO -->
+    <div class="directory-hero">
+        <div class="hero-mascot-mega">🌐</div>
+        <h1 class="directory-title-mega">50+ FREE EDUCATION APIS!</h1>
+        <p class="directory-subtitle">Each API has its OWN page with REAL content! Click to explore!</p>
+    </div>
+
+    <!-- API GRID - EACH LINKS TO ITS OWN PAGE -->
+    <div class="api-mega-grid">
+        
+        <!-- Wikipedia -->
+        <a href="/api/wikipedia" class="api-directory-card">
+            <div class="api-card-glow"></div>
+            <div class="api-dir-icon">📖</div>
+            <h3 class="api-dir-name">Wikipedia</h3>
+            <p class="api-dir-desc">Millions of articles</p>
+            <div class="api-dir-badge">✨ Most Popular</div>
+            <div class="api-dir-arrow">→</div>
+        </a>
+
+        <!-- NASA -->
+        <a href="/api/nasa" class="api-directory-card">
+            <div class="api-card-glow"></div>
+            <div class="api-dir-icon">🚀</div>
+            <h3 class="api-dir-name">NASA</h3>
+            <p class="api-dir-desc">Space & Astronomy</p>
+            <div class="api-dir-badge">🔥 Super Cool</div>
+            <div class="api-dir-arrow">→</div>
+        </a>
+
+        <!-- Open Library -->
+        <a href="/api/books" class="api-directory-card">
+            <div class="api-card-glow"></div>
+            <div class="api-dir-icon">📚</div>
+            <h3 class="api-dir-name">Open Library</h3>
+            <p class="api-dir-desc">20M+ Books</p>
+            <div class="api-dir-badge">📖 Reading</div>
+            <div class="api-dir-arrow">→</div>
+        </a>
+
+        <!-- Open Trivia -->
+        <a href="/api/quiz" class="api-directory-card">
+            <div class="api-card-glow"></div>
+            <div class="api-dir-icon">🎯</div>
+            <h3 class="api-dir-name">Quiz Database</h3>
+            <p class="api-dir-desc">Unlimited Questions</p>
+            <div class="api-dir-badge">🎮 Fun</div>
+            <div class="api-dir-arrow">→</div>
+        </a>
+
+        <!-- Datamuse -->
+        <a href="/api/vocabulary" class="api-directory-card">
+            <div class="api-card-glow"></div>
+            <div class="api-dir-icon">📝</div>
+            <h3 class="api-dir-name">Datamuse</h3>
+            <p class="api-dir-desc">Words & Vocabulary</p>
+            <div class="api-dir-badge">✍️ Language</div>
+            <div class="api-dir-arrow">→</div>
+        </a>
+
+        <!-- USGS Earthquakes -->
+        <a href="/api/earthquakes" class="api-directory-card">
+            <div class="api-card-glow"></div>
+            <div class="api-dir-icon">🌍</div>
+            <h3 class="api-dir-name">USGS Earthquakes</h3>
+            <p class="api-dir-desc">Real-Time Data</p>
+            <div class="api-dir-badge">⚡ Live</div>
+            <div class="api-dir-arrow">→</div>
+        </a>
+
+        <!-- More APIs listed -->
+        <a href="/api/library-congress" class="api-directory-card">
+            <div class="api-card-glow"></div>
+            <div class="api-dir-icon">🏛️</div>
+            <h3 class="api-dir-name">Library of Congress</h3>
+            <p class="api-dir-desc">Historical Treasures</p>
+            <div class="api-dir-badge">📜 History</div>
+            <div class="api-dir-arrow">→</div>
+        </a>
+
+        <a href="/api/met-museum" class="api-directory-card">
+            <div class="api-card-glow"></div>
+            <div class="api-dir-icon">🎨</div>
+            <h3 class="api-dir-name">Met Museum</h3>
+            <p class="api-dir-desc">World-Class Art</p>
+            <div class="api-dir-badge">🖼️ Art</div>
+            <div class="api-dir-arrow">→</div>
+        </a>
+
+        <a href="/api/pubchem" class="api-directory-card">
+            <div class="api-card-glow"></div>
+            <div class="api-dir-icon">🧪</div>
+            <h3 class="api-dir-name">PubChem</h3>
+            <p class="api-dir-desc">Chemistry Database</p>
+            <div class="api-dir-badge">⚗️ Science</div>
+            <div class="api-dir-arrow">→</div>
+        </a>
+
+        <a href="/api/dictionary" class="api-directory-card">
+            <div class="api-card-glow"></div>
+            <div class="api-dir-icon">📖</div>
+            <h3 class="api-dir-name">Dictionary</h3>
+            <p class="api-dir-desc">Word Definitions</p>
+            <div class="api-dir-badge">📝 Language</div>
+            <div class="api-dir-arrow">→</div>
+        </a>
+
+        <a href="/api/numbers" class="api-directory-card">
+            <div class="api-card-glow"></div>
+            <div class="api-dir-icon">🔢</div>
+            <h3 class="api-dir-name">Numbers API</h3>
+            <p class="api-dir-desc">Math Facts</p>
+            <div class="api-dir-badge">🎯 Fun</div>
+            <div class="api-dir-arrow">→</div>
+        </a>
+
+        <a href="/api/jeopardy" class="api-directory-card">
+            <div class="api-card-glow"></div>
+            <div class="api-dir-icon">🎭</div>
+            <h3 class="api-dir-name">Jeopardy</h3>
+            <p class="api-dir-desc">TV Show Questions</p>
+            <div class="api-dir-badge">🎮 Quiz</div>
+            <div class="api-dir-arrow">→</div>
+        </a>
+
+        <a href="/api/poetry" class="api-directory-card">
+            <div class="api-card-glow"></div>
+            <div class="api-dir-icon">✍️</div>
+            <h3 class="api-dir-name">Poetry</h3>
+            <p class="api-dir-desc">Poems & Poets</p>
+            <div class="api-dir-badge">📜 Literature</div>
+            <div class="api-dir-arrow">→</div>
+        </a>
+
+        <a href="/api/quotes" class="api-directory-card">
+            <div class="api-card-glow"></div>
+            <div class="api-dir-icon">💬</div>
+            <h3 class="api-dir-name">Quotes</h3>
+            <p class="api-dir-desc">Inspiring Quotes</p>
+            <div class="api-dir-badge">✨ Wisdom</div>
+            <div class="api-dir-arrow">→</div>
+        </a>
+
+    </div>
+
+    <!-- COMPLETE LIST -->
+    <div class="complete-list-section">
+        <h2>📋 All 50+ APIs (Click any to explore!)</h2>
+        <div class="list-columns">
+            <div class="list-column">
+                <h3>📚 Content & Knowledge</h3>
+                <a href="/api/wikipedia" class="list-link">✅ Wikipedia</a>
+                <a href="/api/books" class="list-link">✅ Open Library</a>
+                <a href="/api/library-congress" class="list-link">✅ Library of Congress</a>
+                <a href="#" class="list-link">Wikidata</a>
+                <a href="#" class="list-link">Internet Archive</a>
+                <a href="#" class="list-link">Google Books</a>
+            </div>
+            
+            <div class="list-column">
+                <h3>🔬 Science & STEM</h3>
+                <a href="/api/nasa" class="list-link">✅ NASA APOD</a>
+                <a href="/api/earthquakes" class="list-link">✅ USGS Earthquakes</a>
+                <a href="/api/pubchem" class="list-link">✅ PubChem</a>
+                <a href="/api/numbers" class="list-link">✅ Numbers API</a>
+                <a href="#" class="list-link">NASA Mars Rover</a>
+                <a href="#" class="list-link">GBIF Biodiversity</a>
+            </div>
+            
+            <div class="list-column">
+                <h3>✍️ Language & Literacy</h3>
+                <a href="/api/vocabulary" class="list-link">✅ Datamuse</a>
+                <a href="/api/dictionary" class="list-link">✅ Free Dictionary</a>
+                <a href="/api/poetry" class="list-link">✅ PoetryDB</a>
+                <a href="/api/quotes" class="list-link">✅ Quotable</a>
+                <a href="#" class="list-link">Wordnik</a>
+            </div>
+            
+            <div class="list-column">
+                <h3>🎮 Quiz & Practice</h3>
+                <a href="/api/quiz" class="list-link">✅ Open Trivia</a>
+                <a href="/api/jeopardy" class="list-link">✅ JService</a>
+                <a href="#" class="list-link">FlashcardDB</a>
+            </div>
+            
+            <div class="list-column">
+                <h3>🎨 Art & Museums</h3>
+                <a href="/api/met-museum" class="list-link">✅ Met Museum</a>
+                <a href="#" class="list-link">Rijksmuseum</a>
+                <a href="#" class="list-link">Harvard Art</a>
+                <a href="#" class="list-link">Smithsonian</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.api-directory-mega {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    padding-bottom: 4rem;
+}
+
+.directory-hero {
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.hero-mascot-mega {
+    font-size: 15rem;
+    animation: bounce 2s ease-in-out infinite;
+    filter: drop-shadow(0 25px 50px rgba(0,0,0,0.5));
+}
+
+.directory-title-mega {
+    font-family: 'Fredoka One', cursive;
+    font-size: 6rem;
+    color: white;
+    text-shadow: 6px 6px 20px rgba(0,0,0,0.5);
+    margin: 2rem 0;
+}
+
+.directory-subtitle {
+    font-size: 2rem;
+    color: white;
+    font-weight: bold;
+}
+
+.api-mega-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.api-directory-card {
+    background: linear-gradient(135deg, #ffffff, #f5f5f5);
+    border-radius: 30px;
+    padding: 2.5rem;
+    text-decoration: none;
+    text-align: center;
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border: 5px solid transparent;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.api-directory-card:hover {
+    transform: translateY(-20px) scale(1.08);
+    box-shadow: 0 30px 70px rgba(0,0,0,0.4);
+    border-color: #4ecdc4;
+}
+
+.api-card-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(78,205,196,0.3) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.api-directory-card:hover .api-card-glow {
+    opacity: 1;
+    animation: rotate 4s linear infinite;
+}
+
+.api-dir-icon {
+    font-size: 6rem;
+    margin-bottom: 1.5rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+.api-dir-name {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.api-dir-desc {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+.api-dir-badge {
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
+    color: white;
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    display: inline-block;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.api-dir-arrow {
+    font-size: 3rem;
+    color: #4ecdc4;
+    font-weight: bold;
+}
+
+.api-more-card {
+    background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+    border-radius: 30px;
+    padding: 3rem;
+    text-align: center;
+    border: 5px solid #f39c12;
+}
+
+.more-icon {
+    font-size: 6rem;
+    margin-bottom: 1rem;
+}
+
+.complete-list-section {
+    max-width: 1600px;
+    margin: 5rem auto 0;
+    padding: 3rem;
+    background: rgba(255,255,255,0.95);
+    border-radius: 40px;
+}
+
+.complete-list-section h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3.5rem;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.list-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.list-column h3 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.8rem;
+    color: #667eea;
+    margin-bottom: 1.5rem;
+}
+
+.list-link {
+    display: block;
+    padding: 1rem 1.5rem;
+    background: rgba(102,126,234,0.1);
+    border-radius: 15px;
+    border-left: 5px solid #4ecdc4;
+    margin-bottom: 0.8rem;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.list-link:hover {
+    background: rgba(102,126,234,0.2);
+    transform: translateX(10px);
+    border-left-color: #ff6b6b;
+}
+</style>
+{% endblock %}
+

@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block title %}Multiplayer - Ultimate Badass Tutor{% endblock %}
+
+{% block content %}
+<div class="multiplayer-container">
+    <!-- Header -->
+    <div class="multiplayer-header">
+        <h1 class="fun-title">🤝 MULTIPLAYER LEARNING! 🤝</h1>
+        <p class="multiplayer-subtitle">
+            Challenge friends and compete in real-time!
+        </p>
+    </div>
+
+    <!-- Game Modes -->
+    <div class="game-modes">
+        <h2>🎮 Choose Your Mode</h2>
+        <div class="modes-grid">
+            <div class="mode-card" onclick="createRoom('math-duel')">
+                <div class="mode-icon">⚔️</div>
+                <h3>Math Duel</h3>
+                <p>Race to solve math problems!</p>
+                <div class="mode-players">2-4 players</div>
+            </div>
+            
+            <div class="mode-card" onclick="createRoom('quiz-battle')">
+                <div class="mode-icon">🧠</div>
+                <h3>Quiz Battle</h3>
+                <p>Compete in trivia across all subjects!</p>
+                <div class="mode-players">2-8 players</div>
+            </div>
+            
+            <div class="mode-card" onclick="createRoom('speed-challenge')">
+                <div class="mode-icon">⚡</div>
+                <h3>Speed Challenge</h3>
+                <p>Fastest correct answers win!</p>
+                <div class="mode-players">2-6 players</div>
+            </div>
+            
+            <div class="mode-card" onclick="createRoom('team-tournament')">
+                <div class="mode-icon">🏆</div>
+                <h3>Team Tournament</h3>
+                <p>Work together to win!</p>
+                <div class="mode-players">4-10 players</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Rooms -->
+    <div class="active-rooms">
+        <h2>🎯 Join Active Rooms</h2>
+        <div class="rooms-list" id="rooms-list">
+            <div class="room-item">
+                <div class="room-info">
+                    <div class="room-name">Math Masters Room</div>
+                    <div class="room-details">
+                        <span class="room-game">⚔️ Math Duel</span>
+                        <span class="room-players">2/4 players</span>
+                    </div>
+                </div>
+                <button class="join-room-btn" onclick="joinRoom('room-1')">Join</button>
+            </div>
+            
+            <div class="room-item">
+                <div class="room-info">
+                    <div class="room-name">Science Squad</div>
+                    <div class="room-details">
+                        <span class="room-game">🧠 Quiz Battle</span>
+                        <span class="room-players">3/8 players</span>
+                    </div>
+                </div>
+                <button class="join-room-btn" onclick="joinRoom('room-2')">Join</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="multiplayer-leaderboard">
+        <h2>🏆 Top Players This Week</h2>
+        <div class="leaderboard">
+            <div class="leaderboard-item rank-1">
+                <div class="rank">1</div>
+                <div class="player-info">
+                    <div class="player-avatar">👑</div>
+                    <div class="player-name">MathMaster99</div>
+                </div>
+                <div class="player-stats">
+                    <span class="wins">15 wins</span>
+                    <span class="score">2,847 pts</span>
+                </div>
+            </div>
+            
+            <div class="leaderboard-item rank-2">
+                <div class="rank">2</div>
+                <div class="player-info">
+                    <div class="player-avatar">🥈</div>
+                    <div class="player-name">ScienceWiz</div>
+                </div>
+                <div class="player-stats">
+                    <span class="wins">12 wins</span>
+                    <span class="score">2,634 pts</span>
+                </div>
+            </div>
+            
+            <div class="leaderboard-item rank-3">
+                <div class="rank">3</div>
+                <div class="player-info">
+                    <div class="player-avatar">🥉</div>
+                    <div class="player-name">WordHunter</div>
+                </div>
+                <div class="player-stats">
+                    <span class="wins">10 wins</span>
+                    <span class="score">2,421 pts</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function createRoom(gameType) {
+    alert(`Creating ${gameType} room... (Multiplayer feature coming soon!)`);
+}
+
+function joinRoom(roomId) {
+    alert(`Joining room ${roomId}... (Multiplayer feature coming soon!)`);
+}
+</script>
+
+<style>
+.multiplayer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.multiplayer-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.game-modes, .active-rooms, .multiplayer-leaderboard {
+    margin: 3rem 0;
+}
+
+.modes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.mode-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mode-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.mode-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.mode-players {
+    background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    margin-top: 1rem;
+    display: inline-block;
+}
+
+.rooms-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.room-item {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.room-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.room-details {
+    display: flex;
+    gap: 1rem;
+}
+
+.room-game, .room-players {
+    background: rgba(78, 205, 196, 0.2);
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.join-room-btn {
+    background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+    border: none;
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.join-room-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+</style>
+{% endblock %}
+

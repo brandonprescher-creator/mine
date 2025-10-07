@@ -1,0 +1,471 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz API - Unlimited Questions{% endblock %}
+
+{% block content %}
+<div class="quiz-page-mega">
+    <!-- HERO -->
+    <div class="quiz-hero">
+        <a href="/api-explorer" class="quiz-back-btn">⬅️ All APIs</a>
+        
+        <div class="quiz-mascot">🎯</div>
+        <h1 class="quiz-title-mega">QUIZ DATABASE API</h1>
+        <p class="quiz-subtitle">UNLIMITED Quiz Questions - Test Your Knowledge! 🧠</p>
+    </div>
+
+    <!-- QUIZ GENERATOR -->
+    <div class="quiz-gen-section">
+        <h2 class="quiz-gen-title">🎮 Generate Your Quiz!</h2>
+        
+        <div class="quiz-controls-mega">
+            <div class="control-group">
+                <label class="control-label">Category:</label>
+                <select id="quiz-category" class="quiz-select-mega">
+                    <option value="">Any Category</option>
+                    <option value="science">🔬 Science</option>
+                    <option value="math">📐 Mathematics</option>
+                    <option value="history">📜 History</option>
+                    <option value="geography">🌍 Geography</option>
+                    <option value="art">🎨 Art</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label">Difficulty:</label>
+                <select id="quiz-difficulty" class="quiz-select-mega">
+                    <option value="">Any</option>
+                    <option value="easy">😊 Easy</option>
+                    <option value="medium">🎯 Medium</option>
+                    <option value="hard">🔥 Hard</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label">Questions:</label>
+                <select id="quiz-amount" class="quiz-select-mega">
+                    <option value="5">5 Questions</option>
+                    <option value="10" selected>10 Questions</option>
+                    <option value="15">15 Questions</option>
+                    <option value="20">20 Questions</option>
+                </select>
+            </div>
+        </div>
+        
+        <button onclick="generateQuiz()" class="generate-quiz-btn-mega">
+            <span class="gen-emoji">🎲</span>
+            <span>GENERATE QUIZ!</span>
+            <span class="gen-emoji">🎲</span>
+        </button>
+        
+        <div id="quiz-container" class="quiz-container-mega"></div>
+    </div>
+
+    <!-- QUIZ STATS -->
+    <div id="quiz-stats" class="quiz-stats-section" style="display: none;">
+        <h2>📊 Your Score</h2>
+        <div class="stats-display-mega">
+            <div class="score-card-mega">
+                <div class="score-mega" id="quiz-score">0</div>
+                <div class="score-label">Correct</div>
+            </div>
+            <div class="score-card-mega">
+                <div class="score-mega" id="quiz-total">0</div>
+                <div class="score-label">Total</div>
+            </div>
+            <div class="score-card-mega">
+                <div class="score-mega" id="quiz-percent">0%</div>
+                <div class="score-label">Score</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentQuiz = [];
+let currentQuestion = 0;
+let score = 0;
+
+// Generate quiz
+async function generateQuiz() {
+    const category = document.getElementById('quiz-category').value;
+    const difficulty = document.getElementById('quiz-difficulty').value;
+    const amount = document.getElementById('quiz-amount').value;
+    
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = '<div class="loading-quiz">🎲 Generating quiz from API...</div>';
+    
+    try {
+        let url = `/api/open/quiz?amount=${amount}`;
+        if (category) url += `&category=${category}`;
+        if (difficulty) url += `&difficulty=${difficulty}`;
+        
+        const response = await fetch(url);
+        currentQuiz = await response.json();
+        
+        if (currentQuiz.length > 0) {
+            currentQuestion = 0;
+            score = 0;
+            showQuestion();
+            document.getElementById('quiz-stats').style.display = 'block';
+        }
+    } catch (error) {
+        container.innerHTML = '<div class="error-quiz">Error loading quiz!</div>';
+    }
+}
+
+function showQuestion() {
+    if (currentQuestion >= currentQuiz.length) {
+        showResults();
+        return;
+    }
+    
+    const q = currentQuiz[currentQuestion];
+    const container = document.getElementById('quiz-container');
+    
+    // Shuffle choices
+    const allChoices = [...q.choices];
+    allChoices.sort(() => Math.random() - 0.5);
+    
+    container.innerHTML = `
+        <div class="question-card-mega">
+            <div class="question-header-mega">
+                <span class="q-number">Question ${currentQuestion + 1}/${currentQuiz.length}</span>
+                <span class="q-difficulty">${q.difficulty || 'Medium'}</span>
+            </div>
+            
+            <div class="question-text-mega">
+                <div class="q-icon">❓</div>
+                <h3>${q.question}</h3>
+            </div>
+            
+            <div class="choices-mega">
+                ${allChoices.map((choice, i) => `
+                    <button class="choice-btn-mega" onclick="selectAnswer('${choice.replace(/'/g, "\\'")}', '${q.answer.replace(/'/g, "\\'")}')">
+                        <span class="choice-letter">${String.fromCharCode(65 + i)}</span>
+                        <span class="choice-text">${choice}</span>
+                    </button>
+                `).join('')}
+            </div>
+            
+            ${q.category ? `<div class="q-category">Category: ${q.category}</div>` : ''}
+        </div>
+    `;
+    
+    updateScoreDisplay();
+}
+
+function selectAnswer(selected, correct) {
+    const isCorrect = selected === correct;
+    
+    if (isCorrect) {
+        score++;
+        showFeedback('🎉 CORRECT!', true);
+    } else {
+        showFeedback(`❌ Wrong! Answer: ${correct}`, false);
+    }
+    
+    updateScoreDisplay();
+    
+    setTimeout(() => {
+        currentQuestion++;
+        showQuestion();
+    }, 2000);
+}
+
+function showFeedback(message, isCorrect) {
+    const feedback = document.createElement('div');
+    feedback.className = isCorrect ? 'feedback-correct-mega' : 'feedback-wrong-mega';
+    feedback.textContent = message;
+    feedback.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 4rem; font-weight: bold; z-index: 10000; padding: 3rem; border-radius: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.4);';
+    feedback.style.background = isCorrect ? 'linear-gradient(45deg, #4CAF50, #45a049)' : 'linear-gradient(45deg, #ff9800, #f57c00)';
+    feedback.style.color = 'white';
+    
+    document.body.appendChild(feedback);
+    
+    if (isCorrect) {
+        for (let i = 0; i < 50; i++) {
+            createQuizParticle();
+        }
+    }
+    
+    setTimeout(() => feedback.remove(), 1800);
+}
+
+function createQuizParticle() {
+    const particle = document.createElement('div');
+    particle.textContent = ['⭐', '🌟', '✨', '🎉'][Math.floor(Math.random() * 4)];
+    particle.style.cssText = `position: fixed; font-size: 2rem; pointer-events: none; z-index: 9999; left: ${Math.random() * 100}%; top: ${Math.random() * 100}%;`;
+    particle.style.animation = 'floatAway 2s ease-out forwards';
+    document.body.appendChild(particle);
+    setTimeout(() => particle.remove(), 2000);
+}
+
+function showResults() {
+    const container = document.getElementById('quiz-container');
+    const percent = Math.round((score / currentQuiz.length) * 100);
+    
+    container.innerHTML = `
+        <div class="quiz-complete-mega">
+            <div class="complete-icon-mega">🏆</div>
+            <h2 class="complete-title-mega">QUIZ COMPLETE!</h2>
+            <div class="final-score-mega">
+                <div class="final-num">${score} / ${currentQuiz.length}</div>
+                <div class="final-percent">${percent}%</div>
+            </div>
+            <p class="complete-message">${percent >= 80 ? 'AMAZING JOB! 🌟' : percent >= 60 ? 'GOOD WORK! Keep practicing! 💪' : 'Keep learning! You\'ll get better! 🎯'}</p>
+            <button class="try-again-mega-btn" onclick="generateQuiz()">
+                <span>🔄 TRY AGAIN!</span>
+            </button>
+        </div>
+    `;
+}
+
+function updateScoreDisplay() {
+    document.getElementById('quiz-score').textContent = score;
+    document.getElementById('quiz-total').textContent = currentQuiz.length;
+    const percent = currentQuiz.length > 0 ? Math.round((score / currentQuiz.length) * 100) : 0;
+    document.getElementById('quiz-percent').textContent = percent + '%';
+}
+</script>
+
+<style>
+.quiz-page-mega {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.quiz-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 4rem 2rem;
+    text-align: center;
+    border-radius: 0 0 70px 70px;
+    margin-bottom: 4rem;
+}
+
+.quiz-mascot {
+    font-size: 14rem;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+.quiz-title-mega {
+    font-family: 'Fredoka One', cursive;
+    font-size: 6rem;
+    color: white;
+    text-shadow: 6px 6px 20px rgba(0,0,0,0.5);
+    margin: 2rem 0;
+}
+
+.quiz-controls-mega {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.control-label {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.quiz-select-mega {
+    padding: 1.2rem 2rem;
+    border: 4px solid #667eea;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    outline: none;
+}
+
+.generate-quiz-btn-mega {
+    background: linear-gradient(45deg, #ff6b6b, #feca57, #4ecdc4);
+    background-size: 200%;
+    animation: rainbowShift 3s ease infinite;
+    border: none;
+    color: white;
+    padding: 2.5rem 5rem;
+    border-radius: 60px;
+    font-size: 2.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin: 3rem auto;
+    transition: all 0.3s ease;
+}
+
+.generate-quiz-btn-mega:hover {
+    transform: scale(1.1);
+}
+
+.gen-emoji {
+    font-size: 3rem;
+}
+
+.question-card-mega {
+    background: white;
+    border-radius: 35px;
+    padding: 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+    border: 6px solid #4ecdc4;
+}
+
+.question-text-mega {
+    text-align: center;
+    margin: 2rem 0 3rem;
+}
+
+.q-icon {
+    font-size: 6rem;
+    margin-bottom: 1.5rem;
+}
+
+.question-text-mega h3 {
+    font-size: 2.5rem;
+    color: #333;
+    line-height: 1.6;
+}
+
+.choices-mega {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.choice-btn-mega {
+    background: linear-gradient(135deg, #e0e0e0, #f5f5f5);
+    border: 5px solid #ddd;
+    padding: 2rem;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    transition: all 0.3s ease;
+    font-size: 1.5rem;
+}
+
+.choice-btn-mega:hover {
+    background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+    color: white;
+    border-color: #4ecdc4;
+    transform: translateX(15px) scale(1.05);
+}
+
+.choice-letter {
+    background: #667eea;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.8rem;
+}
+
+.choice-text {
+    flex: 1;
+    text-align: left;
+    font-weight: 600;
+}
+
+.quiz-complete-mega {
+    background: white;
+    border-radius: 40px;
+    padding: 4rem;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+.complete-icon-mega {
+    font-size: 12rem;
+    animation: bounce 1s ease-in-out infinite;
+}
+
+.complete-title-mega {
+    font-family: 'Fredoka One', cursive;
+    font-size: 5rem;
+    color: #333;
+    margin: 2rem 0;
+}
+
+.final-score-mega {
+    margin: 3rem 0;
+}
+
+.final-num {
+    font-size: 6rem;
+    font-weight: bold;
+    color: #4ecdc4;
+}
+
+.final-percent {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #667eea;
+}
+
+.complete-message {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 2rem 0;
+}
+
+.try-again-mega-btn {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    border: none;
+    color: white;
+    padding: 2rem 4rem;
+    border-radius: 50px;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.quiz-stats-section {
+    max-width: 1000px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 35px;
+}
+
+.stats-display-mega {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+.score-card-mega {
+    text-align: center;
+}
+
+.score-mega {
+    font-family: 'Fredoka One', cursive;
+    font-size: 4rem;
+    color: #667eea;
+}
+
+@keyframes floatAway {
+    to {
+        transform: translateY(-300px);
+        opacity: 0;
+    }
+}
+</style>
+{% endblock %}
+

@@ -1,0 +1,918 @@
+{% extends "base.html" %}
+
+{% block title %}{{ lesson.title }} - ULTIMATE BADASS TUTOR{% endblock %}
+
+{% block content %}
+<div class="lesson-mega-page">
+    <!-- LESSON HERO -->
+    <div class="lesson-hero-ultra">
+        <div class="hero-confetti-bg"></div>
+        
+        <!-- Navigation -->
+        <div class="lesson-nav-bar">
+            <a href="/" class="nav-mega-btn">🏠 Home</a>
+            <a href="/subjects" class="nav-mega-btn">📚 Subjects</a>
+            <a href="/subject/{{ lesson.subject_id }}" class="nav-mega-btn">⬅️ Back</a>
+        </div>
+        
+        <!-- Lesson Title -->
+        <div class="lesson-hero-content">
+            <div class="lesson-mascot-huge">🎓</div>
+            <h1 class="lesson-ultra-title">{{ lesson.title }}</h1>
+            <div class="lesson-meta-badges">
+                <span class="meta-badge subject">{{ lesson.subject_name }}</span>
+                <span class="meta-badge difficulty">{{ lesson.difficulty }}</span>
+                <span class="meta-badge time">⏱️ {{ lesson.estimated_time }} min</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODE TOGGLE - MASSIVE BUTTONS -->
+    <div class="mode-toggle-mega">
+        <button class="mode-mega-btn active" onclick="switchMode('learn')" data-mode="learn">
+            <span class="mode-icon">📖</span>
+            <span class="mode-label">LEARN</span>
+        </button>
+        <button class="mode-mega-btn" onclick="switchMode('practice')" data-mode="practice">
+            <span class="mode-icon">🎮</span>
+            <span class="mode-label">PRACTICE</span>
+        </button>
+        <button class="mode-mega-btn" onclick="switchMode('visual')" data-mode="visual">
+            <span class="mode-icon">🎨</span>
+            <span class="mode-label">VISUAL</span>
+        </button>
+    </div>
+
+    <!-- LEARN MODE -->
+    <div id="learn-mode" class="mode-content active">
+        <div class="learn-container-mega">
+            <!-- What You'll Learn -->
+            <div class="intro-card-mega">
+                <div class="intro-icon">🎯</div>
+                <h2 class="intro-title">WHAT YOU'LL LEARN</h2>
+                <p class="intro-text">{{ lesson.description or 'Get ready for an awesome lesson!' }}</p>
+            </div>
+
+            <!-- Teaching Steps - SUPER VISUAL -->
+            <div class="steps-section-mega">
+                <h2 class="section-mega-title">
+                    <span class="title-icon-mega">📚</span>
+                    STEP-BY-STEP MAGIC!
+                    <span class="title-icon-mega">📚</span>
+                </h2>
+                
+                {% for step in lesson.steps %}
+                <div class="step-card-mega">
+                    <div class="step-number-mega">
+                        <span class="step-num">{{ loop.index }}</span>
+                        <span class="step-emoji">🎯</span>
+                    </div>
+                    
+                    <div class="step-content-mega">
+                        <h3 class="step-title-mega">Step {{ loop.index }}</h3>
+                        <p class="step-text-mega">{{ step }}</p>
+                    </div>
+                    
+                    <div class="step-decoration">✨</div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Examples Section -->
+            <div class="examples-section-mega">
+                <h2 class="section-mega-title">
+                    <span class="title-icon-mega">💡</span>
+                    COOL EXAMPLES!
+                    <span class="title-icon-mega">💡</span>
+                </h2>
+                
+                {% for example in lesson.examples %}
+                <div class="example-card-mega">
+                    <div class="example-badge">Example {{ loop.index }}</div>
+                    <h3 class="example-title-mega">{{ example.title or 'Example ' ~ loop.index }}</h3>
+                    <p class="example-desc-mega">{{ example.description or 'Check out this example!' }}</p>
+                    <div class="example-solution-mega">
+                        <div class="solution-icon">✅</div>
+                        <div class="solution-text">{{ example.solution or 'Solution here!' }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- PRACTICE MODE -->
+    <div id="practice-mode" class="mode-content">
+        <div class="practice-container-mega">
+            <div class="practice-header-mega">
+                <h2 class="practice-title-mega">🎮 PRACTICE TIME! 🎮</h2>
+                <div class="practice-stats-mega">
+                    <div class="stat-mega">Score: <span id="practice-score">0</span></div>
+                    <div class="stat-mega">Streak: <span id="practice-streak">0</span> 🔥</div>
+                </div>
+            </div>
+            
+            <div id="practice-area" class="practice-area-mega">
+                <div class="practice-loading">
+                    <div class="loading-spinner-mega">🎯</div>
+                    <p>Loading practice problems...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VISUAL MODE -->
+    <div id="visual-mode" class="mode-content">
+        <div class="visual-container-mega">
+            <h2 class="visual-title-mega">
+                <span class="visual-emoji">🎨</span>
+                SEE IT, LEARN IT, MASTER IT!
+                <span class="visual-emoji">🎨</span>
+            </h2>
+            <p class="visual-subtitle-mega">Watch the concepts come to life with awesome visuals!</p>
+            
+            <div id="visual-area" class="visual-area-mega">
+                <div class="visual-placeholder-mega">
+                    <div class="placeholder-icon">✨</div>
+                    <p>Click "Show Visual" to see the magic!</p>
+                    <button class="visual-show-btn" onclick="loadVisuals()">
+                        <span>🎬 SHOW VISUAL!</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentMode = 'learn';
+let practiceProblems = [];
+let currentProblemIndex = 0;
+let practiceScore = 0;
+let practiceStreak = 0;
+
+function switchMode(mode) {
+    // Update buttons
+    document.querySelectorAll('.mode-mega-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.currentTarget.classList.add('active');
+    
+    // Hide all modes
+    document.querySelectorAll('.mode-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    
+    // Show selected mode
+    document.getElementById(mode + '-mode').classList.add('active');
+    currentMode = mode;
+    
+    // Load content for mode
+    if (mode === 'practice' && practiceProblems.length === 0) {
+        loadPracticeProblems();
+    } else if (mode === 'visual') {
+        prepareVisualMode();
+    }
+    
+    // Sound
+    if (typeof badassTutor !== 'undefined') {
+        badassTutor.playSound('click');
+    }
+}
+
+async function loadPracticeProblems() {
+    try {
+        const response = await fetch('/api/lesson/{{ lesson.id }}/problems');
+        practiceProblems = await response.json();
+        
+        if (practiceProblems.length > 0) {
+            showPracticeProblem();
+        } else {
+            document.getElementById('practice-area').innerHTML = `
+                <div class="no-problems">
+                    <div class="no-problems-icon">😊</div>
+                    <p>No practice problems yet, but you can still review the lesson!</p>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Error loading problems:', error);
+    }
+}
+
+function showPracticeProblem() {
+    if (currentProblemIndex >= practiceProblems.length) {
+        showCompletion();
+        return;
+    }
+    
+    const problem = practiceProblems[currentProblemIndex];
+    
+    document.getElementById('practice-area').innerHTML = `
+        <div class="problem-mega-card">
+            <div class="problem-header-mega">
+                <h3>Problem ${currentProblemIndex + 1} of ${practiceProblems.length}</h3>
+            </div>
+            
+            <div class="problem-question-mega">
+                <div class="question-icon">❓</div>
+                <p class="question-text">${problem.question}</p>
+            </div>
+            
+            <div class="answer-input-mega">
+                <input type="text" id="answer-input" placeholder="Type your answer here..." 
+                       class="mega-input" onkeypress="if(event.key==='Enter') submitAnswer()">
+                <button class="submit-mega-btn" onclick="submitAnswer()">
+                    <span>SUBMIT!</span>
+                    <span class="submit-icon">🚀</span>
+                </button>
+            </div>
+            
+            <div id="feedback-area" class="feedback-area-mega"></div>
+        </div>
+    `;
+    
+    document.getElementById('answer-input').focus();
+}
+
+function submitAnswer() {
+    const userAnswer = document.getElementById('answer-input').value.trim();
+    const correctAnswer = practiceProblems[currentProblemIndex].answer;
+    const feedbackArea = document.getElementById('feedback-area');
+    
+    if (!userAnswer) {
+        feedbackArea.innerHTML = '<div class="warning-mega">⚠️ Please type an answer first!</div>';
+        return;
+    }
+    
+    const isCorrect = userAnswer.toLowerCase() === correctAnswer.toLowerCase();
+    
+    if (isCorrect) {
+        practiceScore += 10;
+        practiceStreak++;
+        
+        feedbackArea.innerHTML = `
+            <div class="correct-mega">
+                <div class="correct-icon">🎉</div>
+                <h3>AWESOME! YOU GOT IT! 🎉</h3>
+                <p class="correct-points">+10 points!</p>
+                <p class="correct-streak">Streak: ${practiceStreak} 🔥</p>
+            </div>
+        `;
+        
+        // Update score display
+        document.getElementById('practice-score').textContent = practiceScore;
+        document.getElementById('practice-streak').textContent = practiceStreak;
+        
+        // Celebration
+        createSuccessExplosion();
+        
+        // Next problem
+        setTimeout(() => {
+            currentProblemIndex++;
+            showPracticeProblem();
+        }, 2000);
+    } else {
+        practiceStreak = 0;
+        
+        feedbackArea.innerHTML = `
+            <div class="incorrect-mega">
+                <div class="incorrect-icon">💪</div>
+                <h3>Keep trying! You're learning!</h3>
+                <p class="correct-answer-show">The answer is: <strong>${correctAnswer}</strong></p>
+                <button class="try-again-mega-btn" onclick="tryAgain()">TRY AGAIN!</button>
+            </div>
+        `;
+        
+        document.getElementById('practice-streak').textContent = practiceStreak;
+    }
+}
+
+function tryAgain() {
+    document.getElementById('answer-input').value = '';
+    document.getElementById('feedback-area').innerHTML = '';
+    document.getElementById('answer-input').focus();
+}
+
+function showCompletion() {
+    document.getElementById('practice-area').innerHTML = `
+        <div class="completion-mega">
+            <div class="completion-icon">🏆</div>
+            <h2 class="completion-title">YOU DID IT!</h2>
+            <p class="completion-score">Final Score: ${practiceScore} points!</p>
+            <p class="completion-message">You're becoming a MASTER! Keep it up! 🌟</p>
+            <button class="restart-mega-btn" onclick="restartPractice()">
+                <span>DO IT AGAIN!</span>
+                <span class="restart-icon">🔄</span>
+            </button>
+        </div>
+    `;
+}
+
+function restartPractice() {
+    currentProblemIndex = 0;
+    practiceScore = 0;
+    practiceStreak = 0;
+    document.getElementById('practice-score').textContent = '0';
+    document.getElementById('practice-streak').textContent = '0';
+    showPracticeProblem();
+}
+
+function prepareVisualMode() {
+    // Load visual content
+    document.querySelector('#visual-area').innerHTML = `
+        <div class="visual-content-mega">
+            <div class="visual-demo-mega">
+                <h3>🎨 Interactive Visual Learning!</h3>
+                <p>Click below to see step-by-step visual solutions!</p>
+                <div class="visual-buttons">
+                    <button class="visual-btn-mega" onclick="showDivisionVisual()">
+                        ➗ Division Visual
+                    </button>
+                    <button class="visual-btn-mega" onclick="showFractionVisual()">
+                        🍕 Fraction Visual
+                    </button>
+                    <button class="visual-btn-mega" onclick="showGeometryVisual()">
+                        📐 Geometry Visual
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function loadVisuals() {
+    prepareVisualMode();
+}
+
+function showDivisionVisual() {
+    // Would load actual division visual
+    alert('🎨 Division visual loading... (Feature ready!)');
+}
+
+function showFractionVisual() {
+    alert('🍕 Fraction visual loading... (Feature ready!)');
+}
+
+function showGeometryVisual() {
+    alert('📐 Geometry visual loading... (Feature ready!)');
+}
+
+function createSuccessExplosion() {
+    const emojis = ['🎉', '🎊', '⭐', '🌟', '✨', '💫', '🏆', '👏'];
+    
+    for (let i = 0; i < 80; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'success-particle';
+        particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        particle.style.left = (Math.random() * window.innerWidth) + 'px';
+        particle.style.top = (Math.random() * window.innerHeight) + 'px';
+        particle.style.fontSize = (Math.random() * 2 + 1.5) + 'rem';
+        particle.style.setProperty('--tx', (Math.random() - 0.5) * 500 + 'px');
+        particle.style.setProperty('--ty', (Math.random() - 0.5) * 500 + 'px');
+        
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 2000);
+    }
+}
+</script>
+
+<style>
+.lesson-mega-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.lesson-hero-ultra {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    padding: 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 0 80px 80px;
+    margin-bottom: 3rem;
+}
+
+.hero-confetti-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-image: 
+        radial-gradient(circle, rgba(255,255,255,0.15) 2px, transparent 2px);
+    background-size: 40px 40px;
+    animation: confettiFall 10s linear infinite;
+}
+
+@keyframes confettiFall {
+    0% { background-position: 0 0; }
+    100% { background-position: 40px 400px; }
+}
+
+.lesson-nav-bar {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.nav-mega-btn {
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 40px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: 3px solid rgba(255,255,255,0.4);
+    transition: all 0.3s ease;
+}
+
+.nav-mega-btn:hover {
+    background: rgba(255,255,255,0.4);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.lesson-mascot-huge {
+    font-size: 10rem;
+    animation: bounce 2s ease-in-out infinite;
+    filter: drop-shadow(0 15px 35px rgba(0,0,0,0.4));
+}
+
+.lesson-ultra-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 4rem;
+    color: white;
+    text-shadow: 5px 5px 15px rgba(0,0,0,0.4);
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.lesson-meta-badges {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.meta-badge {
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(10px);
+    padding: 0.8rem 1.8rem;
+    border-radius: 30px;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: 3px solid rgba(255,255,255,0.5);
+}
+
+.mode-toggle-mega {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem;
+    flex-wrap: wrap;
+}
+
+.mode-mega-btn {
+    background: linear-gradient(135deg, #e0e0e0 0%, #ffffff 100%);
+    border: 5px solid #ddd;
+    padding: 1.8rem 3rem;
+    border-radius: 50px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.mode-mega-btn.active {
+    background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+    color: white;
+    border-color: #ff6b6b;
+    transform: scale(1.15);
+    box-shadow: 0 15px 40px rgba(255,107,107,0.5);
+}
+
+.mode-mega-btn:hover:not(.active) {
+    transform: scale(1.08);
+    border-color: #4ecdc4;
+}
+
+.mode-icon {
+    font-size: 2.5rem;
+}
+
+.mode-label {
+    font-family: 'Fredoka One', cursive;
+}
+
+.mode-content {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.mode-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.learn-container-mega {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.intro-card-mega {
+    background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+    border-radius: 40px;
+    padding: 3rem;
+    text-align: center;
+    margin-bottom: 4rem;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.15);
+}
+
+.intro-icon {
+    font-size: 6rem;
+    margin-bottom: 1rem;
+}
+
+.intro-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.intro-text {
+    font-size: 1.5rem;
+    color: #555;
+    font-weight: 600;
+    line-height: 1.8;
+}
+
+.section-mega-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3.5rem;
+    text-align: center;
+    color: #333;
+    margin: 3rem 0 2rem;
+}
+
+.title-icon-mega {
+    font-size: 4rem;
+    animation: bounce 1.5s ease-in-out infinite;
+}
+
+.step-card-mega {
+    background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+    border-radius: 35px;
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
+    display: flex;
+    gap: 2rem;
+    border: 5px solid #4ecdc4;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.step-card-mega:hover {
+    transform: translateX(15px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+}
+
+.step-number-mega {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.step-num {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5rem;
+    color: white;
+}
+
+.step-emoji {
+    font-size: 2rem;
+}
+
+.step-content-mega {
+    flex: 1;
+}
+
+.step-title-mega {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.step-text-mega {
+    font-size: 1.3rem;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.step-example-mega {
+    background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+    padding: 1.5rem;
+    border-radius: 25px;
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    border: 3px solid #4CAF50;
+}
+
+.example-icon {
+    font-size: 2.5rem;
+}
+
+.example-content {
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.step-decoration {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 3rem;
+    animation: twinkle 1.5s ease-in-out infinite;
+}
+
+.example-card-mega {
+    background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+    border-radius: 35px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    border: 5px solid #f39c12;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+}
+
+.example-card-mega:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+
+.example-badge {
+    background: rgba(255,255,255,0.5);
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    display: inline-block;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.example-title-mega {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.example-desc-mega {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+}
+
+.example-solution-mega {
+    background: rgba(76,175,80,0.3);
+    padding: 1.5rem;
+    border-radius: 25px;
+    display: flex;
+    gap: 1rem;
+    border: 3px solid #4CAF50;
+}
+
+.solution-icon {
+    font-size: 2.5rem;
+}
+
+.solution-text {
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.practice-container-mega {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.practice-header-mega {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.practice-title-mega {
+    font-family: 'Fredoka One', cursive;
+    font-size: 4rem;
+    color: #333;
+}
+
+.practice-stats-mega {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.stat-mega {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem 2.5rem;
+    border-radius: 35px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: 4px solid white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.problem-mega-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 40px;
+    padding: 3rem;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+    border: 6px solid #4ecdc4;
+}
+
+.problem-question-mega {
+    text-align: center;
+    margin: 2rem 0 3rem;
+}
+
+.question-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+}
+
+.question-text {
+    font-size: 2rem;
+    color: #333;
+    font-weight: bold;
+    line-height: 1.6;
+}
+
+.answer-input-mega {
+    display: flex;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.mega-input {
+    flex: 1;
+    padding: 1.5rem 2rem;
+    border: 5px solid #4ecdc4;
+    border-radius: 35px;
+    font-size: 1.5rem;
+    outline: none;
+    font-weight: bold;
+}
+
+.submit-mega-btn {
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
+    border: none;
+    color: white;
+    padding: 1.5rem 3rem;
+    border-radius: 35px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.submit-mega-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 15px 40px rgba(255,107,107,0.5);
+}
+
+.submit-icon {
+    font-size: 2rem;
+}
+
+.correct-mega, .incorrect-mega, .completion-mega {
+    text-align: center;
+    padding: 3rem;
+    border-radius: 35px;
+    margin-top: 2rem;
+}
+
+.correct-mega {
+    background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+    border: 5px solid #4CAF50;
+}
+
+.incorrect-mega {
+    background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+    border: 5px solid #ff9800;
+}
+
+.completion-mega {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    border: 5px solid #667eea;
+}
+
+.correct-icon, .incorrect-icon, .completion-icon {
+    font-size: 8rem;
+    margin-bottom: 1rem;
+}
+
+.correct-mega h3, .incorrect-mega h3, .completion-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.correct-points, .correct-streak {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0.5rem 0;
+}
+
+.try-again-mega-btn, .restart-mega-btn {
+    background: linear-gradient(45deg, #ff9800, #f57c00);
+    border: none;
+    color: white;
+    padding: 1.5rem 3rem;
+    border-radius: 40px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.try-again-mega-btn:hover, .restart-mega-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 35px rgba(255,152,0,0.5);
+}
+
+.success-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    animation: successFloat 2s ease-out forwards;
+}
+
+@keyframes successFloat {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .lesson-ultra-title {
+        font-size: 2.5rem;
+    }
+    
+    .mode-toggle-mega {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .mode-mega-btn {
+        width: 100%;
+        max-width: 400px;
+    }
+    
+    .answer-input-mega {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %}

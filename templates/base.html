@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ULTIMATE BADASS TUTOR{% endblock %}</title>
+    
+    <!-- BADASS CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/badass.css') }}">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Particle.js for background effects -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <!-- Socket.IO for real-time features -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    
+    <!-- Howler.js for sound effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    
+    <!-- Three.js for 3D animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <!-- Particle background -->
+    <div id="particles-js"></div>
+    
+    <!-- Floating characters -->
+    <div class="floating-characters">
+        <div class="character" data-character="🧮">🧮</div>
+        <div class="character" data-character="🔬">🔬</div>
+        <div class="character" data-character="📚">📚</div>
+        <div class="character" data-character="🎨">🎨</div>
+        <div class="character" data-character="🎵">🎵</div>
+        <div class="character" data-character="🌍">🌍</div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="badass-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🎓</span>
+                <span class="logo-text">ULTIMATE TUTOR</span>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="/subjects" class="nav-link">
+                    <i class="fas fa-book"></i>
+                    <span>Subjects</span>
+                </a>
+                <a href="/games" class="nav-link">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Games</span>
+                </a>
+                <a href="/achievements" class="nav-link">
+                    <i class="fas fa-trophy"></i>
+                    <span>Achievements</span>
+                </a>
+                <a href="/multiplayer" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Multiplayer</span>
+                </a>
+            </div>
+            
+            <div class="user-stats">
+                <div class="stat">
+                    <i class="fas fa-star"></i>
+                    <span id="user-level">Level 1</span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-coins"></i>
+                    <span id="user-coins">0</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Achievement popup -->
+    <div id="achievement-popup" class="achievement-popup">
+        <div class="achievement-content">
+            <div class="achievement-icon">🏆</div>
+            <div class="achievement-text">
+                <h3>Achievement Unlocked!</h3>
+                <p id="achievement-message"></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sound effects -->
+    <audio id="correct-sound" preload="auto">
+        <source src="{{ url_for('static', filename='sounds/correct.mp3') }}" type="audio/mpeg">
+    </audio>
+    <audio id="incorrect-sound" preload="auto">
+        <source src="{{ url_for('static', filename='sounds/incorrect.mp3') }}" type="audio/mpeg">
+    </audio>
+    <audio id="level-up-sound" preload="auto">
+        <source src="{{ url_for('static', filename='sounds/level-up.mp3') }}" type="audio/mpeg">
+    </audio>
+    
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/badass.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/games.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/math-visualizer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/math-problems.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/achievements.js') }}"></script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>
