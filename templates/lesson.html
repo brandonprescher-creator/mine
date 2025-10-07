@@ -134,12 +134,11 @@
             <p class="visual-subtitle-mega">Watch the concepts come to life with awesome visuals!</p>
             
             <div id="visual-area" class="visual-area-mega">
-                <div class="visual-placeholder-mega">
-                    <div class="placeholder-icon">✨</div>
-                    <p>Click "Show Visual" to see the magic!</p>
-                    <button class="visual-show-btn" onclick="loadVisuals()">
-                        <span>🎬 SHOW VISUAL!</span>
-                    </button>
+                <div class="visual-loading">
+                    <div class="loading-spinner-huge">✨</div>
+                    <p style="font-size: 2rem; color: #667eea; margin-top: 2rem;">
+                        Creating awesome visuals for you...
+                    </p>
                 </div>
             </div>
         </div>
@@ -173,7 +172,7 @@ function switchMode(mode) {
     if (mode === 'practice' && practiceProblems.length === 0) {
         loadPracticeProblems();
     } else if (mode === 'visual') {
-        prepareVisualMode();
+        loadVisuals(); // Automatically load visuals when switching to visual mode
     }
     
     // Sound
@@ -320,28 +319,6 @@ function restartPractice() {
     showPracticeProblem();
 }
 
-function prepareVisualMode() {
-    // Load visual content
-    document.querySelector('#visual-area').innerHTML = `
-        <div class="visual-content-mega">
-            <div class="visual-demo-mega">
-                <h3>🎨 Interactive Visual Learning!</h3>
-                <p>Click below to see step-by-step visual solutions!</p>
-                <div class="visual-buttons">
-                    <button class="visual-btn-mega" onclick="showDivisionVisual()">
-                        ➗ Division Visual
-                    </button>
-                    <button class="visual-btn-mega" onclick="showFractionVisual()">
-                        🍕 Fraction Visual
-                    </button>
-                    <button class="visual-btn-mega" onclick="showGeometryVisual()">
-                        📐 Geometry Visual
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-}
 
 async function loadVisuals() {
     const visualArea = document.getElementById('visual-area');
@@ -590,6 +567,14 @@ function createSuccessExplosion() {
         setTimeout(() => particle.remove(), 2000);
     }
 }
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', function() {
+    // If visual mode is active by default, load visuals immediately
+    if (currentMode === 'visual') {
+        loadVisuals();
+    }
+});
 </script>
 
 <style>
