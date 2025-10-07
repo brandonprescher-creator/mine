@@ -16,10 +16,8 @@ import threading
 from services.upload_service import UploadService
 
 app = Flask(__name__)
-app.config.setdefault(
-    "SECRET_KEY", os.getenv("SECRET_KEY", "badass_tutor_secret_key_2024")
-)
-app.config.setdefault("DATABASE_URL", os.getenv("DATABASE_URL", "tutor_app.db"))
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "badass_tutor_secret_key_2024")
+app.config["DATABASE_URL"] = os.getenv("DATABASE_URL", "tutor_app.db")
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Import our existing modules
