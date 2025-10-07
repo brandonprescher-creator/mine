@@ -782,4 +782,407 @@ def generate_visual_content(lesson_data: Dict) -> Dict:
 
 def generate_lesson_visuals(lesson_data: Dict) -> Dict:
     """Quick function to generate all visuals for a lesson"""
-    return visual_generator.generate_visual_for_lesson(lesson_data)
+    try:
+        return visual_generator.generate_visual_for_lesson(lesson_data)
+    except Exception as e:
+        print(f"Visual generation error: {e}")
+        # Return simple fallback visuals
+        return create_simple_visuals(lesson_data)
+
+def create_simple_visuals(lesson_data: Dict) -> Dict:
+    """Create simple but effective visuals when full generation fails"""
+    lesson_title = lesson_data.get('title', '').lower()
+    subject = lesson_data.get('subject_name', '').lower()
+    
+    visuals = []
+    
+    # Math visuals
+    if 'math' in subject or any(word in lesson_title for word in ['division', 'fraction', 'multiplication', 'addition', 'subtraction', 'geometry', 'shape']):
+        if 'division' in lesson_title:
+            visuals.append(create_division_visual())
+        elif 'fraction' in lesson_title:
+            visuals.append(create_fraction_visual())
+        elif 'multiplication' in lesson_title or 'times' in lesson_title:
+            visuals.append(create_multiplication_visual())
+        elif 'addition' in lesson_title or 'add' in lesson_title:
+            visuals.append(create_addition_visual())
+        elif 'geometry' in lesson_title or 'shape' in lesson_title:
+            visuals.append(create_geometry_visual())
+        else:
+            visuals.append(create_math_general_visual())
+    
+    # Science visuals
+    elif 'science' in subject:
+        visuals.append(create_science_visual(lesson_title))
+    
+    # ELA visuals
+    elif 'english' in subject or 'language' in subject:
+        visuals.append(create_ela_visual(lesson_title))
+    
+    # Default visual
+    if not visuals:
+        visuals.append(create_general_visual(lesson_data))
+    
+    return {
+        "success": True,
+        "visuals": visuals
+    }
+
+def create_division_visual() -> Dict:
+    """Create a simple division visual"""
+    return {
+        "type": "division",
+        "title": "Division Visual",
+        "description": "See how division works with groups!",
+        "svg": """
+        <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="300" fill="#f0f8ff"/>
+            <text x="200" y="30" text-anchor="middle" font-size="24" font-weight="bold" fill="#333">12 ÷ 3 = ?</text>
+            
+            <!-- Original group -->
+            <text x="50" y="80" font-size="16" fill="#666">12 items:</text>
+            <g transform="translate(50, 100)">
+                <circle cx="0" cy="0" r="8" fill="#ff6b6b"/>
+                <circle cx="25" cy="0" r="8" fill="#4ecdc4"/>
+                <circle cx="50" cy="0" r="8" fill="#45b7d1"/>
+                <circle cx="75" cy="0" r="8" fill="#ffa07a"/>
+                <circle cx="100" cy="0" r="8" fill="#98d8c8"/>
+                <circle cx="125" cy="0" r="8" fill="#ff6b6b"/>
+                <circle cx="150" cy="0" r="8" fill="#4ecdc4"/>
+                <circle cx="175" cy="0" r="8" fill="#45b7d1"/>
+                <circle cx="200" cy="0" r="8" fill="#ffa07a"/>
+                <circle cx="225" cy="0" r="8" fill="#98d8c8"/>
+                <circle cx="250" cy="0" r="8" fill="#ff6b6b"/>
+                <circle cx="275" cy="0" r="8" fill="#4ecdc4"/>
+            </g>
+            
+            <!-- Arrow -->
+            <path d="M 200 130 L 200 150" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+            <defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+                </marker>
+            </defs>
+            
+            <!-- 3 groups -->
+            <text x="200" y="180" text-anchor="middle" font-size="16" fill="#666">Split into 3 groups:</text>
+            
+            <!-- Group 1 -->
+            <text x="80" y="220" text-anchor="middle" font-size="14" fill="#333">Group 1</text>
+            <g transform="translate(50, 240)">
+                <circle cx="0" cy="0" r="8" fill="#ff6b6b"/>
+                <circle cx="20" cy="0" r="8" fill="#4ecdc4"/>
+                <circle cx="40" cy="0" r="8" fill="#45b7d1"/>
+                <circle cx="60" cy="0" r="8" fill="#ffa07a"/>
+            </g>
+            
+            <!-- Group 2 -->
+            <text x="200" y="220" text-anchor="middle" font-size="14" fill="#333">Group 2</text>
+            <g transform="translate(170, 240)">
+                <circle cx="0" cy="0" r="8" fill="#98d8c8"/>
+                <circle cx="20" cy="0" r="8" fill="#ff6b6b"/>
+                <circle cx="40" cy="0" r="8" fill="#4ecdc4"/>
+                <circle cx="60" cy="0" r="8" fill="#45b7d1"/>
+            </g>
+            
+            <!-- Group 3 -->
+            <text x="320" y="220" text-anchor="middle" font-size="14" fill="#333">Group 3</text>
+            <g transform="translate(290, 240)">
+                <circle cx="0" cy="0" r="8" fill="#ffa07a"/>
+                <circle cx="20" cy="0" r="8" fill="#98d8c8"/>
+                <circle cx="40" cy="0" r="8" fill="#ff6b6b"/>
+                <circle cx="60" cy="0" r="8" fill="#4ecdc4"/>
+            </g>
+            
+            <text x="200" y="280" text-anchor="middle" font-size="18" font-weight="bold" fill="#28a745">Answer: 4 items per group!</text>
+        </svg>
+        """,
+        "caption": "12 items divided into 3 equal groups = 4 items per group"
+    }
+
+def create_fraction_visual() -> Dict:
+    """Create a simple fraction visual"""
+    return {
+        "type": "fraction",
+        "title": "Fraction Visual",
+        "description": "See fractions as parts of a whole!",
+        "svg": """
+        <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="300" fill="#fff5f5"/>
+            
+            <!-- 1/2 -->
+            <text x="100" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">1/2</text>
+            <circle cx="100" cy="80" r="40" fill="none" stroke="#333" stroke-width="3"/>
+            <path d="M 60 80 L 140 80" stroke="#ff6b6b" stroke-width="4"/>
+            <path d="M 100 40 L 100 80" stroke="#ff6b6b" stroke-width="4"/>
+            <text x="100" y="140" text-anchor="middle" font-size="14" fill="#666">Half shaded</text>
+            
+            <!-- 1/4 -->
+            <text x="300" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">1/4</text>
+            <circle cx="300" cy="80" r="40" fill="none" stroke="#333" stroke-width="3"/>
+            <path d="M 300 40 L 300 80" stroke="#4ecdc4" stroke-width="4"/>
+            <path d="M 300 80 L 340 80" stroke="#4ecdc4" stroke-width="4"/>
+            <path d="M 300 40 L 340 40" stroke="#4ecdc4" stroke-width="4"/>
+            <path d="M 340 40 L 340 80" stroke="#4ecdc4" stroke-width="4"/>
+            <text x="300" y="140" text-anchor="middle" font-size="14" fill="#666">Quarter shaded</text>
+            
+            <!-- 3/4 -->
+            <text x="200" y="180" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">3/4</text>
+            <circle cx="200" cy="230" r="40" fill="none" stroke="#333" stroke-width="3"/>
+            <path d="M 200 190 L 200 230" stroke="#45b7d1" stroke-width="4"/>
+            <path d="M 200 230 L 240 230" stroke="#45b7d1" stroke-width="4"/>
+            <path d="M 200 190 L 240 190" stroke="#45b7d1" stroke-width="4"/>
+            <path d="M 240 190 L 240 230" stroke="#45b7d1" stroke-width="4"/>
+            <path d="M 200 190 L 240 230" stroke="#45b7d1" stroke-width="4"/>
+            <text x="200" y="290" text-anchor="middle" font-size="14" fill="#666">Three quarters shaded</text>
+        </svg>
+        """,
+        "caption": "Fractions show parts of a whole circle"
+    }
+
+def create_multiplication_visual() -> Dict:
+    """Create a simple multiplication visual"""
+    return {
+        "type": "multiplication",
+        "title": "Multiplication Visual",
+        "description": "See multiplication as arrays!",
+        "svg": """
+        <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="300" fill="#f0fff0"/>
+            <text x="200" y="30" text-anchor="middle" font-size="24" font-weight="bold" fill="#333">3 × 4 = 12</text>
+            
+            <!-- Array grid -->
+            <g transform="translate(150, 80)">
+                <!-- Row 1 -->
+                <circle cx="0" cy="0" r="12" fill="#ff6b6b"/>
+                <circle cx="30" cy="0" r="12" fill="#4ecdc4"/>
+                <circle cx="60" cy="0" r="12" fill="#45b7d1"/>
+                <circle cx="90" cy="0" r="12" fill="#ffa07a"/>
+                
+                <!-- Row 2 -->
+                <circle cx="0" cy="30" r="12" fill="#98d8c8"/>
+                <circle cx="30" cy="30" r="12" fill="#ff6b6b"/>
+                <circle cx="60" cy="30" r="12" fill="#4ecdc4"/>
+                <circle cx="90" cy="30" r="12" fill="#45b7d1"/>
+                
+                <!-- Row 3 -->
+                <circle cx="0" cy="60" r="12" fill="#ffa07a"/>
+                <circle cx="30" cy="60" r="12" fill="#98d8c8"/>
+                <circle cx="60" cy="60" r="12" fill="#ff6b6b"/>
+                <circle cx="90" cy="60" r="12" fill="#4ecdc4"/>
+            </g>
+            
+            <!-- Labels -->
+            <text x="120" y="110" font-size="16" fill="#666">3 rows</text>
+            <text x="280" y="110" font-size="16" fill="#666">4 columns</text>
+            
+            <text x="200" y="180" text-anchor="middle" font-size="18" font-weight="bold" fill="#28a745">3 rows × 4 columns = 12 total!</text>
+            
+            <!-- Count animation -->
+            <text x="200" y="220" text-anchor="middle" font-size="14" fill="#666">Count all the circles: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12</text>
+        </svg>
+        """,
+        "caption": "3 rows of 4 items = 12 total items"
+    }
+
+def create_addition_visual() -> Dict:
+    """Create a simple addition visual"""
+    return {
+        "type": "addition",
+        "title": "Addition Visual",
+        "description": "See addition on a number line!",
+        "svg": """
+        <svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="200" fill="#f0f8ff"/>
+            <text x="200" y="30" text-anchor="middle" font-size="24" font-weight="bold" fill="#333">5 + 3 = ?</text>
+            
+            <!-- Number line -->
+            <line x1="50" y1="100" x2="350" y2="100" stroke="#333" stroke-width="3"/>
+            
+            <!-- Numbers -->
+            <text x="50" y="120" text-anchor="middle" font-size="16" fill="#333">0</text>
+            <text x="80" y="120" text-anchor="middle" font-size="16" fill="#333">1</text>
+            <text x="110" y="120" text-anchor="middle" font-size="16" fill="#333">2</text>
+            <text x="140" y="120" text-anchor="middle" font-size="16" fill="#333">3</text>
+            <text x="170" y="120" text-anchor="middle" font-size="16" fill="#333">4</text>
+            <text x="200" y="120" text-anchor="middle" font-size="16" fill="#333">5</text>
+            <text x="230" y="120" text-anchor="middle" font-size="16" fill="#333">6</text>
+            <text x="260" y="120" text-anchor="middle" font-size="16" fill="#333">7</text>
+            <text x="290" y="120" text-anchor="middle" font-size="16" fill="#333">8</text>
+            <text x="320" y="120" text-anchor="middle" font-size="16" fill="#333">9</text>
+            <text x="350" y="120" text-anchor="middle" font-size="16" fill="#333">10</text>
+            
+            <!-- Start at 5 -->
+            <circle cx="200" cy="100" r="8" fill="#4facfe"/>
+            <text x="200" y="80" text-anchor="middle" font-size="14" font-weight="bold" fill="#4facfe">START</text>
+            
+            <!-- Jump +3 -->
+            <path d="M 200 100 L 290 100" stroke="#ff6b6b" stroke-width="4" marker-end="url(#arrow)"/>
+            <text x="245" y="85" text-anchor="middle" font-size="14" font-weight="bold" fill="#ff6b6b">+3</text>
+            
+            <!-- End at 8 -->
+            <circle cx="290" cy="100" r="8" fill="#28a745"/>
+            <text x="290" y="80" text-anchor="middle" font-size="14" font-weight="bold" fill="#28a745">END</text>
+            
+            <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="#ff6b6b"/>
+                </marker>
+            </defs>
+            
+            <text x="200" y="160" text-anchor="middle" font-size="18" font-weight="bold" fill="#28a745">Answer: 5 + 3 = 8</text>
+        </svg>
+        """,
+        "caption": "Start at 5, jump 3 spaces forward = 8"
+    }
+
+def create_geometry_visual() -> Dict:
+    """Create a simple geometry visual"""
+    return {
+        "type": "geometry",
+        "title": "Geometric Shapes",
+        "description": "Learn about different shapes!",
+        "svg": """
+        <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="300" fill="#fff8f0"/>
+            
+            <!-- Triangle -->
+            <text x="100" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Triangle</text>
+            <polygon points="100,60 80,100 120,100" fill="#ff6b6b" stroke="#333" stroke-width="2"/>
+            <text x="100" y="120" text-anchor="middle" font-size="12" fill="#666">3 sides</text>
+            
+            <!-- Square -->
+            <text x="200" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Square</text>
+            <rect x="180" y="60" width="40" height="40" fill="#4ecdc4" stroke="#333" stroke-width="2"/>
+            <text x="200" y="120" text-anchor="middle" font-size="12" fill="#666">4 equal sides</text>
+            
+            <!-- Circle -->
+            <text x="300" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Circle</text>
+            <circle cx="300" cy="80" r="20" fill="#45b7d1" stroke="#333" stroke-width="2"/>
+            <text x="300" y="120" text-anchor="middle" font-size="12" fill="#666">No sides</text>
+            
+            <!-- Rectangle -->
+            <text x="150" y="180" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Rectangle</text>
+            <rect x="120" y="200" width="60" height="30" fill="#ffa07a" stroke="#333" stroke-width="2"/>
+            <text x="150" y="250" text-anchor="middle" font-size="12" fill="#666">4 sides (2 long, 2 short)</text>
+            
+            <!-- Pentagon -->
+            <text x="300" y="180" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Pentagon</text>
+            <polygon points="300,200 315,210 310,225 290,225 285,210" fill="#98d8c8" stroke="#333" stroke-width="2"/>
+            <text x="300" y="250" text-anchor="middle" font-size="12" fill="#666">5 sides</text>
+        </svg>
+        """,
+        "caption": "Different shapes have different numbers of sides"
+    }
+
+def create_math_general_visual() -> Dict:
+    """Create a general math visual"""
+    return {
+        "type": "math_general",
+        "title": "Math Concepts",
+        "description": "Explore math concepts visually!",
+        "svg": """
+        <svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="200" fill="#f0f8ff"/>
+            <text x="200" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">Math is Everywhere!</text>
+            
+            <!-- Math symbols -->
+            <text x="100" y="80" font-size="40" fill="#ff6b6b">+</text>
+            <text x="150" y="80" font-size="40" fill="#4ecdc4">-</text>
+            <text x="200" y="80" font-size="40" fill="#45b7d1">×</text>
+            <text x="250" y="80" font-size="40" fill="#ffa07a">÷</text>
+            <text x="300" y="80" font-size="40" fill="#98d8c8">=</text>
+            
+            <text x="200" y="120" text-anchor="middle" font-size="16" fill="#666">Addition, Subtraction, Multiplication, Division</text>
+            <text x="200" y="150" text-anchor="middle" font-size="14" fill="#666">All these operations help us solve problems!</text>
+        </svg>
+        """,
+        "caption": "Math operations help us solve problems"
+    }
+
+def create_science_visual(lesson_title: str) -> Dict:
+    """Create a science visual"""
+    return {
+        "type": "science",
+        "title": "Science Visual",
+        "description": "Explore science concepts!",
+        "svg": """
+        <svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="200" fill="#f0fff0"/>
+            <text x="200" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">Science is Amazing!</text>
+            
+            <!-- Science symbols -->
+            <circle cx="100" cy="80" r="15" fill="#ff6b6b"/>
+            <text x="100" y="110" text-anchor="middle" font-size="12" fill="#666">Atom</text>
+            
+            <rect x="150" y="65" width="30" height="30" fill="#4ecdc4"/>
+            <text x="165" y="110" text-anchor="middle" font-size="12" fill="#666">Cell</text>
+            
+            <polygon points="250,65 265,80 250,95 235,80" fill="#45b7d1"/>
+            <text x="250" y="110" text-anchor="middle" font-size="12" fill="#666">Crystal</text>
+            
+            <circle cx="320" cy="80" r="15" fill="#ffa07a"/>
+            <text x="320" y="110" text-anchor="middle" font-size="12" fill="#666">Planet</text>
+            
+            <text x="200" y="140" text-anchor="middle" font-size="14" fill="#666">Science helps us understand the world!</text>
+        </svg>
+        """,
+        "caption": "Science helps us understand the world around us"
+    }
+
+def create_ela_visual(lesson_title: str) -> Dict:
+    """Create an ELA visual"""
+    return {
+        "type": "ela",
+        "title": "Language Arts Visual",
+        "description": "Explore language and reading!",
+        "svg": """
+        <svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="200" fill="#fff8f0"/>
+            <text x="200" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">Language Arts!</text>
+            
+            <!-- Books -->
+            <rect x="80" y="60" width="20" height="30" fill="#ff6b6b"/>
+            <rect x="105" y="60" width="20" height="30" fill="#4ecdc4"/>
+            <rect x="130" y="60" width="20" height="30" fill="#45b7d1"/>
+            
+            <!-- Letters -->
+            <text x="200" y="80" font-size="30" fill="#ffa07a">A</text>
+            <text x="230" y="80" font-size="30" fill="#98d8c8">B</text>
+            <text x="260" y="80" font-size="30" fill="#ff6b6b">C</text>
+            
+            <!-- Words -->
+            <text x="200" y="120" text-anchor="middle" font-size="16" fill="#666">Reading • Writing • Speaking</text>
+            <text x="200" y="150" text-anchor="middle" font-size="14" fill="#666">Language helps us communicate!</text>
+        </svg>
+        """,
+        "caption": "Language arts help us communicate and express ideas"
+    }
+
+def create_general_visual(lesson_data: Dict) -> Dict:
+    """Create a general visual for any lesson"""
+    title = lesson_data.get('title', 'Learning')
+    return {
+        "type": "general",
+        "title": f"{title} Visual",
+        "description": "Visual learning helps you understand better!",
+        "svg": """
+        <svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="200" fill="#f8f9fa"/>
+            <text x="200" y="40" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">Learning is Fun!</text>
+            
+            <!-- Light bulb -->
+            <circle cx="200" cy="100" r="25" fill="#ffea00" stroke="#333" stroke-width="2"/>
+            <text x="200" y="105" text-anchor="middle" font-size="20" fill="#333">💡</text>
+            
+            <!-- Stars -->
+            <text x="150" y="80" font-size="20" fill="#ff6b6b">⭐</text>
+            <text x="250" y="80" font-size="20" fill="#4ecdc4">⭐</text>
+            <text x="150" y="130" font-size="20" fill="#45b7d1">⭐</text>
+            <text x="250" y="130" font-size="20" fill="#ffa07a">⭐</text>
+            
+            <text x="200" y="160" text-anchor="middle" font-size="14" fill="#666">Keep learning and exploring!</text>
+        </svg>
+        """,
+        "caption": "Visual learning makes everything easier to understand"
+    }
