@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Dashboard - Mission Control</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/parent_dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1><i class="fas fa-rocket"></i> Parent Mission Control</h1>
+                <p class="header-subtitle">Your daughters' learning journey at a glance</p>
+            </div>
+            <div class="header-right">
+                <a href="/parent/curriculum-planner" class="header-btn">
+                    <i class="fas fa-calendar-alt"></i> Planner
+                </a>
+                <a href="/parent/sister-quests" class="header-btn">
+                    <i class="fas fa-users"></i> Quests
+                </a>
+                <a href="/parent/logout" class="header-btn logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </header>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ (digest1.lessons_completed if digest1 else 0) + (digest2.lessons_completed if digest2 else 0) }}</div>
+                    <div class="stat-label">Lessons Today</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ (digest1.time_spent_minutes if digest1 else 0) + (digest2.time_spent_minutes if digest2 else 0) }}</div>
+                    <div class="stat-label">Minutes Learning</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ (digest1.achievements_today|length if digest1 else 0) + (digest2.achievements_today|length if digest2 else 0) }}</div>
+                    <div class="stat-label">Achievements</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ (struggles1|length if struggles1 else 0) + (struggles2|length if struggles2 else 0) }}</div>
+                    <div class="stat-label">Needs Help</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Comparison -->
+        <div class="students-comparison">
+            <!-- Student 1 -->
+            <div class="student-panel">
+                <div class="student-header">
+                    <div class="student-avatar">
+                        {{ student1.name[0] if student1 else 'S1' }}
+                    </div>
+                    <div>
+                        <h2>{{ student1.name if student1 else 'Student 1' }}</h2>
+                        <p class="grade-badge">{{ student1.grade_level if student1 else 'Grade Level' }}</p>
+                    </div>
+                </div>
+
+                {% if digest1 %}
+                <!-- Today's Focus -->
+                <div class="focus-section">
+                    <h3><i class="fas fa-bullseye"></i> Today's Activity</h3>
+                    <div class="focus-stat">
+                        <span class="focus-label">Time Spent:</span>
+                        <span class="focus-value">{{ digest1.time_spent_minutes }} minutes</span>
+                    </div>
+                    <div class="focus-stat">
+                        <span class="focus-label">Lessons:</span>
+                        <span class="focus-value">{{ digest1.lessons_completed }}</span>
+                    </div>
+                    <div class="focus-stat">
+                        <span class="focus-label">Average Score:</span>
+                        <span class="focus-value">{{ "%.0f"|format(digest1.activity.avg_score or 0) }}%</span>
+                    </div>
+                </div>
+
+                <!-- Achievements Today -->
+                {% if digest1.achievements_today %}
+                <div class="achievements-section">
+                    <h3><i class="fas fa-star"></i> Achievements Today</h3>
+                    {% for achievement in digest1.achievements_today %}
+                    <div class="achievement-badge">
+                        <i class="fas fa-award"></i> {{ achievement.achievement_id }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Struggle Alerts -->
+                {% if struggles1 %}
+                <div class="struggles-section">
+                    <h3><i class="fas fa-exclamation-circle"></i> Needs Attention</h3>
+                    {% for struggle in struggles1 %}
+                    <div class="struggle-item">
+                        <div class="struggle-header">
+                            <strong>{{ struggle.topic }}</strong>
+                            <span class="severity-badge severity-{{ struggle.severity }}">
+                                {{ struggle.severity }}
+                            </span>
+                        </div>
+                        <div class="struggle-details">
+                            <p><i class="fas fa-lightbulb"></i> {{ struggle.suggested_action.description }}</p>
+                            <p><i class="fas fa-tasks"></i> <strong>Try:</strong> {{ struggle.suggested_action.activity }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="no-activity">
+                    <i class="fas fa-moon"></i>
+                    <p>No activity today yet</p>
+                </div>
+                {% endif %}
+
+                <!-- Actions -->
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="openScheduler('student_1')">
+                        <i class="fas fa-calendar-plus"></i> Schedule Lesson
+                    </button>
+                    <button class="action-btn" onclick="openPlaylistCreator('student_1')">
+                        <i class="fas fa-list"></i> Create Playlist
+                    </button>
+                    <button class="action-btn" onclick="openInterests('student_1')">
+                        <i class="fas fa-heart"></i> Update Interests
+                    </button>
+                </div>
+            </div>
+
+            <!-- Student 2 -->
+            <div class="student-panel">
+                <div class="student-header">
+                    <div class="student-avatar">
+                        {{ student2.name[0] if student2 else 'S2' }}
+                    </div>
+                    <div>
+                        <h2>{{ student2.name if student2 else 'Student 2' }}</h2>
+                        <p class="grade-badge">{{ student2.grade_level if student2 else 'Grade Level' }}</p>
+                    </div>
+                </div>
+
+                {% if digest2 %}
+                <!-- Today's Focus -->
+                <div class="focus-section">
+                    <h3><i class="fas fa-bullseye"></i> Today's Activity</h3>
+                    <div class="focus-stat">
+                        <span class="focus-label">Time Spent:</span>
+                        <span class="focus-value">{{ digest2.time_spent_minutes }} minutes</span>
+                    </div>
+                    <div class="focus-stat">
+                        <span class="focus-label">Lessons:</span>
+                        <span class="focus-value">{{ digest2.lessons_completed }}</span>
+                    </div>
+                    <div class="focus-stat">
+                        <span class="focus-label">Average Score:</span>
+                        <span class="focus-value">{{ "%.0f"|format(digest2.activity.avg_score or 0) }}%</span>
+                    </div>
+                </div>
+
+                <!-- Achievements Today -->
+                {% if digest2.achievements_today %}
+                <div class="achievements-section">
+                    <h3><i class="fas fa-star"></i> Achievements Today</h3>
+                    {% for achievement in digest2.achievements_today %}
+                    <div class="achievement-badge">
+                        <i class="fas fa-award"></i> {{ achievement.achievement_id }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Struggle Alerts -->
+                {% if struggles2 %}
+                <div class="struggles-section">
+                    <h3><i class="fas fa-exclamation-circle"></i> Needs Attention</h3>
+                    {% for struggle in struggles2 %}
+                    <div class="struggle-item">
+                        <div class="struggle-header">
+                            <strong>{{ struggle.topic }}</strong>
+                            <span class="severity-badge severity-{{ struggle.severity }}">
+                                {{ struggle.severity }}
+                            </span>
+                        </div>
+                        <div class="struggle-details">
+                            <p><i class="fas fa-lightbulb"></i> {{ struggle.suggested_action.description }}</p>
+                            <p><i class="fas fa-tasks"></i> <strong>Try:</strong> {{ struggle.suggested_action.activity }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="no-activity">
+                    <i class="fas fa-moon"></i>
+                    <p>No activity today yet</p>
+                </div>
+                {% endif %}
+
+                <!-- Actions -->
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="openScheduler('student_2')">
+                        <i class="fas fa-calendar-plus"></i> Schedule Lesson
+                    </button>
+                    <button class="action-btn" onclick="openPlaylistCreator('student_2')">
+                        <i class="fas fa-list"></i> Create Playlist
+                    </button>
+                    <button class="action-btn" onclick="openInterests('student_2')">
+                        <i class="fas fa-heart"></i> Update Interests
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+            <div class="action-grid">
+                <a href="/parent/create-sister-quest" class="quick-action-card">
+                    <i class="fas fa-users"></i>
+                    <span>Create Sister Quest</span>
+                </a>
+                <a href="/parent/curriculum-planner" class="quick-action-card">
+                    <i class="fas fa-calendar-week"></i>
+                    <span>Plan This Week</span>
+                </a>
+                <button onclick="createReward()" class="quick-action-card">
+                    <i class="fas fa-gift"></i>
+                    <span>New Reward</span>
+                </button>
+                <button onclick="printCertificates()" class="quick-action-card">
+                    <i class="fas fa-certificate"></i>
+                    <span>Print Certificates</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/parent_dashboard.js"></script>
+</body>
+</html>
+

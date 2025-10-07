@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sister Quests - Team Up & Learn!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/badass.css">
+    <style>
+        .quests-hero {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-radius: 30px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quests-hero::before {
+            content: "👭";
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .quests-hero h1 {
+            font-size: 5rem;
+            color: white;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quests-hero p {
+            font-size: 2rem;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quest-card {
+            background: white;
+            border-radius: 25px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            border: 5px solid #ff6b9d;
+            transition: all 0.3s;
+        }
+
+        .quest-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(255,107,157,0.3);
+        }
+
+        .quest-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px dashed #ff6b9d;
+        }
+
+        .quest-title {
+            font-size: 2.5rem;
+            color: #c44569;
+            font-weight: bold;
+        }
+
+        .quest-status {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .quest-description {
+            font-size: 1.4rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .quest-tasks {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .task-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .task-box.completed {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+        }
+
+        .task-header {
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .task-content {
+            font-size: 1.3rem;
+            color: #444;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .task-complete-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .task-complete-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(102,126,234,0.4);
+        }
+
+        .task-complete-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .completed-checkmark {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 3rem;
+            color: #28a745;
+        }
+
+        .quest-reward {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .quest-reward h3 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .quest-reward p {
+            font-size: 1.5rem;
+            color: #666;
+        }
+
+        .no-quests {
+            text-align: center;
+            padding: 5rem;
+            background: white;
+            border-radius: 30px;
+        }
+
+        .no-quests i {
+            font-size: 8rem;
+            color: #ddd;
+            margin-bottom: 2rem;
+        }
+
+        .no-quests p {
+            font-size: 2rem;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="quests-hero">
+            <h1>👭 SISTER QUESTS 👭</h1>
+            <p>Team up, learn together, and earn amazing rewards!</p>
+        </div>
+
+        <!-- Active Quests -->
+        {% if quests %}
+            {% for quest in quests %}
+            <div class="quest-card">
+                <div class="quest-header">
+                    <div class="quest-title">
+                        <i class="fas fa-flag-checkered"></i> {{ quest.quest_name }}
+                    </div>
+                    <div class="quest-status">
+                        {% if quest.student1_completed and quest.student2_completed %}
+                            ✅ COMPLETED!
+                        {% else %}
+                            🔥 IN PROGRESS
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="quest-description">
+                    {{ quest.description }}
+                </div>
+
+                <div class="quest-tasks">
+                    <!-- Task 1 -->
+                    <div class="task-box {% if quest.student1_completed %}completed{% endif %}">
+                        {% if quest.student1_completed %}
+                        <div class="completed-checkmark">✅</div>
+                        {% endif %}
+                        
+                        <div class="task-header">
+                            <i class="fas fa-user"></i> Sister 1's Mission
+                        </div>
+                        <div class="task-content">
+                            {{ quest.student1_task }}
+                        </div>
+                        
+                        {% if not quest.student1_completed %}
+                        <button 
+                            class="task-complete-btn" 
+                            onclick="completeTask({{ quest.id }}, 'student_1')"
+                        >
+                            <i class="fas fa-check-circle"></i> Mark Complete
+                        </button>
+                        {% else %}
+                        <button class="task-complete-btn" disabled>
+                            <i class="fas fa-star"></i> Mission Accomplished!
+                        </button>
+                        {% endif %}
+                    </div>
+
+                    <!-- Task 2 -->
+                    <div class="task-box {% if quest.student2_completed %}completed{% endif %}">
+                        {% if quest.student2_completed %}
+                        <div class="completed-checkmark">✅</div>
+                        {% endif %}
+                        
+                        <div class="task-header">
+                            <i class="fas fa-user"></i> Sister 2's Mission
+                        </div>
+                        <div class="task-content">
+                            {{ quest.student2_task }}
+                        </div>
+                        
+                        {% if not quest.student2_completed %}
+                        <button 
+                            class="task-complete-btn" 
+                            onclick="completeTask({{ quest.id }}, 'student_2')"
+                        >
+                            <i class="fas fa-check-circle"></i> Mark Complete
+                        </button>
+                        {% else %}
+                        <button class="task-complete-btn" disabled>
+                            <i class="fas fa-star"></i> Mission Accomplished!
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Reward -->
+                <div class="quest-reward">
+                    <h3><i class="fas fa-gift"></i> Team Reward</h3>
+                    <p>{{ quest.reward }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-quests">
+                <i class="fas fa-users"></i>
+                <p>No active sister quests right now!</p>
+                <p style="font-size: 1.3rem; margin-top: 1rem; color: #bbb;">
+                    Ask your parent to create an epic quest for you!
+                </p>
+            </div>
+        {% endif %}
+
+        <!-- Back Button -->
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="/" class="badass-btn">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function completeTask(questId, studentId) {
+            if (!confirm('Mark this task as complete?')) return;
+
+            fetch(`/api/sister-quest/${questId}/complete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    student_id: studentId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Check if quest is fully complete
+                    if (data.quest_completed) {
+                        // Epic celebration!
+                        alert('🎉🎉🎉 QUEST COMPLETE! You both did it! 🎉🎉🎉');
+                        createCelebration();
+                    } else {
+                        alert('✅ Task complete! Waiting for your sister to finish her part!');
+                    }
+                    location.reload();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function createCelebration() {
+            // Create confetti explosion
+            for (let i = 0; i < 100; i++) {
+                createConfetti();
+            }
+        }
+
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.style.position = 'fixed';
+            confetti.style.left = Math.random() * window.innerWidth + 'px';
+            confetti.style.top = '-20px';
+            confetti.style.fontSize = '30px';
+            confetti.textContent = ['🎉', '⭐', '🏆', '💖', '👭'][Math.floor(Math.random() * 5)];
+            confetti.style.zIndex = '9999';
+            document.body.appendChild(confetti);
+
+            const fall = confetti.animate([
+                { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                { transform: `translateY(${window.innerHeight}px) rotate(720deg)`, opacity: 0 }
+            ], {
+                duration: 3000 + Math.random() * 2000,
+                easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+            });
+
+            fall.onfinish = () => confetti.remove();
+        }
+    </script>
+</body>
+</html>
+

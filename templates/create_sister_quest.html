@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Sister Quest</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/parent_dashboard.css">
+    <style>
+        .quest-creator {
+            max-width: 900px;
+            margin: 2rem auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .quest-creator h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .task-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .task-box-creator {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 3px solid #667eea;
+        }
+
+        .task-box-creator h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1.5rem;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102,126,234,0.4);
+        }
+
+        .quest-examples {
+            background: #fffbf0;
+            padding: 2rem;
+            border-radius: 15px;
+            border: 3px solid #ffd700;
+            margin-bottom: 2rem;
+        }
+
+        .quest-examples h3 {
+            color: #f0ad4e;
+            margin-bottom: 1rem;
+        }
+
+        .example-quest {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 0.5rem 0;
+            border-left: 4px solid #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="quest-creator">
+        <h1><i class="fas fa-users"></i> Create Sister Quest</h1>
+
+        <!-- Example Quests -->
+        <div class="quest-examples">
+            <h3><i class="fas fa-lightbulb"></i> Quest Ideas</h3>
+            <div class="example-quest">
+                <strong>The Great Salt Lake Ecosystem</strong><br>
+                Sister 1: Research brine shrimp | Sister 2: Research migratory birds
+            </div>
+            <div class="example-quest">
+                <strong>Cottonwood Canyon Geology</strong><br>
+                Sister 1: Study glacial formation | Sister 2: Research local minerals
+            </div>
+            <div class="example-quest">
+                <strong>Family Recipe Book</strong><br>
+                Sister 1: Convert measurements to fractions | Sister 2: Calculate nutrition
+            </div>
+        </div>
+
+        <form id="quest-form">
+            <div class="form-group">
+                <label for="quest_name">
+                    <i class="fas fa-flag"></i> Quest Name
+                </label>
+                <input 
+                    type="text" 
+                    id="quest_name" 
+                    name="quest_name" 
+                    placeholder="E.g., 'The Amazing Utah Geology Project'"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="description">
+                    <i class="fas fa-align-left"></i> Quest Description
+                </label>
+                <textarea 
+                    id="description" 
+                    name="description" 
+                    placeholder="Describe the overall quest and what they'll learn together..."
+                    required
+                ></textarea>
+            </div>
+
+            <div class="task-grid">
+                <div class="task-box-creator">
+                    <h3><i class="fas fa-user"></i> Student 1's Task</h3>
+                    <textarea 
+                        id="student1_task" 
+                        name="student1_task" 
+                        placeholder="What should student 1 do or research?"
+                        style="width: 100%; min-height: 150px; padding: 1rem; border-radius: 10px; border: 2px solid #e0e0e0;"
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="task-box-creator">
+                    <h3><i class="fas fa-user"></i> Student 2's Task</h3>
+                    <textarea 
+                        id="student2_task" 
+                        name="student2_task" 
+                        placeholder="What should student 2 do or research?"
+                        style="width: 100%; min-height: 150px; padding: 1rem; border-radius: 10px; border: 2px solid #e0e0e0;"
+                        required
+                    ></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="reward">
+                    <i class="fas fa-gift"></i> Team Reward
+                </label>
+                <input 
+                    type="text" 
+                    id="reward" 
+                    name="reward" 
+                    placeholder="E.g., 'Family movie night' or 'Bake cookies together'"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-rocket"></i> Create Epic Quest!
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="/parent/dashboard" style="color: #667eea; text-decoration: none; font-weight: 600;">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('quest-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = {
+                quest_name: document.getElementById('quest_name').value,
+                description: document.getElementById('description').value,
+                student1_id: 'student_1',
+                student2_id: 'student_2',
+                student1_task: document.getElementById('student1_task').value,
+                student2_task: document.getElementById('student2_task').value,
+                reward: document.getElementById('reward').value
+            };
+
+            fetch('/parent/create-sister-quest', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('🎉 Sister Quest Created! Your daughters will see it on their quest page!');
+                    window.location.href = '/parent/dashboard';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error creating quest. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curriculum Planner - Schedule Your Week</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/parent_dashboard.css">
+    <style>
+        .planner-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .planner-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .planner-header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .planner-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        /* Lesson Library */
+        .lesson-library {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .lesson-library h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .subject-list {
+            list-style: none;
+        }
+
+        .subject-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .subject-btn {
+            width: 100%;
+            background: #f0f3ff;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 0.75rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .subject-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .topic-list {
+            padding-left: 1rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .topic-list.active {
+            display: block;
+        }
+
+        .lesson-item {
+            background: #f8f9fa;
+            padding: 0.5rem;
+            margin: 0.25rem 0;
+            border-radius: 5px;
+            cursor: grab;
+            font-size: 0.9rem;
+            border-left: 3px solid #667eea;
+        }
+
+        .lesson-item:hover {
+            background: #e9ecef;
+        }
+
+        /* Calendar */
+        .calendar {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .student-selector {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .student-tab {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            background: #e9ecef;
+            color: #666;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .student-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1rem;
+        }
+
+        .day-column {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            min-height: 400px;
+        }
+
+        .day-header {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #667eea;
+            text-align: center;
+        }
+
+        .scheduled-lesson {
+            background: white;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid #667eea;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .drop-zone {
+            border: 2px dashed #ccc;
+            padding: 2rem;
+            text-align: center;
+            color: #999;
+            border-radius: 10px;
+            min-height: 100px;
+        }
+
+        .drop-zone.drag-over {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="planner-container">
+        <div class="planner-header">
+            <h1><i class="fas fa-calendar-alt"></i> Curriculum Planner</h1>
+            <p>Drag lessons to schedule them for your daughters</p>
+        </div>
+
+        <div class="planner-layout">
+            <!-- Lesson Library -->
+            <div class="lesson-library">
+                <h2><i class="fas fa-book"></i> Lesson Library</h2>
+                <ul class="subject-list">
+                    {% for subject in subjects %}
+                    <li class="subject-item">
+                        <button class="subject-btn" onclick="toggleSubject({{ subject.id }})">
+                            {{ subject.icon }} {{ subject.name }}
+                        </button>
+                        <div id="subject-{{ subject.id }}" class="topic-list">
+                            <!-- Topics will be loaded here -->
+                            <div class="drop-zone">Click to load topics...</div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Calendar -->
+            <div class="calendar">
+                <div class="calendar-header">
+                    <h2><i class="fas fa-calendar-week"></i> This Week</h2>
+                    <div class="student-selector">
+                        <button class="student-tab active" onclick="selectStudent('student_1')">
+                            Student 1
+                        </button>
+                        <button class="student-tab" onclick="selectStudent('student_2')">
+                            Student 2
+                        </button>
+                    </div>
+                </div>
+
+                <div class="week-grid" id="calendar-grid">
+                    <!-- Days of the week -->
+                    <div class="day-column">
+                        <div class="day-header">Monday</div>
+                        <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            Drag lessons here
+                        </div>
+                    </div>
+                    <div class="day-column">
+                        <div class="day-header">Tuesday</div>
+                        <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            Drag lessons here
+                        </div>
+                    </div>
+                    <div class="day-column">
+                        <div class="day-header">Wednesday</div>
+                        <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            Drag lessons here
+                        </div>
+                    </div>
+                    <div class="day-column">
+                        <div class="day-header">Thursday</div>
+                        <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            Drag lessons here
+                        </div>
+                    </div>
+                    <div class="day-column">
+                        <div class="day-header">Friday</div>
+                        <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            Drag lessons here
+                        </div>
+                    </div>
+                    <div class="day-column">
+                        <div class="day-header">Saturday</div>
+                        <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            Drag lessons here
+                        </div>
+                    </div>
+                    <div class="day-column">
+                        <div class="day-header">Sunday</div>
+                        <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            Drag lessons here
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="/parent/dashboard" class="header-btn" style="background: #667eea; padding: 1rem 2rem; display: inline-block;">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let currentStudent = 'student_1';
+
+        function toggleSubject(subjectId) {
+            const topicList = document.getElementById(`subject-${subjectId}`);
+            const isActive = topicList.classList.contains('active');
+            
+            // Close all others
+            document.querySelectorAll('.topic-list').forEach(tl => tl.classList.remove('active'));
+            
+            if (!isActive) {
+                topicList.classList.add('active');
+                // Load topics if not already loaded
+                if (topicList.querySelector('.drop-zone')) {
+                    loadTopics(subjectId);
+                }
+            }
+        }
+
+        function loadTopics(subjectId) {
+            fetch(`/api/subject/${subjectId}/topics`)
+                .then(response => response.json())
+                .then(topics => {
+                    const topicList = document.getElementById(`subject-${subjectId}`);
+                    topicList.innerHTML = '';
+                    
+                    topics.forEach(topic => {
+                        const topicDiv = document.createElement('div');
+                        topicDiv.innerHTML = `
+                            <div style="margin: 0.5rem 0;">
+                                <strong>${topic.name}</strong>
+                            </div>
+                        `;
+                        topicList.appendChild(topicDiv);
+                        
+                        // Load lessons for this topic
+                        loadLessons(topic.id, topicDiv);
+                    });
+                });
+        }
+
+        function loadLessons(topicId, container) {
+            fetch(`/api/topic/${topicId}/lessons`)
+                .then(response => response.json())
+                .then(lessons => {
+                    lessons.forEach(lesson => {
+                        const lessonDiv = document.createElement('div');
+                        lessonDiv.className = 'lesson-item';
+                        lessonDiv.draggable = true;
+                        lessonDiv.dataset.lessonId = lesson.id;
+                        lessonDiv.dataset.lessonTitle = lesson.title;
+                        lessonDiv.textContent = lesson.title;
+                        
+                        lessonDiv.addEventListener('dragstart', drag);
+                        container.appendChild(lessonDiv);
+                    });
+                });
+        }
+
+        function selectStudent(studentId) {
+            currentStudent = studentId;
+            document.querySelectorAll('.student-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            // TODO: Load this student's schedule
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("lessonId", ev.target.dataset.lessonId);
+            ev.dataTransfer.setData("lessonTitle", ev.target.dataset.lessonTitle);
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.add('drag-over');
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('drag-over');
+            
+            const lessonId = ev.dataTransfer.getData("lessonId");
+            const lessonTitle = ev.dataTransfer.getData("lessonTitle");
+            
+            // Get the day
+            const dayColumn = ev.currentTarget.closest('.day-column');
+            const dayName = dayColumn.querySelector('.day-header').textContent;
+            
+            // Calculate date for this day
+            const today = new Date();
+            const dayIndex = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].indexOf(dayName);
+            const currentDay = today.getDay();
+            const daysToAdd = (dayIndex + 1 - currentDay + 7) % 7;
+            const targetDate = new Date(today);
+            targetDate.setDate(today.getDate() + daysToAdd);
+            const dateStr = targetDate.toISOString().split('T')[0];
+            
+            // Schedule the lesson
+            fetch('/parent/schedule-lesson', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    student_id: currentStudent,
+                    lesson_id: parseInt(lessonId),
+                    date: dateStr
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'scheduled') {
+                    // Add to calendar
+                    const scheduledDiv = document.createElement('div');
+                    scheduledDiv.className = 'scheduled-lesson';
+                    scheduledDiv.innerHTML = `
+                        <i class="fas fa-book"></i> ${lessonTitle}
+                        <br><small>${dateStr}</small>
+                    `;
+                    ev.currentTarget.appendChild(scheduledDiv);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
+

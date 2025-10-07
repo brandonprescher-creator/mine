@@ -3,12 +3,16 @@ Main blueprint for core pages
 Handles home, subjects, topics, lessons
 """
 
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, session
 from database import (
     get_all_subjects,
     get_topics_by_subject,
     get_lessons_by_topic,
     get_lesson_by_id,
+)
+from database_parent_features import (
+    get_active_sister_quests,
+    complete_sister_quest_task,
 )
 
 main_bp = Blueprint("main", __name__)
@@ -67,3 +71,36 @@ def lesson_view(lesson_id):
         return "Lesson not found", 404
 
     return render_template("lesson.html", lesson=lesson)
+
+
+@main_bp.route("/sister-quests")
+def sister_quests():
+    """Sister quests page for students"""
+    student_id = session.get("student_id", "student_1")
+    quests = get_active_sister_quests(student_id)
+    return render_template("sister_quests.html", quests=quests)
+
+
+@main_bp.route("/api/sister-quest/<int:quest_id>/complete", methods=["POST"])
+def complete_quest_task(quest_id):
+    """Mark a sister quest task as complete"""
+    data = request.json
+    student_id = data.get("student_id")
+
+    complete_sister_quest_task(quest_id, student_id)
+
+    # Check if quest is fully complete
+    from database_parent_features import get_connection
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT student1_completed, student2_completed FROM sister_quests WHERE id = ?",
+        (quest_id,),
+    )
+    quest = cursor.fetchone()
+    conn.close()
+
+    quest_completed = quest["student1_completed"] and quest["student2_completed"]
+
+    return jsonify({"success": True, "quest_completed": quest_completed})

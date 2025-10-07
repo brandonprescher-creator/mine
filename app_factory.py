@@ -8,6 +8,7 @@ from flask import Flask
 from flask_socketio import SocketIO
 from config import get_config
 from blueprints import main_bp, api_bp, uploads_bp, games_bp
+from blueprints.parent import parent_bp
 from open_learning.router import bp as open_learning_bp
 
 
@@ -33,6 +34,7 @@ def create_app(test_config=None):
     app.register_blueprint(api_bp, url_prefix="/api")
     app.register_blueprint(uploads_bp, url_prefix="/uploads")
     app.register_blueprint(games_bp, url_prefix="/games")
+    app.register_blueprint(parent_bp)
     app.register_blueprint(open_learning_bp, url_prefix="/api")
 
     # Initialize SocketIO
@@ -60,6 +62,7 @@ def create_app_only():
     app.register_blueprint(api_bp, url_prefix="/api")
     app.register_blueprint(uploads_bp, url_prefix="/uploads")
     app.register_blueprint(games_bp, url_prefix="/games")
+    app.register_blueprint(parent_bp)
     app.register_blueprint(open_learning_bp, url_prefix="/api")
 
     return app

@@ -148,5 +148,74 @@ def install_hooks():
     subprocess.run(["pre-commit", "install"])
 
 
+@cli.command()
+def init_parent_features():
+    """Initialize Parent Dashboard database tables."""
+    from database_parent_features import init_parent_dashboard_tables
+
+    click.echo("Initializing Parent Dashboard tables...")
+    init_parent_dashboard_tables()
+    click.echo("Parent Dashboard tables created successfully!")
+
+
+@cli.command()
+def seed_new_subjects():
+    """Seed the 50+ new revolutionary subjects."""
+    from NEW_SUBJECTS_CURRICULUM import seed_all_new_subjects
+
+    click.echo("Seeding 50+ new subjects...")
+    seed_all_new_subjects()
+    click.echo("New subjects seeded successfully!")
+
+
+@cli.command()
+@click.option("--name", prompt="Student name", help="Student's full name")
+@click.option("--grade", prompt="Grade level", help="E.g., '4th Grade'")
+@click.option("--age", prompt="Age", type=int, help="Student's age")
+@click.option(
+    "--interests", prompt="Interests (comma-separated)", help="E.g., 'horses,art,science'"
+)
+def create_student(name, grade, age, interests):
+    """Create a new student profile."""
+    from database_parent_features import create_student_profile
+    import random
+
+    student_id = f"student_{random.randint(1000, 9999)}"
+    interest_list = [i.strip() for i in interests.split(",")]
+
+    profile_id = create_student_profile(
+        student_id=student_id,
+        name=name,
+        grade_level=grade,
+        age=age,
+        interests=interest_list,
+    )
+
+    click.echo(f"Student profile created! ID: {student_id}")
+
+
+@cli.command()
+def test_certificates():
+    """Test certificate generation."""
+    from certificate_generator import CertificateGenerator
+
+    gen = CertificateGenerator()
+
+    click.echo("Generating test certificates...")
+
+    cert1 = gen.generate_certificate("Test Student", "Complete 10 Math Lessons")
+    click.echo(f"Generated: {cert1}")
+
+    cert2 = gen.generate_mastery_certificate("Test Student", "Mathematics", 15)
+    click.echo(f"Generated: {cert2}")
+
+    cert3 = gen.generate_sister_quest_certificate(
+        "Student 1", "Student 2", "The Amazing Science Project"
+    )
+    click.echo(f"Generated: {cert3}")
+
+    click.echo("All test certificates generated successfully!")
+
+
 if __name__ == "__main__":
     cli()
