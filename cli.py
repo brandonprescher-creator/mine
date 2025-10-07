@@ -217,5 +217,34 @@ def test_certificates():
     click.echo("All test certificates generated successfully!")
 
 
+@cli.command()
+def load_everything():
+    """Load the complete platform - all subjects, lessons, and features."""
+    from LOAD_EVERYTHING_ULTIMATE import load_complete_platform
+    
+    click.echo("Loading complete Ultimate Homeschool Platform...")
+    load_complete_platform()
+
+
+@cli.command()
+def add_comprehensive_lessons():
+    """Add comprehensive lessons to new subjects."""
+    from COMPLETE_NEW_SUBJECTS_LESSONS import add_all_comprehensive_lessons
+    
+    click.echo("Adding comprehensive lessons...")
+    add_all_comprehensive_lessons()
+    click.echo("Comprehensive lessons added!")
+
+
+@cli.command()
+def add_utah_content():
+    """Add Utah and Cottonwood Heights specific content."""
+    from UTAH_LOCAL_CURRICULUM import seed_utah_curriculum
+    
+    click.echo("Adding Utah-specific curriculum...")
+    seed_utah_curriculum()
+    click.echo("Utah content added!")
+
+
 if __name__ == "__main__":
     cli()
