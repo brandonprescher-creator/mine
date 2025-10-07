@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student - Parent Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/parent_dashboard.css">
+    <style>
+        .add-student-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .form-group label i {
+            color: #667eea;
+            margin-right: 0.5rem;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .interests-input {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .interest-tag {
+            background: #f0f3ff;
+            color: #667eea;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .interest-tag button {
+            background: none;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .add-interest-box {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .add-interest-box input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+        }
+
+        .add-interest-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .add-interest-btn:hover {
+            background: #5568d3;
+        }
+
+        .learning-style-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .style-option {
+            background: #f8f9fa;
+            padding: 1rem;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .style-option:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+
+        .style-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .style-option i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1.5rem;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 2rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102,126,234,0.4);
+        }
+
+        .quick-interests {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .quick-interest-btn {
+            background: #f0f3ff;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .quick-interest-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 2rem;
+            border: 3px solid #28a745;
+        }
+
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="add-student-container">
+        <div class="page-header">
+            <h1><i class="fas fa-user-plus"></i> Add New Student</h1>
+            <p>Create a profile for your daughter</p>
+        </div>
+
+        <form id="student-form">
+            <!-- Basic Information -->
+            <div class="form-section">
+                <h3><i class="fas fa-id-card"></i> Basic Information</h3>
+                
+                <div class="form-group">
+                    <label for="student_name">
+                        <i class="fas fa-user"></i> Student Name
+                    </label>
+                    <input 
+                        type="text" 
+                        id="student_name" 
+                        name="student_name" 
+                        placeholder="Enter full name"
+                        required
+                    >
+                </div>
+
+                <div class="avatar-preview" id="avatar-preview">
+                    ?
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="age">
+                            <i class="fas fa-birthday-cake"></i> Age
+                        </label>
+                        <input 
+                            type="number" 
+                            id="age" 
+                            name="age" 
+                            min="5" 
+                            max="18"
+                            placeholder="Age"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="grade_level">
+                            <i class="fas fa-graduation-cap"></i> Grade Level
+                        </label>
+                        <select id="grade_level" name="grade_level" required>
+                            <option value="">Select grade...</option>
+                            <option value="Kindergarten">Kindergarten</option>
+                            <option value="1st Grade">1st Grade</option>
+                            <option value="2nd Grade">2nd Grade</option>
+                            <option value="3rd Grade">3rd Grade</option>
+                            <option value="4th Grade">4th Grade</option>
+                            <option value="5th Grade">5th Grade</option>
+                            <option value="6th Grade">6th Grade</option>
+                            <option value="7th Grade">7th Grade</option>
+                            <option value="8th Grade">8th Grade</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interests -->
+            <div class="form-section">
+                <h3><i class="fas fa-heart"></i> Interests & Hobbies</h3>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">
+                    These will be used to personalize lesson content!
+                </p>
+
+                <div class="quick-interests">
+                    <button type="button" class="quick-interest-btn" onclick="addQuickInterest('Horses')">🐴 Horses</button>
+                    <button type="button" class="quick-interest-btn" onclick="addQuickInterest('Space')">🚀 Space</button>
+                    <button type="button" class="quick-interest-btn" onclick="addQuickInterest('Art')">🎨 Art</button>
+                    <button type="button" class="quick-interest-btn" onclick="addQuickInterest('Coding')">💻 Coding</button>
+                    <button type="button" class="quick-interest-btn" onclick="addQuickInterest('Reading')">📚 Reading</button>
+                    <button type="button" class="quick-interest-btn" onclick="addQuickInterest('Science')">🔬 Science</button>
+                    <button type="button" class="quick-interest-btn" onclick="addQuickInterest('Animals')">🐾 Animals</button>
+                    <button type="button" class="quick-interest-btn" onclick="addQuickInterest('Music')">🎵 Music</button>
+                    <button type="button" class="quick-interest-btn" onclick="addQuickInterest('Sports')">⚽ Sports</button>
+                    <button type="button" class="quick-interest-btn" onclick="addQuickInterest('Minecraft')">⛏️ Minecraft</button>
+                </div>
+
+                <div class="add-interest-box">
+                    <input 
+                        type="text" 
+                        id="custom_interest" 
+                        placeholder="Or type a custom interest..."
+                    >
+                    <button type="button" class="add-interest-btn" onclick="addCustomInterest()">
+                        <i class="fas fa-plus"></i> Add
+                    </button>
+                </div>
+
+                <div class="interests-input" id="interests-container">
+                    <!-- Interest tags will appear here -->
+                </div>
+            </div>
+
+            <!-- Learning Style -->
+            <div class="form-section">
+                <h3><i class="fas fa-brain"></i> Learning Style</h3>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">
+                    How does she learn best?
+                </p>
+
+                <input type="hidden" id="learning_style" name="learning_style" value="visual">
+
+                <div class="learning-style-options">
+                    <div class="style-option selected" onclick="selectStyle('visual', this)">
+                        <i class="fas fa-eye"></i>
+                        <div>Visual</div>
+                        <small>Pictures & Diagrams</small>
+                    </div>
+                    <div class="style-option" onclick="selectStyle('auditory', this)">
+                        <i class="fas fa-headphones"></i>
+                        <div>Auditory</div>
+                        <small>Listening & Talking</small>
+                    </div>
+                    <div class="style-option" onclick="selectStyle('kinesthetic', this)">
+                        <i class="fas fa-hands"></i>
+                        <div>Hands-On</div>
+                        <small>Physical Activities</small>
+                    </div>
+                    <div class="style-option" onclick="selectStyle('reading', this)">
+                        <i class="fas fa-book"></i>
+                        <div>Reading/Writing</div>
+                        <small>Text-Based</small>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-user-plus"></i> Create Student Profile
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="/parent/dashboard" style="color: #667eea; text-decoration: none; font-weight: 600;">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let interests = [];
+
+        // Update avatar when name changes
+        document.getElementById('student_name').addEventListener('input', function(e) {
+            const name = e.target.value;
+            const preview = document.getElementById('avatar-preview');
+            if (name) {
+                preview.textContent = name.charAt(0).toUpperCase();
+            } else {
+                preview.textContent = '?';
+            }
+        });
+
+        function addQuickInterest(interest) {
+            if (!interests.includes(interest)) {
+                interests.push(interest);
+                renderInterests();
+            }
+        }
+
+        function addCustomInterest() {
+            const input = document.getElementById('custom_interest');
+            const interest = input.value.trim();
+            
+            if (interest && !interests.includes(interest)) {
+                interests.push(interest);
+                renderInterests();
+                input.value = '';
+            }
+        }
+
+        function removeInterest(interest) {
+            interests = interests.filter(i => i !== interest);
+            renderInterests();
+        }
+
+        function renderInterests() {
+            const container = document.getElementById('interests-container');
+            container.innerHTML = '';
+            
+            interests.forEach(interest => {
+                const tag = document.createElement('div');
+                tag.className = 'interest-tag';
+                tag.innerHTML = `
+                    <span>${interest}</span>
+                    <button type="button" onclick="removeInterest('${interest}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                container.appendChild(tag);
+            });
+        }
+
+        function selectStyle(style, element) {
+            // Remove selected from all
+            document.querySelectorAll('.style-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected to clicked
+            element.classList.add('selected');
+            document.getElementById('learning_style').value = style;
+        }
+
+        // Handle form submission
+        document.getElementById('student-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = {
+                name: document.getElementById('student_name').value,
+                age: parseInt(document.getElementById('age').value),
+                grade_level: document.getElementById('grade_level').value,
+                interests: interests,
+                learning_style: document.getElementById('learning_style').value
+            };
+
+            fetch('/parent/create-student', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`✅ Student profile created!\n\nStudent ID: ${data.student_id}\n\nRedirecting to dashboard...`);
+                    window.location.href = '/parent/dashboard';
+                } else {
+                    alert('❌ Error: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Error creating student profile. Please try again.');
+            });
+        });
+
+        // Allow Enter key in custom interest field
+        document.getElementById('custom_interest').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addCustomInterest();
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -236,3 +236,39 @@ def print_certificate(student_id, achievement_id):
 
     return jsonify({"success": True, "pdf_url": f"/certificates/{pdf_path}"})
 
+
+@parent_bp.route("/parent/add-student", methods=["GET"])
+@parent_required
+def add_student_page():
+    """Add student page"""
+    return render_template("add_student.html")
+
+
+@parent_bp.route("/parent/create-student", methods=["POST"])
+@parent_required
+def create_student_profile():
+    """Create a new student profile from parent dashboard"""
+    import random
+    
+    data = request.json
+    
+    # Generate unique student ID
+    student_id = f"student_{random.randint(1000, 9999)}"
+    
+    # Create profile
+    profile_id = create_student_profile(
+        student_id=student_id,
+        name=data["name"],
+        grade_level=data["grade_level"],
+        age=data["age"],
+        interests=data.get("interests", []),
+        learning_style=data.get("learning_style", "visual")
+    )
+    
+    return jsonify({
+        "success": True,
+        "student_id": student_id,
+        "profile_id": profile_id,
+        "message": f"Student profile created for {data['name']}!"
+    })
+
