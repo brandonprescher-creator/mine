@@ -246,5 +246,15 @@ def add_utah_content():
     click.echo("Utah content added!")
 
 
+@cli.command()
+def generate_practice_problems():
+    """Generate practice problems for all lessons."""
+    from GENERATE_ALL_PRACTICE_PROBLEMS import generate_practice_for_all_lessons
+    
+    click.echo("Generating practice problems for all lessons...")
+    generate_practice_for_all_lessons()
+    click.echo("Practice problems generated!")
+
+
 if __name__ == "__main__":
     cli()

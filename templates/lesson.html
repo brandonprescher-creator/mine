@@ -90,11 +90,13 @@
                 <div class="example-card-mega">
                     <div class="example-badge">Example {{ loop.index }}</div>
                     <h3 class="example-title-mega">{{ example.title or 'Example ' ~ loop.index }}</h3>
-                    <p class="example-desc-mega">{{ example.description or 'Check out this example!' }}</p>
+                    <p class="example-desc-mega">{{ example.content or example.description or 'Check out this example!' }}</p>
+                    {% if example.solution %}
                     <div class="example-solution-mega">
                         <div class="solution-icon">✅</div>
-                        <div class="solution-text">{{ example.solution or 'Solution here!' }}</div>
+                        <div class="solution-text">{{ example.solution }}</div>
                     </div>
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
