@@ -3,11 +3,12 @@
 {% block title %}{{ subject.name }} - Topics{% endblock %}
 
 {% block breadcrumbs %}
-{% include 'partials/_breadcrumbs.html' with breadcrumbs=[
+{% set breadcrumbs = [
     {'title': 'Home', 'url': '/'},
     {'title': 'Subjects', 'url': '/subjects'},
     {'title': subject.name, 'url': '#'}
 ] %}
+{% include 'partials/_breadcrumbs.html' %}
 {% endblock %}
 
 {% block content %}
@@ -53,13 +54,15 @@
             {% endfor %}
         </div>
         {% else %}
-        {% include 'partials/_empty_state.html' with 
-            icon='📖',
-            title='No Topics Yet',
-            message='Topics for this subject are being developed. Check back soon!',
-            button_text='Back to Subjects',
-            button_href='/subjects'
-        %}
+        <div class="empty-state">
+            <div class="empty-state-icon">📖</div>
+            <h3 class="text-xl font-semibold mb-2 text-dark-300">No Topics Yet</h3>
+            <p class="text-dark-500 mb-6">Topics for this subject are being developed. Check back soon!</p>
+            <button class="btn btn-primary" onclick="window.location.href='/subjects'">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Back to Subjects
+            </button>
+        </div>
         {% endif %}
     </div>
     

@@ -3,10 +3,11 @@
 {% block title %}Subjects - Ultimate Tutor Platform{% endblock %}
 
 {% block breadcrumbs %}
-{% include 'partials/_breadcrumbs.html' with breadcrumbs=[
+{% set breadcrumbs = [
     {'title': 'Home', 'url': '/'},
     {'title': 'Subjects', 'url': '#'}
 ] %}
+{% include 'partials/_breadcrumbs.html' %}
 {% endblock %}
 
 {% block content %}
@@ -37,16 +38,37 @@
     <div class="grid-responsive" id="subjects-grid">
         {% for subject in subjects %}
         <div class="subject-card-item" data-name="{{ subject.name.lower() }}" data-description="{{ subject.description.lower() }}">
-            {% include 'partials/_subject_card.html' with subject=subject %}
+            <div class="card-modern subject-card group cursor-pointer" onclick="window.location.href='/subject/{{ subject.id }}'">
+                <div class="relative z-10">
+                    <div class="text-6xl mb-4 transform group-hover:scale-110 transition-transform">
+                        {{ subject.icon }}
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 group-hover:text-primary-400 transition-colors">
+                        {{ subject.name }}
+                    </h3>
+                    <p class="text-dark-400 text-sm mb-4">
+                        {{ subject.description }}
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="badge badge-primary">
+                            <i class="fas fa-book mr-1"></i>
+                            {{ subject.topic_count if subject.topic_count else 0 }} Topics
+                        </span>
+                        <i class="fas fa-arrow-right text-primary-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    </div>
+                </div>
+            </div>
         </div>
         {% else %}
-        {% include 'partials/_empty_state.html' with 
-            icon='📚',
-            title='No Subjects Available',
-            message='Subjects will be loaded soon. Check back later!',
-            button_text='Go Home',
-            button_href='/'
-        %}
+        <div class="empty-state">
+            <div class="empty-state-icon">📚</div>
+            <h3 class="text-xl font-semibold mb-2 text-dark-300">No Subjects Available</h3>
+            <p class="text-dark-500 mb-6">Subjects will be loaded soon. Check back later!</p>
+            <button class="btn btn-primary" onclick="window.location.href='/'">
+                <i class="fas fa-home mr-2"></i>
+                Go Home
+            </button>
+        </div>
         {% endfor %}
     </div>
     

@@ -3,10 +3,11 @@
 {% block title %}Dashboard - Ultimate Tutor Platform{% endblock %}
 
 {% block breadcrumbs %}
-{% include 'partials/_breadcrumbs.html' with breadcrumbs=[
+{% set breadcrumbs = [
     {'title': 'Home', 'url': '/'},
     {'title': 'Dashboard', 'url': '#'}
 ] %}
+{% include 'partials/_breadcrumbs.html' %}
 {% endblock %}
 
 {% block content %}
@@ -26,10 +27,33 @@
     
     <!-- Quick Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        {% include 'partials/_stat_card.html' with icon='📚', value='0', label='Lessons Completed', sublabel='This month', id='lessons-completed' %}
-        {% include 'partials/_stat_card.html' with icon='🎯', value='0', label='Problems Solved', sublabel='Total', id='problems-solved' %}
-        {% include 'partials/_stat_card.html' with icon='⭐', value='0%', label='Average Score', sublabel='Last 10 attempts', id='average-score' %}
-        {% include 'partials/_stat_card.html' with icon='🔥', value='0', label='Day Streak', sublabel='Keep it up!', id='streak-days' %}
+        <div class="stat-card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-number" id="lessons-completed">0</div>
+            <div class="stat-label">Lessons Completed</div>
+            <div class="text-xs text-dark-500 mt-1">This month</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-number" id="problems-solved">0</div>
+            <div class="stat-label">Problems Solved</div>
+            <div class="text-xs text-dark-500 mt-1">Total</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-number" id="average-score">0%</div>
+            <div class="stat-label">Average Score</div>
+            <div class="text-xs text-dark-500 mt-1">Last 10 attempts</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-number" id="streak-days">0</div>
+            <div class="stat-label">Day Streak</div>
+            <div class="text-xs text-dark-500 mt-1">Keep it up!</div>
+        </div>
     </div>
     
     <!-- Progress Overview -->

@@ -56,10 +56,29 @@
 
 <!-- Stats Overview -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 animate-slide-up" style="animation-delay: 0.4s">
-    {% include 'partials/_stat_card.html' with icon='📚', value='0', label='Lessons Started', id='lessons-count' %}
-    {% include 'partials/_stat_card.html' with icon='🎯', value='0', label='Problems Solved', id='problems-solved' %}
-    {% include 'partials/_stat_card.html' with icon='🏆', value='0', label='Achievements', id='achievements' %}
-    {% include 'partials/_stat_card.html' with icon='🔥', value='0', label='Day Streak', id='streak' %}
+    <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-number" id="lessons-count">0</div>
+        <div class="stat-label">Lessons Started</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-number" id="problems-solved">0</div>
+        <div class="stat-label">Problems Solved</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-number" id="achievements">0</div>
+        <div class="stat-label">Achievements</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-number" id="streak">0</div>
+        <div class="stat-label">Day Streak</div>
+    </div>
 </div>
 
 <!-- Featured Subjects -->

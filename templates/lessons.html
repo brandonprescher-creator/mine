@@ -3,12 +3,13 @@
 {% block title %}{{ topic.name }} - Lessons{% endblock %}
 
 {% block breadcrumbs %}
-{% include 'partials/_breadcrumbs.html' with breadcrumbs=[
+{% set breadcrumbs = [
     {'title': 'Home', 'url': '/'},
     {'title': 'Subjects', 'url': '/subjects'},
     {'title': topic.subject_name, 'url': '/subject/' + (topic.subject_id|string)},
     {'title': topic.name, 'url': '#'}
 ] %}
+{% include 'partials/_breadcrumbs.html' %}
 {% endblock %}
 
 {% block content %}
@@ -25,18 +26,53 @@
         <h2 class="text-2xl font-bold mb-6">Available Lessons</h2>
         <div class="space-y-4">
             {% for lesson in lessons %}
-            {% include 'partials/_lesson_card.html' with lesson=lesson %}
+            <div class="card-modern group cursor-pointer" onclick="window.location.href='/lesson/{{ lesson.id }}'">
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="text-lg font-bold group-hover:text-primary-400 transition-colors flex-1">
+                        {{ lesson.title }}
+                    </h3>
+                    <span class="badge badge-{{ lesson.difficulty if lesson.difficulty else 'primary' }} ml-2">
+                        {{ lesson.difficulty|upper if lesson.difficulty else 'MEDIUM' }}
+                    </span>
+                </div>
+                
+                <p class="text-dark-400 text-sm mb-4">
+                    {{ lesson.description[:150] + '...' if lesson.description|length > 150 else lesson.description }}
+                </p>
+                
+                <div class="flex items-center justify-between text-sm text-dark-500">
+                    <div class="flex items-center space-x-4">
+                        <span><i class="fas fa-list-ol mr-1"></i> {{ lesson.steps|length if lesson.steps else 0 }} Steps</span>
+                        <span><i class="fas fa-puzzle-piece mr-1"></i> {{ lesson.problem_count if lesson.problem_count else 0 }} Problems</span>
+                    </div>
+                    {% if lesson.progress %}
+                    <span class="badge badge-success">
+                        <i class="fas fa-check mr-1"></i> {{ lesson.progress }}%
+                    </span>
+                    {% endif %}
+                </div>
+                
+                {% if lesson.progress %}
+                <div class="mt-3">
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" style="width: {{ lesson.progress }}%"></div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
             {% endfor %}
         </div>
     </div>
     {% else %}
-    {% include 'partials/_empty_state.html' with 
-        icon='📚',
-        title='No Lessons Available',
-        message='Lessons for this topic are being developed.',
-        button_text='Back to Topics',
-        button_onclick="history.back()"
-    %}
+    <div class="empty-state">
+        <div class="empty-state-icon">📚</div>
+        <h3 class="text-xl font-semibold mb-2 text-dark-300">No Lessons Available</h3>
+        <p class="text-dark-500 mb-6">Lessons for this topic are being developed.</p>
+        <button class="btn btn-primary" onclick="history.back()">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back to Topics
+        </button>
+    </div>
     {% endif %}
     
     <!-- Practice Section -->

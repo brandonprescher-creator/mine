@@ -3,11 +3,12 @@
 {% block title %}{{ api_name }} - API Explorer{% endblock %}
 
 {% block breadcrumbs %}
-{% include 'partials/_breadcrumbs.html' with breadcrumbs=[
+{% set breadcrumbs = [
     {'title': 'Home', 'url': '/'},
     {'title': 'API Explorer', 'url': '/api-explorer'},
     {'title': api_name, 'url': '#'}
 ] %}
+{% include 'partials/_breadcrumbs.html' %}
 {% endblock %}
 
 {% block content %}
@@ -83,13 +84,15 @@
     
     <!-- Empty State -->
     <div id="empty-state" class="hidden">
-        {% include 'partials/_empty_state.html' with 
-            icon='🔍',
-            title='No Results Found',
-            message='Try a different search term or adjust your filters',
-            button_text='Clear Filters',
-            button_onclick='clearFilters()'
-        %}
+        <div class="empty-state">
+            <div class="empty-state-icon">🔍</div>
+            <h3 class="text-xl font-semibold mb-2 text-dark-300">No Results Found</h3>
+            <p class="text-dark-500 mb-6">Try a different search term or adjust your filters</p>
+            <button class="btn btn-primary" onclick="clearFilters()">
+                <i class="fas fa-redo mr-2"></i>
+                Clear Filters
+            </button>
+        </div>
     </div>
     
     <!-- Example Queries -->
