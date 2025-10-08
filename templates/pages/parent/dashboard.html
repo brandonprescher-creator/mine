@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Parent Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto fade-in">
+    <div class="flex items-center justify-between mb-8">
+        <h1 class="heading-2 gradient-text">Parent Dashboard</h1>
+        <a href="/parent/children/add" class="btn btn-primary">
+            <i class="fas fa-plus mr-2"></i>Add Child
+        </a>
+    </div>
+    
+    <!-- Children Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {% for stat in children_stats %}
+        <div class="card-modern p-6">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <h3 class="text-2xl font-bold mb-1">{{ stat.child.name }}</h3>
+                    <p class="text-dark-500">Grade {{ stat.child.grade }}</p>
+                </div>
+                <div class="text-4xl">👦</div>
+            </div>
+            
+            <div class="space-y-3 mb-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-dark-400">Today's Work:</span>
+                    <span class="font-semibold">{{ stat.completed_today }}/{{ stat.today_assignments }}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-dark-400">Pending Reviews:</span>
+                    <span class="badge badge-warning">{{ stat.pending_reviews }}</span>
+                </div>
+            </div>
+            
+            <div class="flex gap-2">
+                <a href="/parent/planner/{{ stat.child.id }}" class="btn btn-secondary text-sm flex-1">
+                    <i class="fas fa-calendar mr-1"></i>Planner
+                </a>
+                <a href="/auth/switch-to-student/{{ stat.child.id }}" class="btn btn-secondary text-sm flex-1">
+                    <i class="fas fa-eye mr-1"></i>View As
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <a href="/parent/review" class="card-modern p-6 group hover:border-primary-500/50">
+            <div class="text-4xl mb-3">📝</div>
+            <h3 class="text-lg font-bold mb-2 group-hover:text-primary-400">Review Queue</h3>
+            <p class="text-dark-400 text-sm">Grade submitted work</p>
+        </a>
+        
+        <a href="/parent/reports" class="card-modern p-6 group hover:border-primary-500/50">
+            <div class="text-4xl mb-3">📊</div>
+            <h3 class="text-lg font-bold mb-2 group-hover:text-primary-400">Reports</h3>
+            <p class="text-dark-400 text-sm">Weekly progress & transcripts</p>
+        </a>
+        
+        <a href="/parent/settings" class="card-modern p-6 group hover:border-primary-500/50">
+            <div class="text-4xl mb-3">⚙️</div>
+            <h3 class="text-lg font-bold mb-2 group-hover:text-primary-400">Settings</h3>
+            <p class="text-dark-400 text-sm">Accommodations & preferences</p>
+        </a>
+    </div>
+</div>
+{% endblock %}

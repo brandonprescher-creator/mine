@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Today - {{ child.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto fade-in">
+    <!-- Welcome Header -->
+    <div class="card-glass p-8 mb-8">
+        <h1 class="heading-2 gradient-text mb-2">Good morning, {{ child.name }}! 🌞</h1>
+        <p class="text-dark-400">Here's what you're learning today</p>
+        <div class="mt-4 flex items-center space-x-6">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-tasks text-primary-400"></i>
+                <span>{{ assignments|length }} assignments</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-clock text-primary-400"></i>
+                <span>{{ total_minutes }} minutes today</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Today's Assignments -->
+    <div class="space-y-4">
+        {% for assignment in assignments %}
+        <div class="card-modern p-6 group cursor-pointer hover:border-primary-500/50 transition-all"
+             onclick="window.location.href='/student/assignment/{{ assignment.id }}'">
+            <div class="flex items-start justify-between">
+                <div class="flex-1">
+                    <div class="flex items-center space-x-3 mb-2">
+                        <span class="text-3xl">
+                            {% if assignment.lesson_item.subject == 'Math' %}🧮
+                            {% elif 'Language Arts' in assignment.lesson_item.subject %}📚
+                            {% elif assignment.lesson_item.subject == 'Science' %}🔬
+                            {% elif assignment.lesson_item.subject == 'Social Studies' %}🌎
+                            {% else %}📖{% endif %}
+                        </span>
+                        <div>
+                            <h3 class="text-xl font-bold">{{ assignment.lesson_item.subject }}</h3>
+                            <p class="text-sm text-dark-500">{{ assignment.lesson_item.type|title }}</p>
+                        </div>
+                    </div>
+                    <p class="text-dark-400 mb-3">Estimated time: {{ assignment.lesson_item.est_minutes }} minutes</p>
+                    <div class="flex items-center space-x-2">
+                        <span class="badge badge-{% if assignment.status == 'completed' %}success{% elif assignment.status == 'in_progress' %}warning{% else %}primary{% endif %}">
+                            {{ assignment.status|title }}
+                        </span>
+                    </div>
+                </div>
+                <button class="btn btn-primary group-hover:scale-105 transition-transform">
+                    {% if assignment.status == 'completed' %}
+                    <i class="fas fa-check mr-2"></i>Review
+                    {% elif assignment.status == 'in_progress' %}
+                    <i class="fas fa-play mr-2"></i>Continue
+                    {% else %}
+                    <i class="fas fa-rocket mr-2"></i>Start
+                    {% endif %}
+                </button>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon">🎉</div>
+            <h3 class="text-xl font-semibold mb-2">All Done for Today!</h3>
+            <p class="text-dark-500 mb-6">Great work! You've completed all your assignments.</p>
+            <button class="btn btn-primary" onclick="window.location.href='/student/portfolio'">
+                <i class="fas fa-star mr-2"></i>View Your Portfolio
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
