@@ -1,0 +1,129 @@
+<!-- Progressive Hints Widget - Can be included in any activity -->
+<div class="hints-widget card-modern p-6 mb-6" id="hints-widget">
+    <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold flex items-center">
+            <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+            Need Help?
+        </h3>
+        <span class="badge badge-primary" id="hints-remaining">
+            3 hints available
+        </span>
+    </div>
+    
+    <div id="hints-container" class="space-y-3">
+        <!-- Hints will be revealed here -->
+    </div>
+    
+    <div class="flex gap-3 mt-4">
+        <button onclick="revealNextHint()" class="btn btn-secondary flex-1" id="hint-button">
+            <i class="fas fa-eye mr-2"></i>
+            Show Hint
+        </button>
+        <button onclick="showSolution()" class="btn btn-danger" id="solution-button" style="display:none;">
+            <i class="fas fa-book-open mr-2"></i>
+            Show Solution
+        </button>
+    </div>
+</div>
+
+<script>
+let hints = [];
+let currentHintIndex = 0;
+let solutionData = null;
+
+function initHints(problemHints, solution) {
+    hints = problemHints;
+    solutionData = solution;
+    currentHintIndex = 0;
+    document.getElementById('hints-remaining').textContent = `${hints.length} hints available`;
+    document.getElementById('hints-container').innerHTML = '';
+    document.getElementById('solution-button').style.display = 'none';
+}
+
+function revealNextHint() {
+    if (currentHintIndex >= hints.length) {
+        showNotification('No more hints available', 'info');
+        return;
+    }
+    
+    const hint = hints[currentHintIndex];
+    const hintElement = createHintElement(hint, currentHintIndex + 1);
+    
+    document.getElementById('hints-container').appendChild(hintElement);
+    currentHintIndex++;
+    
+    // Update remaining count
+    const remaining = hints.length - currentHintIndex;
+    document.getElementById('hints-remaining').textContent = remaining > 0 ? `${remaining} hints remaining` : 'All hints shown';
+    
+    // Show solution button after all hints
+    if (currentHintIndex >= hints.length) {
+        document.getElementById('hint-button').disabled = true;
+        document.getElementById('hint-button').classList.add('opacity-50');
+        document.getElementById('solution-button').style.display = 'block';
+    }
+}
+
+function createHintElement(hint, number) {
+    const div = document.createElement('div');
+    
+    const levelColors = {
+        'mild': 'bg-blue-500/10 border-blue-500/30',
+        'medium': 'bg-yellow-500/10 border-yellow-500/30',
+        'strong': 'bg-orange-500/10 border-orange-500/30'
+    };
+    
+    const levelIcons = {
+        'mild': '💡',
+        'medium': '🔦',
+        'strong': '⭐'
+    };
+    
+    div.className = `p-4 rounded-lg border ${levelColors[hint.level] || 'bg-dark-800 border-dark-700'} fade-in`;
+    div.innerHTML = `
+        <div class="flex items-start space-x-3">
+            <div class="text-2xl">${levelIcons[hint.level] || '💡'}</div>
+            <div class="flex-1">
+                <div class="text-xs font-semibold text-dark-500 uppercase mb-1">Hint ${number} - ${hint.level}</div>
+                <p class="text-dark-200">${hint.content || hint.hint}</p>
+            </div>
+        </div>
+    `;
+    
+    return div;
+}
+
+function showSolution() {
+    if (!solutionData) {
+        showNotification('Solution not available', 'warning');
+        return;
+    }
+    
+    const solutionDiv = document.createElement('div');
+    solutionDiv.className = 'p-6 rounded-lg bg-primary-500/10 border border-primary-500/30 fade-in mt-3';
+    solutionDiv.innerHTML = `
+        <div class="flex items-center space-x-2 mb-4">
+            <i class="fas fa-check-circle text-3xl text-green-500"></i>
+            <h4 class="text-xl font-bold">Complete Solution</h4>
+        </div>
+        <div class="mb-4">
+            <div class="text-lg font-bold text-primary-400 mb-2">Answer: ${solutionData.answer}</div>
+            <p class="text-dark-300">${solutionData.explanation}</p>
+        </div>
+        ${solutionData.steps ? `
+            <div class="space-y-2">
+                <div class="font-semibold">Steps:</div>
+                ${solutionData.steps.map((step, i) => `
+                    <div class="p-3 bg-dark-800 rounded">
+                        <strong>Step ${i+1}:</strong> ${step}
+                    </div>
+                `).join('')}
+            </div>
+        ` : ''}
+    `;
+    
+    document.getElementById('hints-container').appendChild(solutionDiv);
+    document.getElementById('solution-button').disabled = true;
+    document.getElementById('solution-button').classList.add('opacity-50');
+}
+</script>
