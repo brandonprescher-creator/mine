@@ -1,0 +1,23 @@
+<!-- Reusable Card Component -->
+<div class="card-modern {{ class if class else '' }}" {% if onclick %}onclick="{{ onclick }}"{% endif %}>
+    {% if icon %}
+    <div class="text-4xl mb-4">{{ icon }}</div>
+    {% endif %}
+    
+    {% if title %}
+    <h3 class="text-xl font-bold mb-2">{{ title }}</h3>
+    {% endif %}
+    
+    {% if description %}
+    <p class="text-dark-400 text-sm mb-4">{{ description }}</p>
+    {% endif %}
+    
+    {{ content if content else '' }}
+    
+    {% if button_text %}
+    <button class="btn btn-primary mt-4 w-full" {% if button_onclick %}onclick="{{ button_onclick }}"{% endif %}>
+        {% if button_icon %}<i class="{{ button_icon }} mr-2"></i>{% endif %}
+        {{ button_text }}
+    </button>
+    {% endif %}
+</div>

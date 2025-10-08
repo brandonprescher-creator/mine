@@ -1,611 +1,124 @@
 {% extends "base.html" %}
 
-{% block title %}Choose Your Adventure - ULTIMATE BADASS TUTOR{% endblock %}
+{% block title %}Subjects - Ultimate Tutor Platform{% endblock %}
+
+{% block breadcrumbs %}
+{% include 'partials/_breadcrumbs.html' with breadcrumbs=[
+    {'title': 'Home', 'url': '/'},
+    {'title': 'Subjects', 'url': '#'}
+] %}
+{% endblock %}
 
 {% block content %}
-<div class="subjects-mega-page">
-    <!-- MASSIVE HERO SECTION -->
-    <div class="mega-hero">
-        <div class="hero-bg-animation"></div>
-        <div class="hero-mascot">🦸‍♂️</div>
-        <h1 class="ultra-title">
-            <span class="word-pop">PICK</span>
-            <span class="word-pop">YOUR</span>
-            <span class="word-pop">SUPERPOWER!</span>
-        </h1>
-        <p class="mega-subtitle">Every subject makes you AWESOME in a different way! 🌟</p>
-        <div class="hero-badges">
-            <div class="hero-badge">✨ 2000+ Lessons</div>
-            <div class="hero-badge">🎮 Fun Games</div>
-            <div class="hero-badge">🏆 Cool Rewards</div>
+<div class="fade-in">
+    <!-- Page Header -->
+    <div class="text-center mb-12">
+        <h1 class="heading-1 gradient-text mb-4">Explore Subjects</h1>
+        <p class="text-xl text-dark-300 max-w-2xl mx-auto">
+            Comprehensive K-12 curriculum covering all core subjects and enrichment areas
+        </p>
+    </div>
+    
+    <!-- Search Bar -->
+    <div class="max-w-2xl mx-auto mb-12">
+        <div class="relative">
+            <input 
+                type="text" 
+                id="subject-search" 
+                placeholder="Search subjects..." 
+                class="input-modern pl-12"
+                onkeyup="filterSubjects()"
+            >
+            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-dark-500"></i>
         </div>
     </div>
-
-    <!-- GRADE LEVEL FILTER -->
-    <div class="grade-filter-section">
-        <h2 class="grade-filter-title">🎓 CHOOSE YOUR GRADE LEVEL! 🎓</h2>
-        <div class="grade-filter-buttons">
-            <button class="grade-btn active" onclick="filterByGrade('all')">ALL GRADES</button>
-            <button class="grade-btn" onclick="filterByGrade('K')">KINDERGARTEN</button>
-            <button class="grade-btn" onclick="filterByGrade('1st')">1ST GRADE</button>
-            <button class="grade-btn" onclick="filterByGrade('2nd')">2ND GRADE</button>
-            <button class="grade-btn" onclick="filterByGrade('3rd')">3RD GRADE</button>
-            <button class="grade-btn" onclick="filterByGrade('4th')">4TH GRADE</button>
-            <button class="grade-btn" onclick="filterByGrade('5th')">5TH GRADE</button>
-            <button class="grade-btn" onclick="filterByGrade('6th')">6TH GRADE</button>
-            <button class="grade-btn" onclick="filterByGrade('7th')">7TH GRADE</button>
-            <button class="grade-btn" onclick="filterByGrade('8th')">8TH GRADE</button>
-        </div>
-    </div>
-
-    <!-- SUBJECTS - MASSIVE CARDS -->
-    <div class="subjects-ultra-grid" id="subjects-grid">
+    
+    <!-- Subjects Grid -->
+    <div class="grid-responsive" id="subjects-grid">
         {% for subject in subjects %}
-        <div class="subject-ultra-card" data-subject-id="{{ subject.id }}">
-            <div class="card-shine"></div>
-            
-            <!-- HUGE ICON -->
-            <div class="subject-ultra-icon">{{ subject.icon }}</div>
-            
-            <!-- SUBJECT NAME -->
-            <h2 class="subject-ultra-name">{{ subject.name }}</h2>
-            
-            <!-- FUN DESCRIPTION -->
-            <p class="subject-ultra-desc">{{ subject.description or 'Become a superstar!' }}</p>
-            
-            <!-- MINI STATS -->
-            <div class="mini-stats">
-                <div class="mini-stat">
-                    <div class="mini-stat-icon">📚</div>
-                    <div class="mini-stat-text">100+ Topics</div>
-                </div>
-                <div class="mini-stat">
-                    <div class="mini-stat-icon">⚡</div>
-                    <div class="mini-stat-text">Super Fun!</div>
-                </div>
-            </div>
-            
-            <!-- BIG BUTTON -->
-            <button class="mega-explore-btn" onclick="launchSubject({{ subject.id }})">
-                <span class="btn-glow"></span>
-                <span class="btn-content">
-                    <span class="btn-emoji">🚀</span>
-                    <span class="btn-label">LET'S GO!</span>
-                    <span class="btn-emoji">🚀</span>
-                </span>
-            </button>
-            
-            <!-- DECORATIVE ELEMENTS -->
-            <div class="card-stars">
-                <span class="star">⭐</span>
-                <span class="star">⭐</span>
-                <span class="star">⭐</span>
-            </div>
+        <div class="subject-card-item" data-name="{{ subject.name.lower() }}" data-description="{{ subject.description.lower() }}">
+            {% include 'partials/_subject_card.html' with subject=subject %}
         </div>
+        {% else %}
+        {% include 'partials/_empty_state.html' with 
+            icon='📚',
+            title='No Subjects Available',
+            message='Subjects will be loaded soon. Check back later!',
+            button_text='Go Home',
+            button_href='/'
+        %}
         {% endfor %}
     </div>
-
-    <!-- MOTIVATIONAL SECTION -->
-    <div class="motivation-mega-section">
-        <div class="motivation-character">🎯</div>
-        <h2 class="motivation-title">YOU'RE GOING TO BE AMAZING!</h2>
-        <div class="motivation-cards">
-            <div class="motiv-card">
-                <div class="motiv-icon">💪</div>
-                <p>Every lesson makes you SMARTER!</p>
-            </div>
-            <div class="motiv-card">
-                <div class="motiv-icon">🎮</div>
-                <p>Learning can be FUN!</p>
-            </div>
-            <div class="motiv-card">
-                <div class="motiv-icon">🌟</div>
-                <p>You can learn ANYTHING!</p>
-            </div>
+    
+    <!-- Statistics -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+        <div class="card-modern text-center">
+            <div class="text-4xl mb-3">📚</div>
+            <div class="text-3xl font-bold gradient-text mb-2">{{ subjects|length }}</div>
+            <div class="text-dark-400">Total Subjects</div>
+        </div>
+        <div class="card-modern text-center">
+            <div class="text-4xl mb-3">📖</div>
+            <div class="text-3xl font-bold gradient-text mb-2" id="total-topics">0</div>
+            <div class="text-dark-400">Total Topics</div>
+        </div>
+        <div class="card-modern text-center">
+            <div class="text-4xl mb-3">🎯</div>
+            <div class="text-3xl font-bold gradient-text mb-2" id="total-lessons">0</div>
+            <div class="text-dark-400">Total Lessons</div>
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block scripts %}
 <script>
-function launchSubject(subjectId) {
-    // Epic launch animation!
-    const card = event.currentTarget.closest('.subject-ultra-card');
+function filterSubjects() {
+    const searchTerm = document.getElementById('subject-search').value.toLowerCase();
+    const subjects = document.querySelectorAll('.subject-card-item');
     
-    // Sound effect
-    if (typeof badassTutor !== 'undefined' && badassTutor.playSound) {
-        badassTutor.playSound('click');
-    }
-    
-    // Massive explosion effect
-    createMassiveExplosion(card);
-    
-    // Card flies away
-    card.style.transform = 'scale(1.5) translateY(-1000px) rotate(360deg)';
-    card.style.opacity = '0';
-    
-    // Navigate after animation
-    setTimeout(() => {
-        window.location.href = `/subject/${subjectId}`;
-    }, 800);
-}
-
-function createMassiveExplosion(element) {
-    const rect = element.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    
-    const emojis = ['✨', '⭐', '🌟', '💫', '🎉', '🎊', '💥', '🔥'];
-    
-    for (let i = 0; i < 50; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'mega-particle';
-        particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        particle.style.left = centerX + 'px';
-        particle.style.top = centerY + 'px';
-        particle.style.setProperty('--tx', (Math.random() - 0.5) * 400 + 'px');
-        particle.style.setProperty('--ty', (Math.random() - 0.5) * 400 + 'px');
-        particle.style.setProperty('--rotation', Math.random() * 720 + 'deg');
-        document.body.appendChild(particle);
+    subjects.forEach(subject => {
+        const name = subject.dataset.name;
+        const description = subject.dataset.description;
         
-        setTimeout(() => particle.remove(), 1500);
-    }
-}
-</script>
-
-<style>
-.subjects-mega-page {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-}
-
-.mega-hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-    padding: 4rem 2rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    border-radius: 0 0 80px 80px;
-    margin-bottom: 4rem;
-}
-
-.hero-bg-animation {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    animation: pulse 3s ease-in-out infinite;
-}
-
-.hero-mascot {
-    font-size: 10rem;
-    animation: bounce 2s ease-in-out infinite;
-    display: inline-block;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
-}
-
-.ultra-title {
-    font-family: 'Fredoka One', cursive;
-    font-size: 5rem;
-    color: white;
-    text-shadow: 5px 5px 15px rgba(0,0,0,0.4);
-    margin: 2rem 0;
-    line-height: 1.2;
-}
-
-.word-pop {
-    display: inline-block;
-    animation: pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    animation-fill-mode: both;
-}
-
-.word-pop:nth-child(1) { animation-delay: 0.1s; }
-.word-pop:nth-child(2) { animation-delay: 0.3s; }
-.word-pop:nth-child(3) { animation-delay: 0.5s; }
-
-@keyframes pop {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.mega-subtitle {
-    font-size: 2rem;
-    color: white;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.hero-badges {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-}
-
-.hero-badge {
-    background: rgba(255,255,255,0.25);
-    backdrop-filter: blur(10px);
-    padding: 1rem 2rem;
-    border-radius: 50px;
-    color: white;
-    font-size: 1.2rem;
-    font-weight: bold;
-    border: 3px solid rgba(255,255,255,0.5);
-    animation: float 3s ease-in-out infinite;
-}
-
-.hero-badge:nth-child(1) { animation-delay: 0s; }
-.hero-badge:nth-child(2) { animation-delay: 0.5s; }
-.hero-badge:nth-child(3) { animation-delay: 1s; }
-
-.subjects-ultra-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-    gap: 3rem;
-    padding: 2rem;
-    max-width: 1600px;
-    margin: 0 auto;
-}
-
-.subject-ultra-card {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    border-radius: 40px;
-    padding: 3rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    border: 6px solid transparent;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-}
-
-.subject-ultra-card:hover {
-    transform: translateY(-20px) scale(1.08);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-    border-color: #ff6b6b;
-}
-
-.card-shine {
-    position: absolute;
-    top: -100%;
-    left: -100%;
-    width: 300%;
-    height: 300%;
-    background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.5) 50%, transparent 60%);
-    transform: rotate(45deg);
-    transition: all 0.5s;
-}
-
-.subject-ultra-card:hover .card-shine {
-    left: 100%;
-}
-
-.subject-ultra-icon {
-    font-size: 8rem;
-    margin-bottom: 1.5rem;
-    animation: bounce 2s ease-in-out infinite;
-    display: inline-block;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
-}
-
-.subject-ultra-name {
-    font-family: 'Fredoka One', cursive;
-    font-size: 2.5rem;
-    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-}
-
-.subject-ultra-desc {
-    font-size: 1.3rem;
-    color: #666;
-    margin-bottom: 2rem;
-    line-height: 1.8;
-    font-weight: 600;
-}
-
-.mini-stats {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin: 2rem 0;
-}
-
-.mini-stat {
-    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-    padding: 1rem 1.5rem;
-    border-radius: 25px;
-    border: 3px solid white;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.mini-stat:hover {
-    transform: scale(1.1);
-}
-
-.mini-stat-icon {
-    font-size: 1.5rem;
-    margin-right: 0.5rem;
-}
-
-.mega-explore-btn {
-    background: linear-gradient(45deg, #ff6b6b 0%, #ff8e53 25%, #4ecdc4 50%, #45b7d1 75%, #ff6b6b 100%);
-    background-size: 300% 100%;
-    border: none;
-    color: white;
-    padding: 1.8rem 3rem;
-    border-radius: 60px;
-    font-size: 1.8rem;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
-    transition: all 0.4s ease;
-    animation: gradientSlide 3s ease infinite;
-}
-
-.mega-explore-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 15px 45px rgba(255, 107, 107, 0.6);
-}
-
-@keyframes gradientSlide {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-.btn-glow {
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    animation: shine 2s infinite;
-}
-
-@keyframes shine {
-    0% { left: -100%; }
-    100% { left: 100%; }
-}
-
-.btn-content {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.btn-emoji {
-    font-size: 2rem;
-    animation: wiggle 1s ease-in-out infinite;
-}
-
-@keyframes wiggle {
-    0%, 100% { transform: rotate(-5deg); }
-    50% { transform: rotate(5deg); }
-}
-
-.btn-label {
-    font-family: 'Fredoka One', cursive;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.card-stars {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    gap: 0.3rem;
-}
-
-.star {
-    font-size: 1.5rem;
-    animation: twinkle 1s ease-in-out infinite;
-}
-
-.star:nth-child(1) { animation-delay: 0s; }
-.star:nth-child(2) { animation-delay: 0.3s; }
-.star:nth-child(3) { animation-delay: 0.6s; }
-
-@keyframes twinkle {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.3); }
-}
-
-.motivation-mega-section {
-    max-width: 1200px;
-    margin: 5rem auto 3rem;
-    padding: 3rem;
-    background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
-    border-radius: 50px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.motivation-character {
-    font-size: 6rem;
-    animation: bounce 2s ease-in-out infinite;
-}
-
-.motivation-title {
-    font-family: 'Fredoka One', cursive;
-    font-size: 3rem;
-    color: #333;
-    margin: 2rem 0;
-    text-transform: uppercase;
-}
-
-.motivation-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.motiv-card {
-    background: rgba(255,255,255,0.9);
-    padding: 2rem;
-    border-radius: 30px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    transition: all 0.3s ease;
-}
-
-.motiv-card:hover {
-    transform: translateY(-10px) rotate(3deg);
-}
-
-.motiv-icon {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-}
-
-.motiv-card p {
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: #333;
-}
-
-.mega-particle {
-    position: fixed;
-    font-size: 2.5rem;
-    pointer-events: none;
-    z-index: 10000;
-    animation: megaExplode 1.5s ease-out forwards;
-}
-
-@keyframes megaExplode {
-    0% {
-        transform: translate(0, 0) scale(1) rotate(0deg);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(var(--tx), var(--ty)) scale(0) rotate(var(--rotation));
-        opacity: 0;
-    }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .ultra-title {
-        font-size: 3rem;
-    }
-    
-    .hero-mascot {
-        font-size: 6rem;
-    }
-    
-    .subjects-ultra-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        padding: 1rem;
-    }
-    
-    .subject-ultra-icon {
-        font-size: 5rem;
-    }
-    
-    .subject-ultra-name {
-        font-size: 2rem;
-    }
-    
-    .mega-explore-btn {
-        font-size: 1.4rem;
-        padding: 1.5rem 2rem;
-    }
-    
-    .motivation-title {
-        font-size: 2rem;
-    }
-}
-
-/* Grade Filter Styles */
-.grade-filter-section {
-    max-width: 1400px;
-    margin: 0 auto 4rem;
-    padding: 0 2rem;
-    text-align: center;
-}
-
-.grade-filter-title {
-    font-family: 'Fredoka One', cursive;
-    font-size: 4rem;
-    color: white;
-    margin-bottom: 3rem;
-    text-shadow: 4px 4px 15px rgba(0,0,0,0.5);
-}
-
-.grade-filter-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 3rem;
-}
-
-.grade-btn {
-    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-    border: none;
-    color: white;
-    padding: 1.5rem 2.5rem;
-    border-radius: 30px;
-    font-size: 1.3rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-}
-
-.grade-btn:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-}
-
-.grade-btn.active {
-    background: linear-gradient(45deg, #667eea, #764ba2);
-    transform: scale(1.1);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-}
-</style>
-
-<script>
-function filterByGrade(grade) {
-    // Update active button
-    document.querySelectorAll('.grade-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-    
-    // For now, just show all subjects
-    // In the future, this will filter topics by grade level
-    const cards = document.querySelectorAll('.subject-ultra-card');
-    cards.forEach(card => {
-        card.style.display = 'block';
+        if (name.includes(searchTerm) || description.includes(searchTerm)) {
+            subject.style.display = '';
+        } else {
+            subject.style.display = 'none';
+        }
     });
-    
-    // Show a message about grade filtering
-    if (grade !== 'all') {
-        alert(`Grade ${grade} filtering will show grade-specific topics when you click on English Language Arts!`);
+}
+
+// Load statistics
+async function loadStats() {
+    try {
+        const response = await fetch('/api/subjects');
+        const subjects = await response.json();
+        
+        let totalTopics = 0;
+        let totalLessons = 0;
+        
+        for (const subject of subjects) {
+            const topicsResponse = await fetch(`/api/subject/${subject.id}/topics`);
+            const topics = await topicsResponse.json();
+            totalTopics += topics.length;
+            
+            for (const topic of topics) {
+                const lessonsResponse = await fetch(`/api/topic/${topic.id}/lessons`);
+                const lessons = await lessonsResponse.json();
+                totalLessons += lessons.length;
+            }
+        }
+        
+        document.getElementById('total-topics').textContent = totalTopics;
+        document.getElementById('total-lessons').textContent = totalLessons;
+    } catch (error) {
+        console.error('Error loading stats:', error);
     }
 }
-</script>
 
+document.addEventListener('DOMContentLoaded', () => {
+    loadStats();
+});
+</script>
 {% endblock %}

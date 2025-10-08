@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Ultimate Tutor Platform{% endblock %}
+
+{% block breadcrumbs %}
+{% include 'partials/_breadcrumbs.html' with breadcrumbs=[
+    {'title': 'Home', 'url': '/'},
+    {'title': 'Dashboard', 'url': '#'}
+] %}
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <!-- Welcome Header -->
+    <div class="card-glass p-8 mb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="heading-2 gradient-text mb-2">
+                    Welcome back, {{ current_user.username if current_user.is_authenticated else 'Student' }}!
+                </h1>
+                <p class="text-dark-400">Here's your learning progress at a glance</p>
+            </div>
+            <div class="text-6xl">🎓</div>
+        </div>
+    </div>
+    
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        {% include 'partials/_stat_card.html' with icon='📚', value='0', label='Lessons Completed', sublabel='This month', id='lessons-completed' %}
+        {% include 'partials/_stat_card.html' with icon='🎯', value='0', label='Problems Solved', sublabel='Total', id='problems-solved' %}
+        {% include 'partials/_stat_card.html' with icon='⭐', value='0%', label='Average Score', sublabel='Last 10 attempts', id='average-score' %}
+        {% include 'partials/_stat_card.html' with icon='🔥', value='0', label='Day Streak', sublabel='Keep it up!', id='streak-days' %}
+    </div>
+    
+    <!-- Progress Overview -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Subject Mastery -->
+        <div class="card-modern">
+            <h2 class="text-2xl font-bold mb-6">Subject Mastery</h2>
+            <div class="space-y-4" id="subject-mastery">
+                <!-- Will be populated dynamically -->
+            </div>
+        </div>
+        
+        <!-- Recent Activity -->
+        <div class="card-modern">
+            <h2 class="text-2xl font-bold mb-6">Recent Activity</h2>
+            <div class="space-y-3" id="recent-activity">
+                <!-- Will be populated dynamically -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Achievements -->
+    <div class="card-modern mb-8">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold">Achievements</h2>
+            <a href="/achievements" class="text-primary-400 hover:text-primary-300">View All</a>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4" id="achievements-preview">
+            <!-- Will be populated dynamically -->
+        </div>
+    </div>
+    
+    <!-- Continue Learning -->
+    <div class="card-modern mb-8">
+        <h2 class="text-2xl font-bold mb-6">Continue Learning</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="continue-learning">
+            <!-- Will be populated dynamically -->
+        </div>
+    </div>
+    
+    <!-- Recommended for You -->
+    <div class="card-modern">
+        <h2 class="text-2xl font-bold mb-6">Recommended for You</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="recommendations">
+            <!-- Will be populated dynamically -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadDashboardData();
+});
+
+async function loadDashboardData() {
+    try {
+        // Load user stats
+        const statsResponse = await fetch('/api/user/stats');
+        const stats = await statsResponse.json();
+        
+        document.getElementById('lessons-completed').textContent = stats.lessons || 0;
+        document.getElementById('problems-solved').textContent = stats.problems || 0;
+        document.getElementById('average-score').textContent = (stats.average_score || 0) + '%';
+        document.getElementById('streak-days').textContent = stats.streak || 0;
+        
+        // Load subject mastery
+        await loadSubjectMastery();
+        
+        // Load recent activity
+        await loadRecentActivity();
+        
+        // Load achievements
+        await loadAchievements();
+        
+        // Load continue learning
+        await loadContinueLearning();
+        
+        // Load recommendations
+        await loadRecommendations();
+        
+    } catch (error) {
+        console.error('Error loading dashboard:', error);
+        showNotification('Error loading dashboard data', 'error');
+    }
+}
+
+async function loadSubjectMastery() {
+    try {
+        const response = await fetch('/api/subjects');
+        const subjects = await response.json();
+        
+        const container = document.getElementById('subject-mastery');
+        container.innerHTML = '';
+        
+        for (const subject of subjects.slice(0, 5)) {
+            const mastery = Math.floor(Math.random() * 100); // Placeholder
+            
+            const item = document.createElement('div');
+            item.className = 'space-y-2';
+            item.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-2xl">${subject.icon}</span>
+                        <span class="font-semibold">${subject.name}</span>
+                    </div>
+                    <span class="text-sm text-dark-400">${mastery}%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" style="width: ${mastery}%"></div>
+                </div>
+            `;
+            container.appendChild(item);
+        }
+    } catch (error) {
+        console.error('Error loading subject mastery:', error);
+    }
+}
+
+async function loadRecentActivity() {
+    const container = document.getElementById('recent-activity');
+    container.innerHTML = '';
+    
+    const activities = [
+        { icon: '✅', text: 'Completed "Division Basics"', time: '2 hours ago' },
+        { icon: '🎯', text: 'Solved 10 problems in Fractions', time: '5 hours ago' },
+        { icon: '🏆', text: 'Earned "Math Master" badge', time: '1 day ago' },
+        { icon: '📚', text: 'Started "Photosynthesis" lesson', time: '2 days ago' },
+    ];
+    
+    activities.forEach(activity => {
+        const item = document.createElement('div');
+        item.className = 'flex items-start space-x-3 p-3 rounded-lg bg-dark-800 hover:bg-dark-700 transition-colors';
+        item.innerHTML = `
+            <div class="text-2xl">${activity.icon}</div>
+            <div class="flex-1">
+                <p class="text-sm">${activity.text}</p>
+                <p class="text-xs text-dark-500 mt-1">${activity.time}</p>
+            </div>
+        `;
+        container.appendChild(item);
+    });
+}
+
+async function loadAchievements() {
+    const container = document.getElementById('achievements-preview');
+    container.innerHTML = '';
+    
+    const achievements = [
+        { icon: '🎯', name: 'First Steps', earned: true },
+        { icon: '📚', name: 'Bookworm', earned: true },
+        { icon: '⭐', name: 'Rising Star', earned: true },
+        { icon: '🏆', name: 'Master', earned: false },
+        { icon: '💪', name: 'Persistent', earned: false },
+        { icon: '🔥', name: 'On Fire', earned: false },
+    ];
+    
+    achievements.forEach(achievement => {
+        const item = document.createElement('div');
+        item.className = `text-center p-4 rounded-lg ${achievement.earned ? 'bg-primary-500/20 border border-primary-500/30' : 'bg-dark-800 opacity-50'}`;
+        item.innerHTML = `
+            <div class="text-4xl mb-2">${achievement.icon}</div>
+            <div class="text-xs font-semibold">${achievement.name}</div>
+        `;
+        container.appendChild(item);
+    });
+}
+
+async function loadContinueLearning() {
+    const container = document.getElementById('continue-learning');
+    container.innerHTML = '';
+    
+    // Placeholder for continue learning items
+    const message = document.createElement('div');
+    message.className = 'col-span-full text-center text-dark-500 py-8';
+    message.textContent = 'No lessons in progress. Start a new lesson!';
+    container.appendChild(message);
+}
+
+async function loadRecommendations() {
+    try {
+        const response = await fetch('/api/subjects');
+        const subjects = await response.json();
+        
+        const container = document.getElementById('recommendations');
+        container.innerHTML = '';
+        
+        for (const subject of subjects.slice(0, 3)) {
+            const card = document.createElement('div');
+            card.className = 'card-modern group cursor-pointer';
+            card.onclick = () => window.location.href = `/subject/${subject.id}`;
+            card.innerHTML = `
+                <div class="text-5xl mb-3 transform group-hover:scale-110 transition-transform">${subject.icon}</div>
+                <h3 class="text-lg font-bold mb-2 group-hover:text-primary-400 transition-colors">${subject.name}</h3>
+                <p class="text-sm text-dark-400 mb-3">${subject.description.substring(0, 80)}...</p>
+                <span class="badge badge-primary">Start Learning</span>
+            `;
+            container.appendChild(card);
+        }
+    } catch (error) {
+        console.error('Error loading recommendations:', error);
+    }
+}
+</script>
+{% endblock %}

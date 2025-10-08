@@ -1,122 +1,387 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}ULTIMATE BADASS TUTOR{% endblock %}</title>
+    <meta name="description" content="Ultimate K-12 Tutoring Platform - Professional education technology">
+    <title>{% block title %}Ultimate Tutor Platform{% endblock %}</title>
     
-    <!-- BADASS CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/badass.css') }}">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        dark: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Particle.js for background effects -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}">
+    
+    <!-- Alpine.js for interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
     <!-- Socket.IO for real-time features -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
     
-    <!-- Howler.js for sound effects -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    <style>
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+        }
+        
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.5);
+        }
+        
+        .sidebar-link {
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-link:hover {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 3px solid #38bdf8;
+        }
+        
+        .sidebar-link.active {
+            background: rgba(56, 189, 248, 0.15);
+            border-left: 3px solid #38bdf8;
+            color: #38bdf8;
+        }
+        
+        .card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-blur {
+            backdrop-filter: blur(12px);
+            background: rgba(15, 23, 42, 0.8);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
     
-    <!-- Three.js for 3D animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    {% block extra_css %}{% endblock %}
 </head>
-<body>
-    <!-- Particle background -->
-    <div id="particles-js"></div>
-    
-    <!-- Floating characters -->
-    <div class="floating-characters">
-        <div class="character" data-character="🧮">🧮</div>
-        <div class="character" data-character="🔬">🔬</div>
-        <div class="character" data-character="📚">📚</div>
-        <div class="character" data-character="🎨">🎨</div>
-        <div class="character" data-character="🎵">🎵</div>
-        <div class="character" data-character="🌍">🌍</div>
-    </div>
-    
+<body class="min-h-screen bg-dark-950">
     <!-- Navigation -->
-    <nav class="badass-nav">
-        <div class="nav-container">
-            <div class="logo">
-                <span class="logo-icon">🎓</span>
-                <span class="logo-text">ULTIMATE TUTOR</span>
-            </div>
-            
-            <div class="nav-menu">
-                <a href="/" class="nav-link">
-                    <i class="fas fa-home"></i>
-                    <span>Home</span>
-                </a>
-                <a href="/subjects" class="nav-link">
-                    <i class="fas fa-book"></i>
-                    <span>Subjects</span>
-                </a>
-                <a href="/games" class="nav-link">
-                    <i class="fas fa-gamepad"></i>
-                    <span>Games</span>
-                </a>
-                <a href="/achievements" class="nav-link">
-                    <i class="fas fa-trophy"></i>
-                    <span>Achievements</span>
-                </a>
-                <a href="/multiplayer" class="nav-link">
-                    <i class="fas fa-users"></i>
-                    <span>Multiplayer</span>
-                </a>
-            </div>
-            
-            <div class="user-stats">
-                <div class="stat">
-                    <i class="fas fa-star"></i>
-                    <span id="user-level">Level 1</span>
+    <nav class="nav-blur fixed top-0 w-full z-50" x-data="{ mobileMenuOpen: false }">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <a href="/" class="flex items-center space-x-2 group">
+                        <div class="bg-gradient-to-br from-blue-500 to-purple-600 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                            <i class="fas fa-graduation-cap text-white text-xl"></i>
+                        </div>
+                        <span class="text-xl font-bold gradient-text hidden sm:block">Ultimate Tutor</span>
+                    </a>
                 </div>
-                <div class="stat">
-                    <i class="fas fa-coins"></i>
-                    <span id="user-coins">0</span>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="/" class="px-4 py-2 rounded-lg hover:bg-dark-800 transition-colors flex items-center space-x-2">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="/subjects" class="px-4 py-2 rounded-lg hover:bg-dark-800 transition-colors flex items-center space-x-2">
+                        <i class="fas fa-book"></i>
+                        <span>Subjects</span>
+                    </a>
+                    <a href="/games" class="px-4 py-2 rounded-lg hover:bg-dark-800 transition-colors flex items-center space-x-2">
+                        <i class="fas fa-gamepad"></i>
+                        <span>Games</span>
+                    </a>
+                    <a href="/api-explorer" class="px-4 py-2 rounded-lg hover:bg-dark-800 transition-colors flex items-center space-x-2">
+                        <i class="fas fa-code"></i>
+                        <span>APIs</span>
+                    </a>
+                    <a href="/worksheets" class="px-4 py-2 rounded-lg hover:bg-dark-800 transition-colors flex items-center space-x-2">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Worksheets</span>
+                    </a>
                 </div>
+                
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <div class="hidden sm:flex items-center space-x-4">
+                        <div class="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-dark-800">
+                            <i class="fas fa-fire text-orange-500"></i>
+                            <span class="text-sm font-semibold" id="user-streak">0</span>
+                        </div>
+                        <div class="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-dark-800">
+                            <i class="fas fa-star text-yellow-500"></i>
+                            <span class="text-sm font-semibold" id="user-points">0</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile menu button -->
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-lg hover:bg-dark-800">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenuOpen" x-transition class="md:hidden border-t border-dark-800">
+            <div class="px-4 py-3 space-y-2">
+                <a href="/" class="block px-4 py-2 rounded-lg hover:bg-dark-800">
+                    <i class="fas fa-home mr-2"></i> Home
+                </a>
+                <a href="/subjects" class="block px-4 py-2 rounded-lg hover:bg-dark-800">
+                    <i class="fas fa-book mr-2"></i> Subjects
+                </a>
+                <a href="/games" class="block px-4 py-2 rounded-lg hover:bg-dark-800">
+                    <i class="fas fa-gamepad mr-2"></i> Games
+                </a>
+                <a href="/api-explorer" class="block px-4 py-2 rounded-lg hover:bg-dark-800">
+                    <i class="fas fa-code mr-2"></i> APIs
+                </a>
+                <a href="/worksheets" class="block px-4 py-2 rounded-lg hover:bg-dark-800">
+                    <i class="fas fa-file-alt mr-2"></i> Worksheets
+                </a>
             </div>
         </div>
     </nav>
     
-    <!-- Main content -->
-    <main class="main-content">
-        {% block content %}{% endblock %}
+    <!-- Breadcrumbs -->
+    {% block breadcrumbs %}{% endblock %}
+    
+    <!-- Main Content -->
+    <main class="pt-20 pb-12 px-4 sm:px-6 lg:px-8 min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <!-- Flash Messages -->
+            <div id="flash-messages" class="space-y-2 mb-6">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="p-4 rounded-lg glass fade-in {% if category == 'error' %}border-l-4 border-red-500{% elif category == 'success' %}border-l-4 border-green-500{% else %}border-l-4 border-blue-500{% endif %}">
+                                <p class="text-sm">{{ message }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            
+            <!-- Page Content -->
+            {% block content %}{% endblock %}
+        </div>
     </main>
     
-    <!-- Achievement popup -->
-    <div id="achievement-popup" class="achievement-popup">
-        <div class="achievement-content">
-            <div class="achievement-icon">🏆</div>
-            <div class="achievement-text">
-                <h3>Achievement Unlocked!</h3>
-                <p id="achievement-message"></p>
+    <!-- Footer -->
+    <footer class="glass border-t border-dark-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4 gradient-text">Ultimate Tutor</h3>
+                    <p class="text-sm text-dark-400">Professional K-12 education platform with comprehensive curriculum and resources.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3">Quick Links</h4>
+                    <ul class="space-y-2 text-sm text-dark-400">
+                        <li><a href="/subjects" class="hover:text-primary-400">Subjects</a></li>
+                        <li><a href="/games" class="hover:text-primary-400">Games</a></li>
+                        <li><a href="/worksheets" class="hover:text-primary-400">Worksheets</a></li>
+                        <li><a href="/api-explorer" class="hover:text-primary-400">API Explorer</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3">Resources</h4>
+                    <ul class="space-y-2 text-sm text-dark-400">
+                        <li><a href="/upload" class="hover:text-primary-400">Upload Content</a></li>
+                        <li><a href="/books-reader" class="hover:text-primary-400">Book Reader</a></li>
+                        <li><a href="/achievements" class="hover:text-primary-400">Achievements</a></li>
+                        <li><a href="/parent/login" class="hover:text-primary-400">Parent Dashboard</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-2xl hover:text-primary-400 transition-colors"><i class="fab fa-github"></i></a>
+                        <a href="#" class="text-2xl hover:text-primary-400 transition-colors"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-2xl hover:text-primary-400 transition-colors"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
             </div>
+            <div class="border-t border-dark-800 mt-8 pt-6 text-center text-sm text-dark-400">
+                <p>&copy; 2025 Ultimate Tutor Platform. Empowering K-12 Education.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Notification Container -->
+    <div id="notifications" class="fixed top-20 right-4 z-50 space-y-2"></div>
+    
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50">
+        <div class="text-center">
+            <div class="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-500"></div>
+            <p class="mt-4 text-lg">Loading...</p>
         </div>
     </div>
     
-    <!-- Sound effects -->
-    <audio id="correct-sound" preload="auto">
-        <source src="{{ url_for('static', filename='sounds/correct.mp3') }}" type="audio/mpeg">
-    </audio>
-    <audio id="incorrect-sound" preload="auto">
-        <source src="{{ url_for('static', filename='sounds/incorrect.mp3') }}" type="audio/mpeg">
-    </audio>
-    <audio id="level-up-sound" preload="auto">
-        <source src="{{ url_for('static', filename='sounds/level-up.mp3') }}" type="audio/mpeg">
-    </audio>
-    
-    <!-- JavaScript -->
-    <script src="{{ url_for('static', filename='js/badass.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/games.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/math-visualizer.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/math-problems.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/achievements.js') }}"></script>
+    <!-- Core JavaScript -->
+    <script>
+        // Initialize user stats
+        async function loadUserStats() {
+            try {
+                const response = await fetch('/api/user/stats');
+                const data = await response.json();
+                document.getElementById('user-streak').textContent = data.streak || 0;
+                document.getElementById('user-points').textContent = data.problems || 0;
+            } catch (error) {
+                console.error('Error loading user stats:', error);
+            }
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notifications');
+            const notification = document.createElement('div');
+            
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                warning: 'bg-yellow-500',
+                info: 'bg-blue-500'
+            };
+            
+            notification.className = `${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg fade-in`;
+            notification.textContent = message;
+            
+            container.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+        
+        // Show loading overlay
+        function showLoading() {
+            document.getElementById('loading-overlay').classList.remove('hidden');
+            document.getElementById('loading-overlay').classList.add('flex');
+        }
+        
+        // Hide loading overlay
+        function hideLoading() {
+            document.getElementById('loading-overlay').classList.add('hidden');
+            document.getElementById('loading-overlay').classList.remove('flex');
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserStats();
+            
+            // Update active nav link
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('nav a').forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('text-primary-400');
+                }
+            });
+        });
+    </script>
     
     {% block scripts %}{% endblock %}
 </body>

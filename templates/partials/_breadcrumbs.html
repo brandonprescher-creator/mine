@@ -1,0 +1,15 @@
+<!-- Breadcrumbs Component -->
+{% if breadcrumbs %}
+<nav class="breadcrumb mt-4" aria-label="Breadcrumb">
+    {% for crumb in breadcrumbs %}
+        {% if not loop.last %}
+            <a href="{{ crumb.url }}" class="breadcrumb-item hover:text-primary-400 transition-colors">
+                {{ crumb.title }}
+            </a>
+            <span class="breadcrumb-separator"><i class="fas fa-chevron-right text-xs"></i></span>
+        {% else %}
+            <span class="breadcrumb-item active">{{ crumb.title }}</span>
+        {% endif %}
+    {% endfor %}
+</nav>
+{% endif %}

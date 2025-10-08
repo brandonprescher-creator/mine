@@ -1,0 +1,12 @@
+<!-- Empty State Component -->
+<div class="empty-state">
+    <div class="empty-state-icon">{{ icon if icon else '📭' }}</div>
+    <h3 class="text-xl font-semibold mb-2 text-dark-300">{{ title if title else 'Nothing here yet' }}</h3>
+    <p class="text-dark-500 mb-6">{{ message if message else 'Get started by adding some content!' }}</p>
+    {% if button_text %}
+    <button class="btn btn-primary" {% if button_onclick %}onclick="{{ button_onclick }}"{% elif button_href %}onclick="window.location.href='{{ button_href }}'"{% endif %}>
+        {% if button_icon %}<i class="{{ button_icon }} mr-2"></i>{% endif %}
+        {{ button_text }}
+    </button>
+    {% endif %}
+</div>

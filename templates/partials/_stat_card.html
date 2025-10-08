@@ -1,0 +1,9 @@
+<!-- Stat Card Component -->
+<div class="stat-card">
+    <div class="stat-icon">{{ icon }}</div>
+    <div class="stat-number" id="{{ id if id else '' }}">{{ value }}</div>
+    <div class="stat-label">{{ label }}</div>
+    {% if sublabel %}
+    <div class="text-xs text-dark-500 mt-1">{{ sublabel }}</div>
+    {% endif %}
+</div>

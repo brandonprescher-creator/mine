@@ -1,278 +1,190 @@
-# 🎓 Ultimate Tutoring Program
+# Ultimate Tutor Platform
 
-A comprehensive, self-contained K-8 educational tutoring application that runs with a single command. Features offline capability, file upload support, automatic lesson generation, and integration with free educational APIs.
+Professional K-12 education platform with comprehensive curriculum, real-time progress tracking, and 50+ educational API integrations.
 
-## ✨ Features
+## Features
 
-### 📚 Comprehensive K-8 Curriculum
-- **Mathematics**: Addition, subtraction, multiplication, division (with 10 mastery methods!), fractions, decimals, geometry, algebra, statistics
-- **English Language Arts**: Phonics, reading comprehension, writing, grammar, vocabulary
-- **Science**: Life science, physical science, Earth science, space science, scientific method
-- **Social Studies**: US history, world history, geography, civics, economics
-- **Arts**: Visual arts, music
-- **World Languages**: Spanish, French, ESL support
-- **Technology & STEAM**: Coding basics, media literacy, STEAM projects
-- **PE & Health**: Fitness, nutrition, wellness
-- **Life Skills**: Study skills, test preparation
+- 🎓 **Comprehensive K-12 Curriculum** - Complete coverage of Math, Science, ELA, Social Studies, Arts, and more
+- 🔌 **50+ API Integrations** - Wikipedia, NASA, Khan Academy, OpenStax, and dozens of free educational resources
+- 📊 **Progress Tracking** - Real-time mastery tracking with spaced repetition and personalized learning paths
+- 🎮 **Interactive Games** - Gamified learning with achievements, multiplayer challenges, and instant feedback
+- 📄 **Worksheet Generator** - AI-powered worksheet and quiz generation with PDF export
+- 👨‍👩‍👧‍👦 **Parent Dashboard** - Comprehensive monitoring and reporting tools
+- 🎨 **Modern UI** - Professional dark theme with responsive design
+- 🔐 **Authentication** - Multi-role system (Student, Teacher, Parent, Admin)
 
-### 🌟 Special Feature: Division Mastery
-Complete module with **10 different division methods**:
-1. Long Division
-2. Partial Quotients
-3. Distributive Property
-4. Repeated Subtraction
-5. Equal Groups
-6. Array / Area Model
-7. Number Line Jumps
-8. Ratio Table
-9. Place Value Division
-10. Bar Model
-
-Each method includes:
-- Step-by-step teaching instructions
-- Worked examples
-- 4-6 practice problems with instant feedback
-- Hints and solution steps
-
-### 📤 File Upload & AI Lesson Generation
-- Upload PDF, Word documents, text files, or images
-- Automatic text extraction (including OCR for images)
-- AI-powered lesson generation from your content
-- Automatic practice problem creation
-- Edit lessons before saving
-
-### 🌐 Educational API Integration
-Enriches lessons with free resources from:
-- Wikipedia
-- Wikibooks
-- Khan Academy (links)
-- CK-12 Foundation
-- CommonLit
-- NASA Kids Club
-- National Geographic Education
-- And more!
-
-### ✍️ Interactive Learning
-- Step-by-step lessons with clear explanations
-- Interactive practice problems
-- Instant feedback on answers
-- Progress tracking and mastery levels
-- Achievement badges
-
-### 💾 Offline Capable
-- Local SQLite database
-- Works without internet connection
-- API-fetched content is cached for offline use
-- All lessons available anytime
-
-### 👶 Kid-Friendly Interface
-- Large, readable fonts
-- Clear icons and colors
-- Simple navigation
-- Encouraging feedback
-- Visual progress tracking
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
-- Python 3.8 or higher
-- pip (Python package installer)
-- (Optional) Tesseract OCR for image text extraction
+- Python 3.11+
+- pip
 
 ### Installation
 
-1. **Clone or download this repository**
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd Tutor
+   ```
 
-2. **Install Python dependencies:**
+2. **Create virtual environment**
+   ```bash
+   python -m venv venv
+   
+   # Windows
+   venv\Scripts\activate
+   
+   # macOS/Linux
+   source venv/bin/activate
+   ```
+
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+5. **Initialize database**
+   ```bash
+   python -c "from app_updated import initialize_database; initialize_database()"
+   ```
+
+6. **Run the application**
+   ```bash
+   python app_updated.py
+   ```
+
+7. **Open your browser**
+   ```
+   http://localhost:5001
+   ```
+
+## Project Structure
+
+```
+Tutor/
+├── app_updated.py          # Main application file
+├── models/                 # Database models
+├── auth/                   # Authentication blueprint
+├── blueprints/             # Feature blueprints
+├── templates/              # HTML templates
+│   ├── base.html          # Base template
+│   ├── partials/          # Reusable components
+│   ├── auth/              # Auth pages
+│   └── errors/            # Error pages
+├── static/                 # Static assets
+│   ├── css/               # Stylesheets
+│   └── js/                # JavaScript files
+├── services/              # Business logic
+├── open_learning/         # API integrations
+└── requirements.txt       # Python dependencies
+```
+
+## API Integrations
+
+The platform integrates with 50+ free educational APIs including:
+
+- **General Knowledge**: Wikipedia, Wikidata, Wikiquote
+- **Science**: NASA, USGS, GBIF, PubChem
+- **Math**: Wolfram Alpha API, Numbers API
+- **Literature**: Open Library, Google Books, Project Gutenberg
+- **Museums**: Met Museum, Smithsonian, Rijksmuseum
+- **Educational**: Khan Academy, OpenStax, CK-12
+- **Geography**: REST Countries, UN Data, World Bank
+- **And many more!**
+
+## User Roles
+
+- **Student**: Access lessons, practice problems, games, and track progress
+- **Teacher**: Create content, monitor student progress, generate materials
+- **Parent**: View child progress, set goals, receive reports
+- **Admin**: Manage users, content, and system configuration
+
+## Deployment
+
+### Render
+
+1. Create account on [Render](https://render.com)
+2. Connect your repository
+3. Use the included `render.yaml` configuration
+4. Set environment variables in Render dashboard
+5. Deploy!
+
+### Manual Deployment
 
 ```bash
-pip install -r requirements.txt
+# Using gunicorn
+gunicorn app_updated:app --bind 0.0.0.0:$PORT --workers 4 --worker-class eventlet
+
+# Using environment variables
+export SECRET_KEY="your-production-secret-key"
+export FLASK_ENV=production
+gunicorn app_updated:app
 ```
 
-3. **Install Tesseract OCR (Optional, for image text extraction):**
+## Development
 
-   - **Windows**: Download installer from https://github.com/UB-Mannheim/tesseract/wiki
-   - **Mac**: `brew install tesseract`
-   - **Linux**: `sudo apt-get install tesseract-ocr`
-
-### Running the Application
-
-**Single command to start:**
+### Running Tests
 
 ```bash
-streamlit run tutor.py
+pytest
 ```
 
-The app will automatically:
-- Initialize the database
-- Seed the complete K-8 curriculum
-- Open in your default web browser
+### Code Formatting
 
-**Default URL:** http://localhost:8501
-
-## 📖 How to Use
-
-### 1. **Home Dashboard**
-- View featured lessons
-- Quick access to subjects
-- See your progress at a glance
-
-### 2. **Browse Subjects**
-- Click on any subject (Math, Science, ELA, etc.)
-- Select a topic
-- Choose a lesson
-
-### 3. **Learn**
-- Read step-by-step instructions
-- Review worked examples
-- Access additional online resources
-
-### 4. **Practice**
-- Toggle to Practice mode
-- Answer questions
-- Get instant feedback
-- See solution steps
-- Track your mastery
-
-### 5. **Upload Files**
-- Drag and drop PDF, Word, text, or image files
-- App extracts the text automatically
-- Review generated lesson
-- Edit and save to your curriculum
-
-### 6. **Search**
-- Search across all lessons
-- Find topics quickly
-- Jump directly to lessons
-
-### 7. **Ask Tutor**
-- Type any academic question
-- Get answers from built-in lessons
-- Access online educational resources
-- See relevant video channels
-
-### 8. **Track Progress**
-- View lessons started
-- See problems mastered
-- Earn achievement badges
-- Monitor your learning journey
-
-## 🗂️ Project Structure
-
-```
-tutor/
-├── tutor.py                  # Main Streamlit application
-├── database.py               # SQLite database functions
-├── curriculum_data.py        # K-8 curriculum content
-├── file_processor.py         # File upload & text extraction
-├── lesson_generator.py       # AI lesson generation
-├── api_integrations.py       # Educational API connections
-├── requirements.txt          # Python dependencies
-├── README.md                 # This file
-└── tutor_app.db             # SQLite database (created on first run)
-```
-
-## 🔧 Configuration
-
-### Database Location
-The SQLite database `tutor_app.db` is created in the same directory as the application. All curriculum, progress, and uploaded content is stored here.
-
-### Adding Custom Content
-1. Use the **Upload Files** feature in the app
-2. Or manually add to the database using the functions in `database.py`
-
-### Extending the Curriculum
-Edit `curriculum_data.py` to add more subjects, topics, or lessons. The structure is:
-```python
-subject_id = add_subject(name, description, icon, order)
-topic_id = add_topic(subject_id, name, description, order)
-lesson_id = add_lesson(topic_id, title, description, steps, examples)
-add_practice_problem(lesson_id, question, answer, steps, hints)
-```
-
-## 🌐 API Integration
-
-The app integrates with free educational APIs:
-
-- **Wikipedia API**: Article summaries and content
-- **Wikibooks API**: Free textbook content
-- **Curated OER Links**: Khan Academy, CK-12, CommonLit, etc.
-
-All API responses are cached locally for offline access. Internet connection is optional.
-
-## 🎯 Perfect For
-
-- **Homeschooling families**
-- **Students** needing extra practice
-- **Teachers** wanting supplemental materials
-- **Parents** helping with homework
-- **Self-directed learners**
-
-## 📊 Database Schema
-
-### Tables
-- `subjects` - Subject categories
-- `topics` - Topics within subjects
-- `lessons` - Lesson content
-- `practice_problems` - Practice questions
-- `student_progress` - Progress tracking
-- `uploaded_files` - Uploaded documents
-- `api_cache` - Cached API responses
-- `standards` - Educational standards alignment
-
-## 🔒 Privacy & Data
-
-- **100% local** - No data sent to external servers
-- **No accounts required** - No sign-up or login
-- **No tracking** - Your learning data stays on your computer
-- **No API keys needed** - Uses free, public APIs only
-
-## 🐛 Troubleshooting
-
-### "Module not found" errors
 ```bash
-pip install -r requirements.txt --upgrade
+black .
 ```
 
-### OCR not working
-Make sure Tesseract is installed and in your system PATH.
+### Linting
 
-### Database errors
-Delete `tutor_app.db` and restart the app to reset everything.
-
-### Port already in use
 ```bash
-streamlit run tutor.py --server.port 8502
+ruff check .
 ```
 
-## 🤝 Contributing
+## Technologies
 
-This is a self-contained educational tool. Feel free to:
-- Add more curriculum content
-- Improve lesson generation algorithms
-- Add more API integrations
-- Enhance the UI/UX
+- **Backend**: Flask, Flask-Login, Flask-SocketIO
+- **Frontend**: TailwindCSS, Alpine.js, Vanilla JavaScript
+- **Database**: SQLite (development), PostgreSQL (production ready)
+- **Real-time**: Socket.IO
+- **PDF Generation**: ReportLab, WeasyPrint
+- **APIs**: requests, aiohttp
 
-## 📝 License
+## Contributing
 
-This project is provided as-is for educational purposes.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
-## 🙏 Acknowledgments
+## License
 
-Educational content inspired by:
-- Common Core State Standards
-- Next Generation Science Standards
-- Free educational resources from Khan Academy, CK-12, and others
+MIT License - see LICENSE file for details
+
+## Support
+
+For questions or issues:
+- Open a GitHub issue
+- Email: support@ultimatetutor.com
+
+## Roadmap
+
+- [ ] Mobile apps (iOS/Android)
+- [ ] Advanced AI tutoring with GPT integration
+- [ ] Video lessons integration
+- [ ] Offline mode with PWA
+- [ ] Advanced analytics dashboard
+- [ ] Multi-language support
+- [ ] Accessibility enhancements (WCAG 2.1 AA)
+- [ ] Integration with LMS platforms
 
 ---
 
-## 🎓 Get Started Learning!
-
-```bash
-streamlit run tutor.py
-```
-
-**Happy Learning! 📚✨**
-
-"# mine" 
+**Ultimate Tutor Platform** - Empowering K-12 Education 🎓

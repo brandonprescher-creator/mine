@@ -1,0 +1,51 @@
+<!-- API Result Card Component -->
+<div class="card-modern">
+    {% if result.image %}
+    <div class="mb-4 rounded-lg overflow-hidden">
+        <img src="{{ result.image }}" alt="{{ result.title }}" class="w-full h-48 object-cover">
+    </div>
+    {% endif %}
+    
+    <div class="flex items-start justify-between mb-2">
+        <h3 class="text-lg font-bold flex-1">{{ result.title }}</h3>
+        {% if result.source %}
+        <span class="badge badge-primary ml-2">{{ result.source }}</span>
+        {% endif %}
+    </div>
+    
+    {% if result.description %}
+    <p class="text-dark-400 text-sm mb-3">
+        {{ result.description[:200] + '...' if result.description|length > 200 else result.description }}
+    </p>
+    {% endif %}
+    
+    {% if result.metadata %}
+    <div class="flex flex-wrap gap-2 mb-3">
+        {% for key, value in result.metadata.items() %}
+        <span class="text-xs px-2 py-1 rounded bg-dark-800 text-dark-400">
+            <strong>{{ key }}:</strong> {{ value }}
+        </span>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <div class="flex items-center justify-between">
+        {% if result.url %}
+        <a href="{{ result.url }}" target="_blank" class="btn btn-secondary text-sm py-2 px-4">
+            <i class="fas fa-external-link-alt mr-2"></i>
+            View Source
+        </a>
+        {% endif %}
+        
+        {% if result.actions %}
+        <div class="flex space-x-2">
+            {% for action in result.actions %}
+            <button class="btn btn-secondary text-sm py-2 px-3" onclick="{{ action.onclick }}">
+                <i class="{{ action.icon }} mr-1"></i>
+                {{ action.label }}
+            </button>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>

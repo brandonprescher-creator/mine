@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: ultimate-tutor-platform
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app_updated:app --bind 0.0.0.0:$PORT --workers 4 --worker-class eventlet --timeout 120
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        value: ./tutor_app.db
+      - key: FLASK_ENV
+        value: production
+    autoDeploy: true
+    
+databases:
+  - name: tutor-db
+    databaseName: tutor_platform
+    plan: free

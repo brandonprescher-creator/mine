@@ -1,600 +1,101 @@
 {% extends "base.html" %}
 
-{% block title %}{{ subject.name }} Topics - ULTIMATE BADASS TUTOR{% endblock %}
+{% block title %}{{ subject.name }} - Topics{% endblock %}
+
+{% block breadcrumbs %}
+{% include 'partials/_breadcrumbs.html' with breadcrumbs=[
+    {'title': 'Home', 'url': '/'},
+    {'title': 'Subjects', 'url': '/subjects'},
+    {'title': subject.name, 'url': '#'}
+] %}
+{% endblock %}
 
 {% block content %}
-<div class="topics-mega-page">
-    <!-- EPIC SUBJECT HEADER -->
-    <div class="subject-mega-header">
-        <div class="header-bg-waves"></div>
-        
-        <a href="/subjects" class="back-mega-btn">
-            <span class="back-arrow">⬅️</span>
-            <span>Back to Subjects</span>
-        </a>
-        
-        <div class="subject-hero-content">
-            <div class="subject-mascot">{{ subject.icon }}</div>
-            <h1 class="subject-mega-title">{{ subject.name }}</h1>
-            <p class="subject-tagline">Get ready to become a {{ subject.name }} MASTER! 🏆</p>
-            
-            <div class="subject-super-stats">
-                <div class="super-stat">
-                    <div class="super-stat-number">{{ topics|length }}</div>
-                    <div class="super-stat-label">EPIC TOPICS!</div>
-                </div>
-                <div class="super-stat">
-                    <div class="super-stat-number">500+</div>
-                    <div class="super-stat-label">PROBLEMS!</div>
-                </div>
-                <div class="super-stat">
-                    <div class="super-stat-number">∞</div>
-                    <div class="super-stat-label">FUN!</div>
-                </div>
+<div class="fade-in">
+    <!-- Subject Header -->
+    <div class="card-glass p-8 mb-8">
+        <div class="flex items-center space-x-4 mb-4">
+            <div class="text-6xl">{{ subject.icon }}</div>
+            <div>
+                <h1 class="heading-2 gradient-text">{{ subject.name }}</h1>
+                <p class="text-dark-300">{{ subject.description }}</p>
             </div>
         </div>
     </div>
-
-    <!-- TOPICS - HUGE EXCITING CARDS -->
-    <div class="topics-mega-container">
-        <h2 class="topics-section-title">
-            <span class="title-emoji">🎯</span>
-            PICK YOUR MISSION!
-            <span class="title-emoji">🎯</span>
-        </h2>
+    
+    <!-- Topics Grid -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Topics</h2>
         
-        <div class="topics-ultra-grid">
+        {% if topics %}
+        <div class="grid-responsive">
             {% for topic in topics %}
-            <div class="topic-ultra-card" data-topic-id="{{ topic.id }}">
-                <div class="topic-ribbon">{{ loop.index }}</div>
-                <div class="topic-glow-effect"></div>
-                
-                <!-- BIG ICON -->
-                <div class="topic-mega-icon">{{ topic.icon or '📚' }}</div>
-                
-                <!-- TOPIC NAME -->
-                <h3 class="topic-mega-name">{{ topic.name }}</h3>
-                
-                <!-- DESCRIPTION -->
-                <p class="topic-mega-desc">{{ topic.description or 'Get ready for an awesome adventure!' }}</p>
-                
-                <!-- PROGRESS BAR -->
-                <div class="topic-progress-container">
-                    <div class="topic-progress-label">Your Progress:</div>
-                    <div class="topic-progress-bar">
-                        <div class="topic-progress-fill" style="width: {{ topic.progress or 0 }}%">
-                            <span class="progress-text">{{ topic.progress or 0 }}%</span>
-                        </div>
-                    </div>
+            <div class="card-modern group cursor-pointer" onclick="window.location.href='/topic/{{ topic.id }}'">
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="text-xl font-bold group-hover:text-primary-400 transition-colors flex-1">
+                        {{ topic.name }}
+                    </h3>
+                    <i class="fas fa-arrow-right text-primary-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
                 </div>
-                
-                <!-- TOPIC STATS -->
-                <div class="topic-mini-stats">
-                    <div class="topic-mini-stat">
-                        <span>📖</span>
-                        <span>{{ topic.lesson_count or 5 }} Lessons</span>
-                    </div>
-                    <div class="topic-mini-stat">
-                        <span>⚡</span>
-                        <span>{{ topic.estimated_time or 30 }} min</span>
-                    </div>
-                </div>
-                
-                <!-- MASSIVE START BUTTON -->
-                <button class="topic-start-mega-btn" onclick="startTopic({{ topic.id }})">
-                    <div class="btn-shine"></div>
-                    <span class="btn-mega-text">
-                        <span class="btn-rocket">🚀</span>
-                        <span class="btn-words">START NOW!</span>
-                        <span class="btn-rocket">🚀</span>
+                <p class="text-dark-400 text-sm mb-4">{{ topic.description }}</p>
+                <div class="flex items-center justify-between text-sm">
+                    <span class="badge badge-primary">
+                        <i class="fas fa-book-open mr-1"></i>
+                        {{ topic.lesson_count if topic.lesson_count else 'Multiple' }} Lessons
                     </span>
-                </button>
-                
-                <!-- DECORATIONS -->
-                <div class="topic-decorations">
-                    {% if loop.index <= 3 %}
-                    <div class="hot-badge">🔥 HOT!</div>
-                    {% endif %}
-                    {% if topic.has_games %}
-                    <div class="game-badge">🎮 Has Games!</div>
+                    {% if topic.difficulty %}
+                    <span class="badge badge-{{ topic.difficulty }}">
+                        {{ topic.difficulty|upper }}
+                    </span>
                     {% endif %}
                 </div>
             </div>
             {% endfor %}
         </div>
+        {% else %}
+        {% include 'partials/_empty_state.html' with 
+            icon='📖',
+            title='No Topics Yet',
+            message='Topics for this subject are being developed. Check back soon!',
+            button_text='Back to Subjects',
+            button_href='/subjects'
+        %}
+        {% endif %}
     </div>
-
-    <!-- ENCOURAGEMENT SECTION -->
-    <div class="encouragement-mega-section">
-        <div class="encouragement-mascot">💪</div>
-        <h2 class="encouragement-title">YOU'VE GOT THIS!</h2>
-        <p class="encouragement-text">Pick a topic and start your journey to becoming a MASTER! 🌟</p>
+    
+    <!-- Related Resources -->
+    <div class="card-modern">
+        <h3 class="text-xl font-bold mb-4">Additional Resources</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <a href="/api-explorer?subject={{ subject.name }}" class="flex items-center space-x-3 p-4 rounded-lg bg-dark-800 hover:bg-dark-700 transition-colors">
+                <i class="fas fa-code text-2xl text-primary-400"></i>
+                <div>
+                    <div class="font-semibold">API Resources</div>
+                    <div class="text-sm text-dark-500">Explore external learning materials</div>
+                </div>
+            </a>
+            <a href="/worksheets?subject={{ subject.name }}" class="flex items-center space-x-3 p-4 rounded-lg bg-dark-800 hover:bg-dark-700 transition-colors">
+                <i class="fas fa-file-alt text-2xl text-primary-400"></i>
+                <div>
+                    <div class="font-semibold">Generate Worksheets</div>
+                    <div class="text-sm text-dark-500">Create practice materials</div>
+                </div>
+            </a>
+            <a href="/games?subject={{ subject.name }}" class="flex items-center space-x-3 p-4 rounded-lg bg-dark-800 hover:bg-dark-700 transition-colors">
+                <i class="fas fa-gamepad text-2xl text-primary-400"></i>
+                <div>
+                    <div class="font-semibold">Subject Games</div>
+                    <div class="text-sm text-dark-500">Play educational games</div>
+                </div>
+            </a>
+            <a href="/upload?subject={{ subject.name }}" class="flex items-center space-x-3 p-4 rounded-lg bg-dark-800 hover:bg-dark-700 transition-colors">
+                <i class="fas fa-upload text-2xl text-primary-400"></i>
+                <div>
+                    <div class="font-semibold">Upload Content</div>
+                    <div class="text-sm text-dark-500">Add your own materials</div>
+                </div>
+            </a>
+        </div>
     </div>
 </div>
-
-<script>
-function startTopic(topicId) {
-    const card = event.currentTarget.closest('.topic-ultra-card');
-    
-    // Epic animation!
-    card.style.transform = 'scale(1.2)';
-    card.style.opacity = '0.8';
-    
-    // Sound
-    if (typeof badassTutor !== 'undefined') {
-        badassTutor.playSound('level-up');
-    }
-    
-    // Confetti explosion!
-    createConfettiExplosion();
-    
-    // Navigate
-    setTimeout(() => {
-        window.location.href = `/topic/${topicId}`;
-    }, 600);
-}
-
-function createConfettiExplosion() {
-    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#feca57', '#ff9ff3'];
-    const emojis = ['🎉', '🎊', '⭐', '🌟', '✨', '💫'];
-    
-    for (let i = 0; i < 60; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti-piece';
-        
-        if (Math.random() > 0.5) {
-            confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-            confetti.style.fontSize = '2rem';
-        } else {
-            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.width = '10px';
-            confetti.style.height = '10px';
-        }
-        
-        confetti.style.left = Math.random() * window.innerWidth + 'px';
-        confetti.style.top = '-20px';
-        confetti.style.setProperty('--fall-distance', Math.random() * window.innerHeight + 'px');
-        confetti.style.setProperty('--fall-rotation', Math.random() * 720 + 'deg');
-        confetti.style.setProperty('--fall-duration', (Math.random() * 2 + 2) + 's');
-        
-        document.body.appendChild(confetti);
-        
-        setTimeout(() => confetti.remove(), 4000);
-    }
-}
-
-// Add hover effects
-document.addEventListener('DOMContentLoaded', function() {
-    const cards = document.querySelectorAll('.topic-ultra-card');
-    
-    cards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.querySelector('.topic-mega-icon').style.transform = 'scale(1.2) rotate(10deg)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.querySelector('.topic-mega-icon').style.transform = 'scale(1) rotate(0deg)';
-        });
-    });
-});
-</script>
-
-<style>
-.topics-mega-page {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-}
-
-.subject-mega-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 4rem 2rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    border-radius: 0 0 60px 60px;
-    margin-bottom: 4rem;
-}
-
-.header-bg-waves {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 10px,
-        rgba(255,255,255,0.05) 10px,
-        rgba(255,255,255,0.05) 20px
-    );
-    animation: wave 20s linear infinite;
-}
-
-@keyframes wave {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(40px); }
-}
-
-.back-mega-btn {
-    position: absolute;
-    top: 2rem;
-    left: 2rem;
-    background: rgba(255,255,255,0.25);
-    backdrop-filter: blur(10px);
-    color: white;
-    padding: 1rem 2rem;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    border: 3px solid rgba(255,255,255,0.5);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.back-mega-btn:hover {
-    background: rgba(255,255,255,0.4);
-    transform: translateX(-10px);
-}
-
-.back-arrow {
-    font-size: 1.5rem;
-}
-
-.subject-mascot {
-    font-size: 10rem;
-    animation: bounce 2s ease-in-out infinite;
-    filter: drop-shadow(0 15px 30px rgba(0,0,0,0.3));
-}
-
-.subject-mega-title {
-    font-family: 'Fredoka One', cursive;
-    font-size: 5rem;
-    color: white;
-    text-shadow: 5px 5px 15px rgba(0,0,0,0.4);
-    margin: 2rem 0 1rem;
-    text-transform: uppercase;
-}
-
-.subject-tagline {
-    font-size: 2rem;
-    color: white;
-    font-weight: bold;
-    margin-bottom: 2rem;
-}
-
-.subject-super-stats {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    flex-wrap: wrap;
-}
-
-.super-stat {
-    background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(10px);
-    padding: 1.5rem 2.5rem;
-    border-radius: 30px;
-    border: 4px solid rgba(255,255,255,0.4);
-}
-
-.super-stat-number {
-    font-size: 3rem;
-    font-weight: bold;
-    color: white;
-    font-family: 'Fredoka One', cursive;
-}
-
-.super-stat-label {
-    font-size: 1rem;
-    color: white;
-    font-weight: bold;
-}
-
-.topics-mega-container {
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.topics-section-title {
-    font-family: 'Fredoka One', cursive;
-    font-size: 3.5rem;
-    text-align: center;
-    color: #333;
-    margin-bottom: 3rem;
-}
-
-.title-emoji {
-    font-size: 4rem;
-    animation: bounce 1s ease-in-out infinite;
-}
-
-.topics-ultra-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 3rem;
-}
-
-.topic-ultra-card {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    border-radius: 35px;
-    padding: 2.5rem;
-    position: relative;
-    cursor: pointer;
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    border: 5px solid transparent;
-    overflow: visible;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-}
-
-.topic-ultra-card:hover {
-    transform: translateY(-25px) rotate(2deg);
-    box-shadow: 0 30px 70px rgba(0,0,0,0.3);
-    border-color: #4ecdc4;
-}
-
-.topic-ribbon {
-    position: absolute;
-    top: -10px;
-    left: 20px;
-    background: linear-gradient(45deg, #ff6b6b, #feca57);
-    color: white;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    z-index: 10;
-}
-
-.topic-glow-effect {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, rgba(78,205,196,0.2) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.5s;
-    border-radius: 35px;
-}
-
-.topic-ultra-card:hover .topic-glow-effect {
-    opacity: 1;
-}
-
-.topic-mega-icon {
-    font-size: 7rem;
-    margin: 1rem 0 1.5rem;
-    transition: all 0.3s ease;
-    display: inline-block;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
-}
-
-.topic-mega-name {
-    font-family: 'Fredoka One', cursive;
-    font-size: 2.2rem;
-    background: linear-gradient(45deg, #667eea, #764ba2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 1rem;
-}
-
-.topic-mega-desc {
-    font-size: 1.2rem;
-    color: #666;
-    margin-bottom: 1.5rem;
-    line-height: 1.7;
-    font-weight: 600;
-}
-
-.topic-progress-container {
-    margin: 1.5rem 0;
-}
-
-.topic-progress-label {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 0.5rem;
-}
-
-.topic-progress-bar {
-    background: rgba(0,0,0,0.1);
-    border-radius: 30px;
-    height: 35px;
-    overflow: hidden;
-    position: relative;
-}
-
-.topic-progress-fill {
-    background: linear-gradient(45deg, #4ecdc4, #45b7d1, #4ecdc4);
-    background-size: 200% 100%;
-    height: 100%;
-    border-radius: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: width 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    animation: shimmer 2s linear infinite;
-}
-
-@keyframes shimmer {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 200% 50%; }
-}
-
-.progress-text {
-    font-weight: bold;
-    color: white;
-    font-size: 1rem;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-}
-
-.topic-mini-stats {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    margin: 1.5rem 0;
-}
-
-.topic-mini-stat {
-    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-    padding: 0.8rem 1.5rem;
-    border-radius: 25px;
-    font-weight: bold;
-    border: 3px solid white;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.topic-start-mega-btn {
-    background: linear-gradient(45deg, #ff6b6b 0%, #ff8e53 25%, #feca57 50%, #ff8e53 75%, #ff6b6b 100%);
-    background-size: 300% 100%;
-    border: none;
-    color: white;
-    padding: 1.8rem 3rem;
-    border-radius: 60px;
-    font-size: 1.8rem;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 12px 35px rgba(255,107,107,0.5);
-    transition: all 0.4s ease;
-    animation: buttonGradient 3s ease infinite;
-}
-
-@keyframes buttonGradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-.topic-start-mega-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 20px 50px rgba(255,107,107,0.7);
-}
-
-.btn-shine {
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
-    transform: rotate(45deg);
-    animation: shine 3s infinite;
-}
-
-.btn-mega-text {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    font-family: 'Fredoka One', cursive;
-}
-
-.btn-rocket {
-    font-size: 2rem;
-    animation: wiggle 0.8s ease-in-out infinite;
-}
-
-.topic-decorations {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.hot-badge, .game-badge {
-    background: linear-gradient(45deg, #ff6b6b, #feca57);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-weight: bold;
-    font-size: 0.9rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    animation: pulse 1.5s ease-in-out infinite;
-}
-
-.encouragement-mega-section {
-    max-width: 1000px;
-    margin: 5rem auto 3rem;
-    padding: 3rem;
-    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-    border-radius: 50px;
-    text-align: center;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-}
-
-.encouragement-mascot {
-    font-size: 8rem;
-    animation: bounce 2s ease-in-out infinite;
-}
-
-.encouragement-title {
-    font-family: 'Fredoka One', cursive;
-    font-size: 3.5rem;
-    color: #333;
-    margin: 1rem 0;
-}
-
-.encouragement-text {
-    font-size: 1.5rem;
-    color: #555;
-    font-weight: bold;
-}
-
-.confetti-piece {
-    position: fixed;
-    pointer-events: none;
-    z-index: 10000;
-    animation: fall var(--fall-duration) linear forwards;
-}
-
-@keyframes fall {
-    to {
-        transform: translateY(var(--fall-distance)) rotate(var(--fall-rotation));
-        opacity: 0;
-    }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .subject-mega-title {
-        font-size: 3rem;
-    }
-    
-    .subject-mascot {
-        font-size: 6rem;
-    }
-    
-    .topics-ultra-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    
-    .topic-mega-icon {
-        font-size: 5rem;
-    }
-    
-    .topic-start-mega-btn {
-        font-size: 1.4rem;
-        padding: 1.5rem 2rem;
-    }
-}
-</style>
 {% endblock %}

@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% block title %}{{ api_name }} - API Explorer{% endblock %}
+
+{% block breadcrumbs %}
+{% include 'partials/_breadcrumbs.html' with breadcrumbs=[
+    {'title': 'Home', 'url': '/'},
+    {'title': 'API Explorer', 'url': '/api-explorer'},
+    {'title': api_name, 'url': '#'}
+] %}
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <!-- API Header -->
+    <div class="card-glass mb-8 p-8">
+        <div class="flex items-start justify-between">
+            <div class="flex-1">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="text-5xl">{{ api_icon }}</div>
+                    <div>
+                        <h1 class="heading-2 gradient-text">{{ api_name }}</h1>
+                        <p class="text-dark-400 text-sm">{{ api_category }}</p>
+                    </div>
+                </div>
+                <p class="text-dark-300 text-lg mb-4">{{ api_description }}</p>
+                <div class="flex flex-wrap gap-2">
+                    {% for tag in api_tags %}
+                    <span class="badge badge-primary">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% if api_url %}
+            <a href="{{ api_url }}" target="_blank" class="btn btn-secondary">
+                <i class="fas fa-external-link-alt mr-2"></i>
+                Official Docs
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Search/Query Section -->
+    <div class="card-modern mb-8">
+        <h2 class="text-xl font-bold mb-4">Search {{ api_name }}</h2>
+        <form id="api-search-form" class="flex gap-4">
+            <input 
+                type="text" 
+                id="search-query" 
+                placeholder="Enter search term..." 
+                class="input-modern flex-1"
+                required
+            >
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search mr-2"></i>
+                Search
+            </button>
+        </form>
+        
+        {% if api_filters %}
+        <div class="mt-4 flex flex-wrap gap-3">
+            {% for filter in api_filters %}
+            <select class="input-modern" id="filter-{{ filter.id }}" onchange="updateFilters()">
+                <option value="">{{ filter.label }}</option>
+                {% for option in filter.options %}
+                <option value="{{ option.value }}">{{ option.label }}</option>
+                {% endfor %}
+            </select>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Loading State -->
+    <div id="loading-state" class="hidden text-center py-12">
+        <div class="spinner mx-auto mb-4"></div>
+        <p class="text-dark-400">Fetching results...</p>
+    </div>
+    
+    <!-- Results Grid -->
+    <div id="results-container" class="grid-responsive mb-8">
+        <!-- Results will be loaded dynamically -->
+    </div>
+    
+    <!-- Empty State -->
+    <div id="empty-state" class="hidden">
+        {% include 'partials/_empty_state.html' with 
+            icon='🔍',
+            title='No Results Found',
+            message='Try a different search term or adjust your filters',
+            button_text='Clear Filters',
+            button_onclick='clearFilters()'
+        %}
+    </div>
+    
+    <!-- Example Queries -->
+    <div class="card-modern">
+        <h3 class="text-lg font-bold mb-4">Example Queries</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {% for example in api_examples %}
+            <button 
+                class="text-left px-4 py-3 rounded-lg bg-dark-800 hover:bg-dark-700 transition-colors"
+                onclick="searchExample('{{ example.query }}')"
+            >
+                <div class="font-semibold text-primary-400 mb-1">{{ example.title }}</div>
+                <div class="text-sm text-dark-500">{{ example.query }}</div>
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const API_ENDPOINT = '{{ api_endpoint }}';
+const API_KEY = '{{ api_key if api_key else '' }}';
+
+document.getElementById('api-search-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const query = document.getElementById('search-query').value;
+    await performSearch(query);
+});
+
+async function performSearch(query) {
+    showLoading();
+    hideEmptyState();
+    clearResults();
+    
+    try {
+        const url = buildSearchUrl(query);
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        hideLoading();
+        
+        if (data && data.results && data.results.length > 0) {
+            displayResults(data.results);
+        } else {
+            showEmptyState();
+        }
+    } catch (error) {
+        hideLoading();
+        console.error('Search error:', error);
+        showNotification('Error fetching results', 'error');
+    }
+}
+
+function buildSearchUrl(query) {
+    const filters = getActiveFilters();
+    const params = new URLSearchParams({
+        q: query,
+        ...filters
+    });
+    return `${API_ENDPOINT}?${params}`;
+}
+
+function getActiveFilters() {
+    const filters = {};
+    {% for filter in api_filters %}
+    const {{ filter.id }} = document.getElementById('filter-{{ filter.id }}')?.value;
+    if ({{ filter.id }}) {
+        filters['{{ filter.id }}'] = {{ filter.id }};
+    }
+    {% endfor %}
+    return filters;
+}
+
+function displayResults(results) {
+    const container = document.getElementById('results-container');
+    container.innerHTML = '';
+    
+    results.forEach(result => {
+        const card = createResultCard(result);
+        container.appendChild(card);
+    });
+}
+
+function createResultCard(result) {
+    const card = document.createElement('div');
+    card.className = 'card-modern';
+    
+    card.innerHTML = `
+        ${result.image ? `
+            <div class="mb-4 rounded-lg overflow-hidden">
+                <img src="${result.image}" alt="${result.title}" class="w-full h-48 object-cover">
+            </div>
+        ` : ''}
+        
+        <h3 class="text-lg font-bold mb-2">${result.title}</h3>
+        
+        ${result.description ? `
+            <p class="text-dark-400 text-sm mb-3">
+                ${result.description.substring(0, 150)}${result.description.length > 150 ? '...' : ''}
+            </p>
+        ` : ''}
+        
+        ${result.metadata ? `
+            <div class="flex flex-wrap gap-2 mb-3">
+                ${Object.entries(result.metadata).map(([key, value]) => `
+                    <span class="text-xs px-2 py-1 rounded bg-dark-800 text-dark-400">
+                        <strong>${key}:</strong> ${value}
+                    </span>
+                `).join('')}
+            </div>
+        ` : ''}
+        
+        ${result.url ? `
+            <a href="${result.url}" target="_blank" class="btn btn-secondary text-sm py-2 px-4 w-full">
+                <i class="fas fa-external-link-alt mr-2"></i>
+                View Source
+            </a>
+        ` : ''}
+    `;
+    
+    return card;
+}
+
+function searchExample(query) {
+    document.getElementById('search-query').value = query;
+    performSearch(query);
+}
+
+function updateFilters() {
+    const query = document.getElementById('search-query').value;
+    if (query) {
+        performSearch(query);
+    }
+}
+
+function clearFilters() {
+    {% for filter in api_filters %}
+    document.getElementById('filter-{{ filter.id }}').value = '';
+    {% endfor %}
+    hideEmptyState();
+    clearResults();
+}
+
+function showLoading() {
+    document.getElementById('loading-state').classList.remove('hidden');
+}
+
+function hideLoading() {
+    document.getElementById('loading-state').classList.add('hidden');
+}
+
+function showEmptyState() {
+    document.getElementById('empty-state').classList.remove('hidden');
+}
+
+function hideEmptyState() {
+    document.getElementById('empty-state').classList.add('hidden');
+}
+
+function clearResults() {
+    document.getElementById('results-container').innerHTML = '';
+}
+</script>
+{% endblock %}

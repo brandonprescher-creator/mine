@@ -1,0 +1,31 @@
+<!-- Modal Component -->
+<div id="{{ modal_id }}" class="modal-overlay hidden" onclick="closeModal('{{ modal_id }}')">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="flex items-center justify-between p-6 border-b border-dark-800">
+            <h2 class="text-2xl font-bold">{{ title }}</h2>
+            <button onclick="closeModal('{{ modal_id }}')" class="text-dark-400 hover:text-white transition-colors">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <div class="p-6">
+            {{ content }}
+        </div>
+        
+        {% if footer %}
+        <div class="flex items-center justify-end space-x-3 p-6 border-t border-dark-800">
+            {{ footer }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.add('hidden');
+}
+
+function openModal(modalId) {
+    document.getElementById(modalId).classList.remove('hidden');
+}
+</script>

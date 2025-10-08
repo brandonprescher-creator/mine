@@ -1,535 +1,100 @@
 {% extends "base.html" %}
 
-{% block title %}{{ topic.name }} - ULTIMATE BADASS TUTOR{% endblock %}
+{% block title %}{{ topic.name }} - Lessons{% endblock %}
+
+{% block breadcrumbs %}
+{% include 'partials/_breadcrumbs.html' with breadcrumbs=[
+    {'title': 'Home', 'url': '/'},
+    {'title': 'Subjects', 'url': '/subjects'},
+    {'title': topic.subject_name, 'url': '/subject/' + (topic.subject_id|string)},
+    {'title': topic.name, 'url': '#'}
+] %}
+{% endblock %}
 
 {% block content %}
-<div class="lessons-mega-page">
-    <!-- TOPIC HERO -->
-    <div class="topic-hero-mega">
-        <div class="hero-particles-bg"></div>
-        
-        <a href="/subject/{{ topic.subject_id }}" class="super-back-btn">
-            ⬅️ Back
-        </a>
-        
-        <div class="topic-mascot-huge">{{ topic.icon or '📚' }}</div>
-        <h1 class="topic-title-mega">{{ topic.name }}</h1>
-        <p class="topic-subtitle-mega">Choose a lesson and become a PRO! 🏆</p>
+<div class="fade-in">
+    <!-- Topic Header -->
+    <div class="card-glass p-8 mb-8">
+        <h1 class="heading-2 gradient-text mb-3">{{ topic.name }}</h1>
+        <p class="text-dark-300 text-lg">{{ topic.description }}</p>
     </div>
-
-    <!-- LESSONS - SUPER FUN CARDS -->
-    <div class="lessons-container-mega">
-        <h2 class="lessons-header-mega">
-            <span class="header-star">⭐</span>
-            PICK YOUR LESSON!
-            <span class="header-star">⭐</span>
-        </h2>
-        
-        <div class="lessons-grid-mega">
+    
+    <!-- Lessons List -->
+    {% if lessons %}
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-6">Available Lessons</h2>
+        <div class="space-y-4">
             {% for lesson in lessons %}
-            <div class="lesson-card-mega" data-lesson-id="{{ lesson.id }}">
-                <div class="lesson-number-badge">{{ loop.index }}</div>
-                <div class="lesson-sparkle-effect"></div>
-                
-                <!-- LESSON ICON -->
-                <div class="lesson-icon-mega">
-                    {% if 'division' in lesson.title.lower() %}
-                        ➗
-                    {% elif 'multiplication' in lesson.title.lower() %}
-                        ✖️
-                    {% elif 'fraction' in lesson.title.lower() %}
-                        🍕
-                    {% elif 'geometry' in lesson.title.lower() %}
-                        📐
-                    {% else %}
-                        📖
-                    {% endif %}
-                </div>
-                
-                <!-- LESSON TITLE -->
-                <h3 class="lesson-title-mega">{{ lesson.title }}</h3>
-                
-                <!-- DESCRIPTION -->
-                <p class="lesson-desc-mega">{{ lesson.description or 'Learn something AWESOME!' }}</p>
-                
-                <!-- LESSON INFO -->
-                <div class="lesson-info-badges">
-                    <div class="info-badge">
-                        <span class="badge-icon">📚</span>
-                        <span>{{ lesson.steps|length }} Steps</span>
-                    </div>
-                    <div class="info-badge">
-                        <span class="badge-icon">💡</span>
-                        <span>{{ lesson.examples|length }} Examples</span>
-                    </div>
-                    <div class="info-badge">
-                        <span class="badge-icon">⏱️</span>
-                        <span>15 min</span>
-                    </div>
-                </div>
-                
-                <!-- HUGE START BUTTON -->
-                <button class="lesson-start-ultra-btn" onclick="startLesson({{ lesson.id }})">
-                    <div class="ultra-btn-glow"></div>
-                    <span class="ultra-btn-content">
-                        <span class="ultra-emoji">🎓</span>
-                        <span class="ultra-text">START LEARNING!</span>
-                        <span class="ultra-emoji">🎓</span>
-                    </span>
-                </button>
-                
-                <!-- FLOATING STARS -->
-                <div class="floating-stars">
-                    <span class="f-star">⭐</span>
-                    <span class="f-star">⭐</span>
-                    <span class="f-star">⭐</span>
-                </div>
-            </div>
+            {% include 'partials/_lesson_card.html' with lesson=lesson %}
             {% endfor %}
         </div>
     </div>
-
-    <!-- PUMP UP SECTION -->
-    <div class="pump-up-section">
-        <div class="pump-mascot">🎯</div>
-        <h2 class="pump-title">READY TO LEARN?</h2>
-        <p class="pump-text">Each lesson is packed with FUN, GAMES, and AWESOME visuals! 🌈</p>
-        <div class="pump-features">
-            <div class="pump-feature">✨ Step-by-step teaching</div>
-            <div class="pump-feature">🎨 Colorful pictures</div>
-            <div class="pump-feature">🎮 Fun practice</div>
-            <div class="pump-feature">🏆 Earn rewards!</div>
+    {% else %}
+    {% include 'partials/_empty_state.html' with 
+        icon='📚',
+        title='No Lessons Available',
+        message='Lessons for this topic are being developed.',
+        button_text='Back to Topics',
+        button_onclick="history.back()"
+    %}
+    {% endif %}
+    
+    <!-- Practice Section -->
+    <div class="card-modern mb-8">
+        <h3 class="text-xl font-bold mb-4">Practice All</h3>
+        <p class="text-dark-400 mb-4">
+            Test your knowledge across all lessons in this topic with mixed practice problems
+        </p>
+        <button class="btn btn-primary" onclick="startMixedPractice()">
+            <i class="fas fa-dumbbell mr-2"></i>
+            Start Mixed Practice
+        </button>
+    </div>
+    
+    <!-- Progress Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="card-modern text-center">
+            <div class="text-4xl mb-3">✅</div>
+            <div class="text-3xl font-bold gradient-text mb-2" id="completed-lessons">0</div>
+            <div class="text-dark-400">Lessons Completed</div>
+        </div>
+        <div class="card-modern text-center">
+            <div class="text-4xl mb-3">🎯</div>
+            <div class="text-3xl font-bold gradient-text mb-2" id="problems-solved">0</div>
+            <div class="text-dark-400">Problems Solved</div>
+        </div>
+        <div class="card-modern text-center">
+            <div class="text-4xl mb-3">⭐</div>
+            <div class="text-3xl font-bold gradient-text mb-2" id="mastery-score">0%</div>
+            <div class="text-dark-400">Mastery Score</div>
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block scripts %}
 <script>
-function startLesson(lessonId) {
-    const card = event.currentTarget.closest('.lesson-card-mega');
-    
-    // Massive animation
-    card.style.transform = 'scale(1.3) rotateY(360deg)';
-    card.style.opacity = '0';
-    
-    // Sound
-    if (typeof badassTutor !== 'undefined') {
-        badassTutor.playSound('level-up');
-    }
-    
-    // Epic particle explosion
-    createLessonExplosion();
-    
-    // Navigate
-    setTimeout(() => {
-        window.location.href = `/lesson/${lessonId}`;
-    }, 700);
+function startMixedPractice() {
+    const topicId = {{ topic.id }};
+    window.location.href = `/practice/topic/${topicId}`;
 }
 
-function createLessonExplosion() {
-    const emojis = ['📚', '📖', '✏️', '📝', '🎓', '⭐', '🌟', '✨', '💫', '🎉'];
-    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#feca57', '#ff9ff3'];
-    
-    for (let i = 0; i < 70; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'lesson-particle';
-        
-        if (Math.random() > 0.4) {
-            particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-            particle.style.fontSize = (Math.random() * 1.5 + 1.5) + 'rem';
-        } else {
-            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-            particle.style.width = (Math.random() * 15 + 5) + 'px';
-            particle.style.height = particle.style.width;
-            particle.style.borderRadius = '50%';
-        }
-        
-        particle.style.left = (Math.random() * window.innerWidth) + 'px';
-        particle.style.top = '-50px';
-        particle.style.setProperty('--fall', (Math.random() * window.innerHeight + 200) + 'px');
-        particle.style.setProperty('--rotate', (Math.random() * 1080 - 540) + 'deg');
-        particle.style.setProperty('--duration', (Math.random() * 2 + 2) + 's');
-        
-        document.body.appendChild(particle);
-        
-        setTimeout(() => particle.remove(), 4000);
+// Load progress stats
+async function loadProgress() {
+    try {
+        const topicId = {{ topic.id }};
+        // This would call a backend endpoint for topic progress
+        // For now, using placeholder values
+        document.getElementById('completed-lessons').textContent = '0';
+        document.getElementById('problems-solved').textContent = '0';
+        document.getElementById('mastery-score').textContent = '0%';
+    } catch (error) {
+        console.error('Error loading progress:', error);
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadProgress();
+});
 </script>
-
-<style>
-.lessons-mega-page {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 30%, #ffeaa7 100%);
-}
-
-.topic-hero-mega {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 4rem 2rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    border-radius: 0 0 70px 70px;
-    margin-bottom: 4rem;
-}
-
-.hero-particles-bg {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background-image: 
-        radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px),
-        radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-    background-size: 50px 50px;
-    background-position: 0 0, 25px 25px;
-    animation: moveParticles 20s linear infinite;
-}
-
-@keyframes moveParticles {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(50px, 50px); }
-}
-
-.super-back-btn {
-    position: absolute;
-    top: 2rem;
-    left: 2rem;
-    background: rgba(255,255,255,0.3);
-    backdrop-filter: blur(10px);
-    color: white;
-    padding: 1rem 2rem;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2rem;
-    border: 3px solid rgba(255,255,255,0.5);
-    transition: all 0.3s ease;
-}
-
-.super-back-btn:hover {
-    background: rgba(255,255,255,0.5);
-    transform: translateX(-15px);
-}
-
-.topic-mascot-huge {
-    font-size: 12rem;
-    animation: bounce 2s ease-in-out infinite;
-    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
-}
-
-.topic-title-mega {
-    font-family: 'Fredoka One', cursive;
-    font-size: 5rem;
-    color: white;
-    text-shadow: 6px 6px 20px rgba(0,0,0,0.4);
-    margin: 2rem 0 1rem;
-    text-transform: uppercase;
-}
-
-.topic-subtitle-mega {
-    font-size: 2rem;
-    color: white;
-    font-weight: bold;
-}
-
-.lessons-container-mega {
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.lessons-header-mega {
-    font-family: 'Fredoka One', cursive;
-    font-size: 4rem;
-    text-align: center;
-    color: #333;
-    margin-bottom: 3rem;
-}
-
-.header-star {
-    font-size: 4rem;
-    animation: spin 3s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.lessons-grid-mega {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-    gap: 3rem;
-}
-
-.lesson-card-mega {
-    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
-    border-radius: 40px;
-    padding: 3rem;
-    position: relative;
-    cursor: pointer;
-    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    border: 6px solid transparent;
-    overflow: hidden;
-    box-shadow: 0 15px 45px rgba(0,0,0,0.15);
-}
-
-.lesson-card-mega:hover {
-    transform: translateY(-30px) scale(1.1);
-    box-shadow: 0 35px 80px rgba(0,0,0,0.35);
-    border-color: #ff6b6b;
-}
-
-.lesson-number-badge {
-    position: absolute;
-    top: -15px;
-    left: 25px;
-    background: linear-gradient(45deg, #667eea, #764ba2);
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    font-weight: bold;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    z-index: 10;
-    border: 5px solid white;
-}
-
-.lesson-sparkle-effect {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, rgba(255,215,0,0.2) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.5s;
-}
-
-.lesson-card-mega:hover .lesson-sparkle-effect {
-    opacity: 1;
-    animation: pulse 2s ease-in-out infinite;
-}
-
-.lesson-icon-mega {
-    font-size: 8rem;
-    margin: 1.5rem 0;
-    transition: all 0.4s ease;
-    display: inline-block;
-    filter: drop-shadow(0 12px 25px rgba(0,0,0,0.25));
-}
-
-.lesson-title-mega {
-    font-family: 'Fredoka One', cursive;
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 1rem;
-    line-height: 1.3;
-}
-
-.lesson-desc-mega {
-    font-size: 1.2rem;
-    color: #666;
-    margin-bottom: 2rem;
-    line-height: 1.7;
-}
-
-.lesson-info-badges {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin: 2rem 0;
-    flex-wrap: wrap;
-}
-
-.info-badge {
-    background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
-    padding: 0.7rem 1.2rem;
-    border-radius: 25px;
-    font-weight: bold;
-    border: 3px solid white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.badge-icon {
-    font-size: 1.2rem;
-}
-
-.lesson-start-ultra-btn {
-    background: linear-gradient(45deg, #ff6b6b, #feca57, #4ecdc4, #feca57, #ff6b6b);
-    background-size: 400% 100%;
-    border: none;
-    color: white;
-    padding: 2rem 3rem;
-    border-radius: 70px;
-    font-size: 2rem;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 15px 45px rgba(255,107,107,0.6);
-    transition: all 0.5s ease;
-    animation: rainbowShift 4s ease infinite;
-}
-
-@keyframes rainbowShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-.lesson-start-ultra-btn:hover {
-    transform: scale(1.15);
-    box-shadow: 0 25px 60px rgba(255,107,107,0.8);
-}
-
-.ultra-btn-glow {
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-    animation: ultraShine 2.5s infinite;
-}
-
-@keyframes ultraShine {
-    0% { left: -100%; }
-    100% { left: 200%; }
-}
-
-.ultra-btn-content {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
-    font-family: 'Fredoka One', cursive;
-}
-
-.ultra-emoji {
-    font-size: 2.5rem;
-    animation: bounce 1s ease-in-out infinite;
-}
-
-.floating-stars {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    gap: 0.5rem;
-}
-
-.f-star {
-    font-size: 2rem;
-    animation: twinkle 1.2s ease-in-out infinite;
-}
-
-.f-star:nth-child(1) { animation-delay: 0s; }
-.f-star:nth-child(2) { animation-delay: 0.4s; }
-.f-star:nth-child(3) { animation-delay: 0.8s; }
-
-.pump-up-section {
-    max-width: 1200px;
-    margin: 5rem auto 3rem;
-    padding: 4rem;
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
-    border-radius: 60px;
-    text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-    position: relative;
-    overflow: hidden;
-}
-
-.pump-mascot {
-    font-size: 10rem;
-    animation: bounce 2s ease-in-out infinite;
-}
-
-.pump-title {
-    font-family: 'Fredoka One', cursive;
-    font-size: 4rem;
-    color: white;
-    text-shadow: 4px 4px 12px rgba(0,0,0,0.3);
-    margin: 2rem 0;
-}
-
-.pump-text {
-    font-size: 1.8rem;
-    color: white;
-    font-weight: bold;
-    margin-bottom: 2rem;
-}
-
-.pump-features {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    flex-wrap: wrap;
-}
-
-.pump-feature {
-    background: rgba(255,255,255,0.3);
-    backdrop-filter: blur(10px);
-    padding: 1rem 2rem;
-    border-radius: 30px;
-    color: white;
-    font-size: 1.3rem;
-    font-weight: bold;
-    border: 3px solid rgba(255,255,255,0.5);
-}
-
-.lesson-particle {
-    position: fixed;
-    pointer-events: none;
-    z-index: 10000;
-    animation: lessonFall var(--duration) ease-out forwards;
-}
-
-@keyframes lessonFall {
-    to {
-        transform: translateY(var(--fall)) rotate(var(--rotate));
-        opacity: 0;
-    }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .topic-title-mega {
-        font-size: 3rem;
-    }
-    
-    .topic-mascot-huge {
-        font-size: 7rem;
-    }
-    
-    .lessons-grid-mega {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    
-    .lesson-icon-mega {
-        font-size: 5rem;
-    }
-    
-    .lesson-start-ultra-btn {
-        font-size: 1.5rem;
-        padding: 1.5rem 2rem;
-    }
-    
-    .pump-title {
-        font-size: 2.5rem;
-    }
-}
-</style>
 {% endblock %}
