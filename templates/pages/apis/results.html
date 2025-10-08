@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results - API Explorer{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto fade-in">
+    <!-- Search Header -->
+    <div class="card-glass p-6 mb-8">
+        <h1 class="heading-2 gradient-text mb-4">Search Results: "{{ query }}"</h1>
+        
+        <!-- Search Form -->
+        <form action="/apis/search" method="get" class="mb-4">
+            <div class="flex gap-3">
+                <input type="text" name="topic" value="{{ query }}" 
+                       class="input-modern flex-1" placeholder="Search educational resources...">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search mr-2"></i>Search
+                </button>
+            </div>
+        </form>
+        
+        <!-- Filters -->
+        <div class="flex flex-wrap gap-3">
+            <select name="subject" class="input-modern text-sm" onchange="this.form.submit()">
+                <option value="">All Subjects</option>
+                <option value="Math" {% if filters.subject == 'Math' %}selected{% endif %}>Math</option>
+                <option value="English Language Arts" {% if filters.subject == 'English Language Arts' %}selected{% endif %}>ELA</option>
+                <option value="Science" {% if filters.subject == 'Science' %}selected{% endif %}>Science</option>
+                <option value="Social Studies" {% if filters.subject == 'Social Studies' %}selected{% endif %}>Social Studies</option>
+            </select>
+            
+            <select name="grade_band" class="input-modern text-sm" onchange="this.form.submit()">
+                <option value="">All Grades</option>
+                <option value="K-2" {% if filters.grade_band == 'K-2' %}selected{% endif %}>K-2</option>
+                <option value="3-5" {% if filters.grade_band == '3-5' %}selected{% endif %}>3-5</option>
+                <option value="6-8" {% if filters.grade_band == '6-8' %}selected{% endif %}>6-8</option>
+                <option value="9-12" {% if filters.grade_band == '9-12' %}selected{% endif %}>9-12</option>
+            </select>
+            
+            <select name="media_type" class="input-modern text-sm" onchange="this.form.submit()">
+                <option value="">All Types</option>
+                <option value="video" {% if filters.media_type == 'video' %}selected{% endif %}>Video</option>
+                <option value="article" {% if filters.media_type == 'article' %}selected{% endif %}>Article</option>
+                <option value="interactive" {% if filters.media_type == 'interactive' %}selected{% endif %}>Interactive</option>
+                <option value="book" {% if filters.media_type == 'book' %}selected{% endif %}>Book</option>
+            </select>
+        </div>
+    </div>
+    
+    <!-- Results Count -->
+    <div class="mb-6 text-dark-400">
+        Found <strong class="text-white">{{ results|length }}</strong> resources
+    </div>
+    
+    <!-- Results Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for result in results %}
+        <div class="card-modern p-6">
+            <!-- Thumbnail -->
+            {% if result.thumbnail %}
+            <div class="mb-4 rounded-lg overflow-hidden bg-dark-800">
+                <img src="{{ result.thumbnail }}" alt="{{ result.title }}" 
+                     class="w-full h-40 object-cover" loading="lazy">
+            </div>
+            {% endif %}
+            
+            <!-- Title & Provider -->
+            <div class="flex items-start justify-between mb-3">
+                <h3 class="text-lg font-bold flex-1">{{ result.title }}</h3>
+                <span class="badge badge-primary ml-2">{{ result.provider }}</span>
+            </div>
+            
+            <!-- Summary -->
+            <p class="text-dark-400 text-sm mb-4">
+                {{ result.summary[:150] + '...' if result.summary|length > 150 else result.summary }}
+            </p>
+            
+            <!-- Metadata -->
+            <div class="flex flex-wrap gap-2 mb-4">
+                <span class="badge badge-secondary text-xs">{{ result.subject }}</span>
+                <span class="badge badge-secondary text-xs">{{ result.grade_band }}</span>
+                <span class="badge badge-secondary text-xs">{{ result.media_type }}</span>
+                {% if result.length_minutes %}
+                <span class="badge badge-secondary text-xs">
+                    <i class="fas fa-clock mr-1"></i>{{ result.length_minutes }} min
+                </span>
+                {% endif %}
+            </div>
+            
+            <!-- Topics -->
+            {% if result.topics %}
+            <div class="flex flex-wrap gap-1 mb-4">
+                {% for topic in result.topics[:3] %}
+                <span class="text-xs px-2 py-1 rounded bg-dark-800 text-dark-400">{{ topic }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- Actions -->
+            <div class="flex gap-2">
+                <a href="{{ result.url }}" target="_blank" class="btn btn-secondary text-sm flex-1">
+                    <i class="fas fa-external-link-alt mr-1"></i>View
+                </a>
+                <button onclick="assignResource({{ result|tojson }})" 
+                        class="btn btn-primary text-sm">
+                    <i class="fas fa-plus mr-1"></i>Assign
+                </button>
+            </div>
+            
+            <!-- Attribution -->
+            <div class="text-xs text-dark-600 mt-3">
+                {{ result.attribution }}
+            </div>
+        </div>
+        {% else %}
+        <div class="col-span-full">
+            <div class="empty-state">
+                <div class="empty-state-icon">🔍</div>
+                <h3 class="text-xl font-semibold mb-2">No Results Found</h3>
+                <p class="text-dark-500 mb-6">Try a different search term or adjust your filters</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+function assignResource(resource) {
+    fetch('/apis/assign', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(resource)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Resource saved!', 'success');
+        }
+    })
+    .catch(error => {
+        showNotification('Error saving resource', 'error');
+    });
+}
+</script>
+{% endblock %}
