@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}Activity Center - Ultimate Tutor Platform{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="text-center mb-12">
+        <h1 class="heading-1 gradient-text mb-4">Activity Center</h1>
+        <p class="text-xl text-dark-300 max-w-2xl mx-auto">
+            50 Interactive Learning Tools Across All Subjects
+        </p>
+    </div>
+    
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 mb-12">
+        <div class="stat-card">
+            <div class="stat-icon">📝</div>
+            <div class="stat-number">20</div>
+            <div class="stat-label">Features Built</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-number">6</div>
+            <div class="stat-label">Completed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-number">44</div>
+            <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✨</div>
+            <div class="stat-number">50</div>
+            <div class="stat-label">Total Tools</div>
+        </div>
+    </div>
+    
+    <!-- Math Tools -->
+    <section class="mb-12">
+        <h2 class="heading-2 gradient-text mb-6">🧮 Math Tools</h2>
+        <div class="grid-responsive">
+            <div class="card-modern group cursor-pointer" onclick="window.location.href='/activity/equation-solver/1'">
+                <div class="text-4xl mb-3">🔢</div>
+                <h3 class="text-xl font-bold mb-2">Equation Solver</h3>
+                <p class="text-dark-400 text-sm mb-3">Step-by-step equation solving with multiple strategies</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            
+            <div class="card-modern group cursor-pointer" onclick="window.location.href='/activity/whiteboard/1'">
+                <div class="text-4xl mb-3">🖊️</div>
+                <h3 class="text-xl font-bold mb-2">Digital Whiteboard</h3>
+                <p class="text-dark-400 text-sm mb-3">Draw and solve problems visually</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">📊</div>
+                <h3 class="text-xl font-bold mb-2">Graphing Tool</h3>
+                <p class="text-dark-400 text-sm mb-3">Plot points, lines, and functions</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">🧱</div>
+                <h3 class="text-xl font-bold mb-2">Manipulatives</h3>
+                <p class="text-dark-400 text-sm mb-3">Algebra tiles, fraction bars, number lines</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">📝</div>
+                <h3 class="text-xl font-bold mb-2">Word Problems</h3>
+                <p class="text-dark-400 text-sm mb-3">Break down and solve word problems</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">🔍</div>
+                <h3 class="text-xl font-bold mb-2">Error Analysis</h3>
+                <p class="text-dark-400 text-sm mb-3">Find and fix mistakes in solutions</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Literacy Tools -->
+    <section class="mb-12">
+        <h2 class="heading-2 gradient-text mb-6">✍️ Literacy Tools</h2>
+        <div class="grid-responsive">
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">📄</div>
+                <h3 class="text-xl font-bold mb-2">Essay Builder</h3>
+                <p class="text-dark-400 text-sm mb-3">Scaffold thesis, outline, and paragraphs</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">🗂️</div>
+                <h3 class="text-xl font-bold mb-2">Vocab Flashcards</h3>
+                <p class="text-dark-400 text-sm mb-3">Spaced repetition vocabulary practice</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">📖</div>
+                <h3 class="text-xl font-bold mb-2">Reading Comprehension</h3>
+                <p class="text-dark-400 text-sm mb-3">Annotate and analyze texts</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">📚</div>
+                <h3 class="text-xl font-bold mb-2">Citation Helper</h3>
+                <p class="text-dark-400 text-sm mb-3">MLA/APA citation generator</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Science Tools -->
+    <section class="mb-12">
+        <h2 class="heading-2 gradient-text mb-6">🔬 Science Tools</h2>
+        <div class="grid-responsive">
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">🧪</div>
+                <h3 class="text-xl font-bold mb-2">Lab Report Builder</h3>
+                <p class="text-dark-400 text-sm mb-3">Hypothesis, procedure, data, conclusion</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">🎯</div>
+                <h3 class="text-xl font-bold mb-2">CER Scaffold</h3>
+                <p class="text-dark-400 text-sm mb-3">Claim-Evidence-Reasoning framework</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">🕸️</div>
+                <h3 class="text-xl font-bold mb-2">Concept Maps</h3>
+                <p class="text-dark-400 text-sm mb-3">Visual concept organization</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Social Studies Tools -->
+    <section class="mb-12">
+        <h2 class="heading-2 gradient-text mb-6">🌎 Social Studies Tools</h2>
+        <div class="grid-responsive">
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">📜</div>
+                <h3 class="text-xl font-bold mb-2">Primary Sources</h3>
+                <p class="text-dark-400 text-sm mb-3">SOAP analysis of historical documents</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">📅</div>
+                <h3 class="text-xl font-bold mb-2">Timeline Builder</h3>
+                <p class="text-dark-400 text-sm mb-3">Create interactive historical timelines</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">⚖️</div>
+                <h3 class="text-xl font-bold mb-2">Debate Organizer</h3>
+                <p class="text-dark-400 text-sm mb-3">Prepare arguments and rebuttals</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Cross-Curricular Tools -->
+    <section class="mb-12">
+        <h2 class="heading-2 gradient-text mb-6">🎨 Cross-Curricular Tools</h2>
+        <div class="grid-responsive">
+            <div class="card-modern group cursor-pointer" onclick="window.location.href='/activity/work-notebook/1'">
+                <div class="text-4xl mb-3">📓</div>
+                <h3 class="text-xl font-bold mb-2">Work Notebook</h3>
+                <p class="text-dark-400 text-sm mb-3">Show your work with photos, text, or drawings</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">💡</div>
+                <h3 class="text-xl font-bold mb-2">Hint System</h3>
+                <p class="text-dark-400 text-sm mb-3">Progressive hints from mild to solution</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            
+            <div class="card-modern group cursor-pointer" onclick="window.location.href='/activity/portfolio'">
+                <div class="text-4xl mb-3">🎨</div>
+                <h3 class="text-xl font-bold mb-2">Portfolio</h3>
+                <p class="text-dark-400 text-sm mb-3">Showcase your best work</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            
+            <div class="card-modern group cursor-pointer">
+                <div class="text-4xl mb-3">📋</div>
+                <h3 class="text-xl font-bold mb-2">Interactive Rubrics</h3>
+                <p class="text-dark-400 text-sm mb-3">Understand expectations and self-assess</p>
+                <span class="badge badge-success">Complete</span>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
