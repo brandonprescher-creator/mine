@@ -252,7 +252,7 @@ def add_student_page():
 
 @parent_bp.route("/parent/create-student", methods=["POST"])
 @parent_required
-def create_student_profile():
+def handle_create_student():
     """Create a new student profile from parent dashboard"""
     import random
     
@@ -261,8 +261,10 @@ def create_student_profile():
     # Generate unique student ID
     student_id = f"student_{random.randint(1000, 9999)}"
     
-    # Create profile
-    profile_id = create_student_profile(
+    # Create profile using the imported database function
+    from database_parent_features import create_student_profile as db_create_student
+    
+    profile_id = db_create_student(
         student_id=student_id,
         name=data["name"],
         grade_level=data["grade_level"],
