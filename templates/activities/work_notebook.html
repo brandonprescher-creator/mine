@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+
+{% block title %}Show Your Work - {{ activity.title }}{% endblock %}
+
+{% block breadcrumbs %}
+{% set breadcrumbs = [
+    {'title': 'Home', 'url': '/'},
+    {'title': 'Activities', 'url': '/activities'},
+    {'title': activity.title, 'url': '#'}
+] %}
+{% include 'partials/_breadcrumbs.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="fade-in max-w-5xl mx-auto">
+    <!-- Activity Header -->
+    <div class="card-glass p-8 mb-8">
+        <div class="flex items-start justify-between mb-4">
+            <div class="flex-1">
+                <h1 class="heading-2 gradient-text mb-3">{{ activity.title }}</h1>
+                <p class="text-dark-300 text-lg">{{ activity.description }}</p>
+            </div>
+            <div class="text-6xl">📝</div>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="bg-primary-500/10 border border-primary-500/30 rounded-lg p-4 mt-6">
+            <h3 class="font-bold mb-2 flex items-center">
+                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                How to Show Your Work
+            </h3>
+            <ul class="text-sm space-y-1 text-dark-300">
+                <li>✓ Upload photos of your handwritten work</li>
+                <li>✓ Type your solution step-by-step</li>
+                <li>✓ Draw your work on the digital canvas</li>
+                <li>✓ Explain your thinking in your own words</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Work Items Container -->
+    <div class="card-modern p-8 mb-8">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold">Your Work</h2>
+            <div class="flex gap-3">
+                <button onclick="addPhotoWork()" class="btn btn-secondary text-sm">
+                    <i class="fas fa-camera mr-2"></i>
+                    Upload Photo
+                </button>
+                <button onclick="addTypedWork()" class="btn btn-secondary text-sm">
+                    <i class="fas fa-keyboard mr-2"></i>
+                    Type Work
+                </button>
+                <button onclick="addDrawing()" class="btn btn-secondary text-sm">
+                    <i class="fas fa-paint-brush mr-2"></i>
+                    Draw
+                </button>
+            </div>
+        </div>
+        
+        <!-- Work Items List -->
+        <div id="work-items" class="space-y-6">
+            <!-- Dynamic work items will be added here -->
+        </div>
+        
+        <!-- Empty State -->
+        <div id="empty-state" class="empty-state">
+            <div class="empty-state-icon">📋</div>
+            <h3 class="text-xl font-semibold mb-2 text-dark-300">No Work Added Yet</h3>
+            <p class="text-dark-500 mb-6">Click one of the buttons above to start showing your work!</p>
+        </div>
+    </div>
+    
+    <!-- Explanation Section -->
+    <div class="card-modern p-8 mb-8">
+        <h2 class="text-2xl font-bold mb-4">Explain Your Thinking</h2>
+        <p class="text-dark-400 mb-4">Tell us about your problem-solving process. What strategies did you use? Why?</p>
+        <textarea 
+            id="explanation" 
+            rows="6" 
+            class="input-modern"
+            placeholder="Example: I started by identifying what I knew and what I needed to find. Then I..."
+        ></textarea>
+        <div class="text-sm text-dark-500 mt-2">
+            <span id="word-count">0</span> words
+        </div>
+    </div>
+    
+    <!-- Submit Section -->
+    <div class="card-modern p-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-bold mb-1">Ready to Submit?</h3>
+                <p class="text-dark-400 text-sm">Your teacher will review your work and provide feedback.</p>
+            </div>
+            <button onclick="submitWork()" class="btn btn-primary text-lg">
+                <i class="fas fa-paper-plane mr-2"></i>
+                Submit Work
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden file input -->
+<input type="file" id="photo-upload" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event)">
+
+<!-- Drawing Modal -->
+<div id="drawing-modal" class="modal-overlay hidden" onclick="closeDrawingModal(event)">
+    <div class="modal-content max-w-4xl" onclick="event.stopPropagation()">
+        <div class="flex items-center justify-between p-6 border-b border-dark-800">
+            <h2 class="text-2xl font-bold">Draw Your Work</h2>
+            <button onclick="closeDrawingModal()" class="text-dark-400 hover:text-white">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <div class="p-6">
+            <div class="mb-4 flex gap-3">
+                <button onclick="setDrawColor('black')" class="w-10 h-10 rounded bg-black border-2 border-white"></button>
+                <button onclick="setDrawColor('red')" class="w-10 h-10 rounded bg-red-500"></button>
+                <button onclick="setDrawColor('blue')" class="w-10 h-10 rounded bg-blue-500"></button>
+                <button onclick="setDrawColor('green')" class="w-10 h-10 rounded bg-green-500"></button>
+                <div class="flex-1"></div>
+                <button onclick="clearCanvas()" class="btn btn-secondary text-sm">
+                    <i class="fas fa-eraser mr-2"></i>
+                    Clear
+                </button>
+            </div>
+            
+            <canvas id="drawing-canvas" width="800" height="600" class="border-2 border-dark-700 rounded-lg bg-white cursor-crosshair"></canvas>
+        </div>
+        
+        <div class="flex items-center justify-end space-x-3 p-6 border-t border-dark-800">
+            <button onclick="closeDrawingModal()" class="btn btn-secondary">Cancel</button>
+            <button onclick="saveDrawing()" class="btn btn-primary">
+                <i class="fas fa-check mr-2"></i>
+                Save Drawing
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const activityId = {{ activity.id }};
+let workItems = [];
+let workItemCounter = 0;
+
+// Canvas setup
+let canvas, ctx;
+let drawing = false;
+let currentColor = 'black';
+
+document.addEventListener('DOMContentLoaded', () => {
+    canvas = document.getElementById('drawing-canvas');
+    ctx = canvas.getContext('2d');
+    setupCanvas();
+    updateWordCount();
+    
+    // Word count listener
+    document.getElementById('explanation').addEventListener('input', updateWordCount);
+});
+
+function setupCanvas() {
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+    
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+}
+
+function startDrawing(e) {
+    drawing = true;
+    const rect = canvas.getBoundingClientRect();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+}
+
+function draw(e) {
+    if (!drawing) return;
+    const rect = canvas.getBoundingClientRect();
+    ctx.strokeStyle = currentColor;
+    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+    ctx.stroke();
+}
+
+function stopDrawing() {
+    drawing = false;
+}
+
+function setDrawColor(color) {
+    currentColor = color;
+}
+
+function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function addPhotoWork() {
+    document.getElementById('photo-upload').click();
+}
+
+function handlePhotoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const item = {
+            id: ++workItemCounter,
+            type: 'photo',
+            content: e.target.result,
+            label: 'Uploaded Photo ' + workItemCounter
+        };
+        workItems.push(item);
+        renderWorkItems();
+    };
+    reader.readAsDataURL(file);
+}
+
+function addTypedWork() {
+    const item = {
+        id: ++workItemCounter,
+        type: 'text',
+        content: '',
+        label: 'Written Work ' + workItemCounter
+    };
+    workItems.push(item);
+    renderWorkItems();
+}
+
+function addDrawing() {
+    document.getElementById('drawing-modal').classList.remove('hidden');
+}
+
+function closeDrawingModal(event) {
+    if (!event || event.target.classList.contains('modal-overlay')) {
+        document.getElementById('drawing-modal').classList.add('hidden');
+    }
+}
+
+function saveDrawing() {
+    const dataURL = canvas.getDataURL();
+    const item = {
+        id: ++workItemCounter,
+        type: 'drawing',
+        content: dataURL,
+        label: 'Drawing ' + workItemCounter
+    };
+    workItems.push(item);
+    renderWorkItems();
+    closeDrawingModal();
+    clearCanvas();
+}
+
+function removeWorkItem(id) {
+    workItems = workItems.filter(item => item.id !== id);
+    renderWorkItems();
+}
+
+function renderWorkItems() {
+    const container = document.getElementById('work-items');
+    const emptyState = document.getElementById('empty-state');
+    
+    if (workItems.length === 0) {
+        emptyState.style.display = 'block';
+        container.innerHTML = '';
+        return;
+    }
+    
+    emptyState.style.display = 'none';
+    container.innerHTML = workItems.map(item => createWorkItemHTML(item)).join('');
+}
+
+function createWorkItemHTML(item) {
+    const typeIcons = {
+        photo: 'fa-camera',
+        text: 'fa-keyboard',
+        drawing: 'fa-paint-brush'
+    };
+    
+    let contentHTML = '';
+    
+    if (item.type === 'photo' || item.type === 'drawing') {
+        contentHTML = `
+            <img src="${item.content}" alt="${item.label}" class="w-full rounded-lg border border-dark-700">
+        `;
+    } else if (item.type === 'text') {
+        contentHTML = `
+            <textarea 
+                class="input-modern" 
+                rows="6" 
+                placeholder="Type your work here..."
+                onchange="updateWorkItemContent(${item.id}, this.value)"
+            >${item.content}</textarea>
+        `;
+    }
+    
+    return `
+        <div class="card-modern p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                    <i class="fas ${typeIcons[item.type]} text-2xl text-primary-400"></i>
+                    <input 
+                        type="text" 
+                        value="${item.label}" 
+                        class="input-modern text-lg font-semibold" 
+                        onchange="updateWorkItemLabel(${item.id}, this.value)"
+                    >
+                </div>
+                <button onclick="removeWorkItem(${item.id})" class="text-red-400 hover:text-red-300">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+            ${contentHTML}
+        </div>
+    `;
+}
+
+function updateWorkItemLabel(id, label) {
+    const item = workItems.find(i => i.id === id);
+    if (item) item.label = label;
+}
+
+function updateWorkItemContent(id, content) {
+    const item = workItems.find(i => i.id === id);
+    if (item) item.content = content;
+}
+
+function updateWordCount() {
+    const text = document.getElementById('explanation').value;
+    const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+    document.getElementById('word-count').textContent = wordCount;
+}
+
+async function submitWork() {
+    if (workItems.length === 0) {
+        showNotification('Please add at least one work item', 'warning');
+        return;
+    }
+    
+    const explanation = document.getElementById('explanation').value;
+    
+    const submission = {
+        activity_id: activityId,
+        work_items: workItems,
+        explanation: explanation,
+        submitted_at: new Date().toISOString()
+    };
+    
+    showLoading();
+    
+    try {
+        const response = await fetch('/api/submit/work-notebook', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(submission)
+        });
+        
+        const result = await response.json();
+        
+        hideLoading();
+        
+        if (response.ok) {
+            showNotification('Work submitted successfully!', 'success');
+            setTimeout(() => {
+                window.location.href = '/activities';
+            }, 2000);
+        } else {
+            showNotification(result.error || 'Failed to submit', 'error');
+        }
+    } catch (error) {
+        hideLoading();
+        showNotification('Error submitting work', 'error');
+        console.error(error);
+    }
+}
+</script>
+{% endblock %}

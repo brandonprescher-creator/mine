@@ -69,10 +69,12 @@ def ensure_database_ready():
 # Register blueprints
 from auth import auth_bp
 from blueprints.parent import parent_bp
+from blueprints.activities import activities_bp
 from open_learning.router import bp as open_learning_bp
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(parent_bp)
+app.register_blueprint(activities_bp)
 app.register_blueprint(open_learning_bp)
 
 # Error handlers
